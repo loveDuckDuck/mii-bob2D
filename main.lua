@@ -1,12 +1,15 @@
 -- in main.lua
-Object = require 'libraries/classic/classic'
 require 'objects/Test'
+Object = require 'libraries/classic/classic'
+Input = require 'libraries/input/Input'
 
 -- define hear all the local main variables
 local test_circle
 local test_hypercircle
 local test_rectangle
 local dt
+local input
+local sum_table
 
 
 
@@ -39,15 +42,37 @@ function love.update(args)
 	test_circle:update(dt)
 	test_hypercircle:update(dt)
 	test_rectangle:update(dt)
-end
+if input:down('left_click', 0.5) then print("zio pera ") end
+	if input:pressed('left_click') then print('pressed') end
+	if input:released('left_click') then print('released') end
 
-local function createSumTable(a, b, c)
-	return {
-		value = 0,
-		sum = function(self)
-			self.value = a + b + c
-		end
-	}
+	-- use the system of the coordinate in the 0,0 in top left
+	-- so when you move remember going y is negative to go up
+	-- also y is positivo if you wont to go down
+
+
+	if input:down('up') then
+		print('up')
+		test_hypercircle:move(0, -1)
+	end
+	if input:down('left') then
+		print('left')
+		test_hypercircle:move(-1, 0)
+	end
+	if input:down('right') then
+		print('right')
+		test_hypercircle:move(1, 0)
+	end
+	if input:down('down') then
+		print('down')
+		test_hypercircle:move(0, 1)
+	end
+	if input:down('add') then
+		print('add')
+		sum_table:add()
+		print(sum_table.value)
+	end
+
 end
 
 function love.load()
@@ -58,31 +83,22 @@ function love.load()
 	test_circle = Circle(100, 100, 100)
 	test_hypercircle = HyperCircle(200, 200, 50, 3, 100)
 	test_rectangle = Rectangle(50, 50, 500, 500)
+	sum_table = createSumTable(1, 2, 3)
+	print(sum_table.value)
+	sum_table:sum()
+	print(sum_table.value)
 
-	local sumtTable = createSumTable(1,2,3)
-	print(sumtTable.value)
-	sumtTable:sum()
-	print(sumtTable.value)
+
+	input = Input()
+	input:bind('mouse1', 'left_click')
+	input:bind('w', 'up')
+	input:bind('a', 'left')
+	input:bind('d', 'right')
+	input:bind('s', 'down')
+	input:bind('1', 'add')
+
+
 end
-
-
-
-function love.keypressed(key)
-    print(key)
-end
-
-function love.keyreleased(key)
-    print(key)
-end
-
-function love.mousepressed(x, y, button)
-    print(x, y, button)
-end
-
-function love.mousereleased(x, y, button)
-    print(x, y, button)
-end
-
 
 function love.run()
 	-- Make the window resizable with vsync disabled and a minimum size

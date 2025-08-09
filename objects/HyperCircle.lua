@@ -18,3 +18,8 @@ function HyperCircle:draw()
     love.graphics.circle('line', self.x, self.y, self.outer_radius)
     love.graphics.setLineWidth(1)
 end
+
+function HyperCircle:move(direction_x, direction_y)
+    self.x = self.x + direction_x
+    self.y = self.y + direction_y
+end

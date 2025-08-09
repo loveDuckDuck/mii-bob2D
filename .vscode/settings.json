@@ -1,6 +1,7 @@
 {
     "Lua.diagnostics.globals": [
         "love",
-        "recursiveEnumerate"
+        "recursiveEnumerate",
+        "Rectangle"
     ]
 }
