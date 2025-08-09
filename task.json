@@ -1,0 +1,177 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run LÖVE Game",
+            "type": "shell",
+            "command": "love",
+            "args": ["${workspaceFolder}"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Run the current LÖVE project"
+        },
+        {
+            "label": "Run LÖVE Game (Current File Directory)",
+            "type": "shell",
+            "command": "love",
+            "args": ["${fileDirname}"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Run LÖVE game from the directory of the currently open file"
+        },
+        {
+            "label": "Lua Syntax Check",
+            "type": "shell",
+            "command": "lua",
+            "args": ["-c", "${file}"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "lua",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^lua: (.*):(\\d+): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "message": 3
+                }
+            },
+            "detail": "Check Lua syntax for the current file"
+        },
+        {
+            "label": "Run Current Lua File",
+            "type": "shell",
+            "command": "lua",
+            "args": ["${file}"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Execute the current Lua file"
+        },
+        {
+            "label": "Luacheck (Lint)",
+            "type": "shell",
+            "command": "luacheck",
+            "args": ["${workspaceFolder}", "--formatter", "plain"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "luacheck",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): \\((\\w+)\\) (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "detail": "Run Luacheck linter on the project"
+        },
+        {
+            "label": "Luacheck Current File",
+            "type": "shell",
+            "command": "luacheck",
+            "args": ["${file}", "--formatter", "plain"],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": {
+                "owner": "luacheck",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+): \\((\\w+)\\) (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                }
+            },
+            "detail": "Run Luacheck linter on the current file"
+        },
+        {
+            "label": "LÖVE Build (zip for distribution)",
+            "type": "shell",
+            "command": "zip",
+            "args": ["-r", "${workspaceFolder}/game.love", "${workspaceFolder}/", "-x", "*.git*", "*.vscode*", "*.md", "*.txt"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "detail": "Create a .love file for distribution"
+        },
+        {
+            "label": "LÖVE Debug Mode",
+            "type": "shell",
+            "command": "love",
+            "args": ["${workspaceFolder}", "--console"],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "problemMatcher": [],
+            "detail": "Run LÖVE game with console output (Windows)"
+        },
+        {
+            "label": "Generate LÖVE Project Structure",
+            "type": "shell",
+            "command": "mkdir",
+            "args": ["-p", "src", "assets/images", "assets/sounds", "assets/fonts"],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": [],
+            "detail": "Create basic LÖVE project folder structure"
+        }
+    ]
+}
