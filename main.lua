@@ -1,17 +1,13 @@
 -- in main.lua
-require 'objects/Test'
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
+Timer = require 'libraries/hump/timer'
+EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
+
 
 -- define hear all the local main variables
-local test_circle
-local test_hypercircle
-local test_rectangle
+
 local dt
-local input
-local sum_table
-
-
 
 function recursiveEnumerate(folder, file_list)
 	local items = love.filesystem.getDirectoryItems(folder)
@@ -33,45 +29,10 @@ function requireFiles(files)
 end
 
 function love.draw()
-	test_circle:draw()
-	test_hypercircle:draw()
-	test_rectangle:draw()
 end
 
-function love.update(args)
-	test_circle:update(dt)
-	test_hypercircle:update(dt)
-	test_rectangle:update(dt)
-if input:down('left_click', 0.5) then print("zio pera ") end
-	if input:pressed('left_click') then print('pressed') end
-	if input:released('left_click') then print('released') end
 
-	-- use the system of the coordinate in the 0,0 in top left
-	-- so when you move remember going y is negative to go up
-	-- also y is positivo if you wont to go down
-
-
-	if input:down('up') then
-		print('up')
-		test_hypercircle:move(0, -1)
-	end
-	if input:down('left') then
-		print('left')
-		test_hypercircle:move(-1, 0)
-	end
-	if input:down('right') then
-		print('right')
-		test_hypercircle:move(1, 0)
-	end
-	if input:down('down') then
-		print('down')
-		test_hypercircle:move(0, 1)
-	end
-	if input:down('add') then
-		print('add')
-		sum_table:add()
-		print(sum_table.value)
-	end
+function love.update(dt)
 
 end
 
@@ -79,25 +40,6 @@ function love.load()
 	local object_files = {}
 	recursiveEnumerate('objects', object_files)
 	requireFiles(object_files)
-	-- add all my forms
-	test_circle = Circle(100, 100, 100)
-	test_hypercircle = HyperCircle(200, 200, 50, 3, 100)
-	test_rectangle = Rectangle(50, 50, 500, 500)
-	sum_table = createSumTable(1, 2, 3)
-	print(sum_table.value)
-	sum_table:sum()
-	print(sum_table.value)
-
-
-	input = Input()
-	input:bind('mouse1', 'left_click')
-	input:bind('w', 'up')
-	input:bind('a', 'left')
-	input:bind('d', 'right')
-	input:bind('s', 'down')
-	input:bind('1', 'add')
-
-
 end
 
 function love.run()
@@ -111,7 +53,7 @@ function love.run()
 	end
 
 	if love.load then
-		love.load(arg)
+		love.load()
 	end
 
 	-- We don't want the first frame's dt to include time taken by love.load.
@@ -120,7 +62,6 @@ function love.run()
 		dt = love.timer.getDelta() -- with this im gone insert define the fixed delta time
 	end
 
-	local dt = 0
 
 	-- Main loop time.
 	while true do
@@ -161,7 +102,7 @@ function love.run()
 			-- print("nos sleep")
 			love.timer.sleep(0.001)
 		else
-			-- print("vSync enabled")
+			--print("vSync enabled")
 		end
 	end
 end

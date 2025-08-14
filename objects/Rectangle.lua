@@ -1,18 +1,17 @@
-Object = require 'libraries/classic/classic'
+local Object = require 'libraries/classic/classic'
+local Shape = require 'objects/Shape'
 
--- in objects/Test.lua
-Rectangle = Object:extend()
+Rectangle = Shape:extend()
 
-function Rectangle:new(height, width, x,y)
-    self.height, self.width = height, width
-    self.x,self.y = x,y
-    self.creation_time = love.timer.getTime()
+function Rectangle:new(height, width, x, y, color)
+    Rectangle.super.new(self, height, width, x, y, color)
 end
 
 function Rectangle:update(dt)
-
+    Rectangle.super.update(self, dt)
 end
 
 function Rectangle:draw()
-    love.graphics.rectangle("fill",self.x,self.y,self.width,self.height)
+    Rectangle.super.draw(self)
+    love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
