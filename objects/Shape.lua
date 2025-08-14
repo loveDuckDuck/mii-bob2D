@@ -12,7 +12,6 @@ function Shape:update(dt)
 end
 
 function Shape:draw()
-    love.graphics.setColor(self.color)
 end
 
 return Shape

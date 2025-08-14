@@ -1,8 +1,7 @@
 Object = require 'libraries/classic/classic'
 
 -- in objects/Test.lua
-Circle = Object:extend()
-
+local Circle = Object:extend()
 
 function Circle:new(x, y, radius)
     -- how to initialize in lua
@@ -18,5 +17,7 @@ function Circle:update(dt)
 end
 
 function Circle:draw()
-    love.graphics.circle( "fill",self.x, self.y, self.radius )
+    love.graphics.circle("fill", self.x, self.y, self.radius)
 end
+
+return Circle

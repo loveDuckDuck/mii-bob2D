@@ -1,6 +1,7 @@
 Object = require 'libraries/classic/classic'
+local Circle = require 'objects/Circle'
 
-HyperCircle = Circle:extend()
+local HyperCircle = Circle:extend()
 
 function HyperCircle:new(x, y, radius, line_width, outer_radius)
     HyperCircle.super.new(self, x, y, radius)
@@ -23,3 +24,5 @@ function HyperCircle:move(direction_x, direction_y)
     self.x = self.x + direction_x
     self.y = self.y + direction_y
 end
+
+return HyperCircle

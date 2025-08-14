@@ -1,10 +1,10 @@
-local Object = require 'libraries/classic/classic'
 local Shape = require 'objects/Shape'
 
-Rectangle = Shape:extend()
+local Rectangle = Shape:extend()
 
 function Rectangle:new(height, width, x, y, color)
     Rectangle.super.new(self, height, width, x, y, color)
+    print("color param:", self.color[1],self.color[2],self.color[3])
 end
 
 function Rectangle:update(dt)
@@ -12,6 +12,9 @@ function Rectangle:update(dt)
 end
 
 function Rectangle:draw()
-    Rectangle.super.draw(self)
+    love.graphics.setColor(self.color)
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+    love.graphics.setColor(1, 1, 1)
 end
+
+return Rectangle
