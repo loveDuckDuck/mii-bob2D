@@ -4,10 +4,13 @@ Input = require 'libraries/input/Input'
 Timer = require 'libraries/hump/timer'
 EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
 --utilities
-Loader = require 'utils/Loader'
+Loader = require 'Loader'
 Util = require 'utils/Utils'
 RoomController = require 'utils/RoomController'
 
+RoomController = require 'utils/RoomController'
+Area = require 'gameObject.Area'
+CircleGameObject = require 'gameObject.CircleGameObject'
 
 -- define hear all the local main variables
 
@@ -20,6 +23,7 @@ local room_controller
 
 local circle_room
 local rectangle_room
+local area_circleLifeRoom
 
 
 function love.draw()
@@ -27,7 +31,6 @@ function love.draw()
 end
 
 function love.update(dt)
-
 	if input_handler:pressed('CircleRoom') then
 		print("to circle_room")
 		room_controller:gotoRoom('CircleRoom', 1)
@@ -36,7 +39,10 @@ function love.update(dt)
 		print("to rectangle_room")
 		room_controller:gotoRoom('RectangleRoom', 2)
 	end
-
+	if input_handler:pressed('CircleLifeRoom') then
+		print("to Stage")
+		room_controller:gotoRoom('Stage', 3)
+	end
 	if room_controller.current_room then room_controller.current_room:update(dt) end
 	if room_controller.current_room then
 		if input_handler:pressed('add_circle') and room_controller.current_room.type == "CircleRoom" then
@@ -59,10 +65,9 @@ function love.update(dt)
 	room_controller:update(dt)
 end
 
-
-
 function love.load()
 	loader = Loader()
+	loader:getRequireFiles('gameObject')
 	loader:getRequireFiles('objects')
 	loader:getRequireFiles('rooms')
 
@@ -75,6 +80,8 @@ function love.load()
 
 	input_handler:bind('f1', 'CircleRoom')
 	input_handler:bind('f2', 'RectangleRoom')
+	input_handler:bind('f3', 'CircleLifeRoom')
+
 end
 
 function love.run()

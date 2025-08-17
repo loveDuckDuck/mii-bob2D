@@ -1,4 +1,4 @@
-bject = require 'libraries/classic/classic'
+Object = require 'libraries/classic/classic'
 local Rectangle = require 'objects/Rectangle'
 -- in objects/Test.lua
 RectangleRoom = Object:extend()
