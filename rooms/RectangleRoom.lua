@@ -1,4 +1,4 @@
-Object = require 'libraries/classic/classic'
+bject = require 'libraries/classic/classic'
 local Rectangle = require 'objects/Rectangle'
 -- in objects/Test.lua
 RectangleRoom = Object:extend()
@@ -6,6 +6,8 @@ RectangleRoom = Object:extend()
 
 function RectangleRoom:new()
     self.rectangles = {} -- <--- initialize your circles table
+    self.type = 'RectangleRoom'
+
     self.creation_time = love.timer.getTime()
 end
 
@@ -17,8 +19,8 @@ function RectangleRoom:update(dt)
     end
 end
 
-function RectangleRoom:addRectangle(heigth,width, x,y,color)
-    table.insert(self.rectangles,Rectangle(heigth,width,x,y,color))
+function RectangleRoom:addRectangle(heigth, width, x, y, color)
+    table.insert(self.rectangles, Rectangle(heigth, width, x, y, color))
 end
 
 function RectangleRoom:draw()

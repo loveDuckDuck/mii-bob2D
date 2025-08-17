@@ -5,7 +5,8 @@ CircleRoom = Object:extend()
 
 
 function CircleRoom:new()
-    self.circles = {}     -- <--- initialize your circles table
+    self.circles = {} -- <--- initialize your circles table
+    self.type = 'CircleRoom'
     self.creation_time = love.timer.getTime()
 end
 
