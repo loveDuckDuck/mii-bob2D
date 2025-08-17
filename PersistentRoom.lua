@@ -1,3 +1,5 @@
+
+--[[
 Object = require 'libraries/classic/classic'
 
 
@@ -27,3 +29,4 @@ function gotoRoom(room_type, room_name, ...)
         if current_room.activate then current_room:activate() end
     else current_room = addRoom(room_type, room_name, ...) end
 end
+]]

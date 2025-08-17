@@ -1,3 +1,5 @@
+
+--[[
 -- in main.lua
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
@@ -201,3 +203,4 @@ function love.run()
 		end
 	end
 end
+]]
