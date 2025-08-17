@@ -21,9 +21,7 @@ local loader
 -- room_controller controller
 local room_controller
 
-local circle_room
-local rectangle_room
-local area_circleLifeRoom
+
 
 
 function love.draw()
@@ -31,37 +29,7 @@ function love.draw()
 end
 
 function love.update(dt)
-	if input_handler:pressed('CircleRoom') then
-		print("to circle_room")
-		room_controller:gotoRoom('CircleRoom', 1)
-	end
-	if input_handler:pressed('RectangleRoom') then
-		print("to rectangle_room")
-		room_controller:gotoRoom('RectangleRoom', 2)
-	end
-	if input_handler:pressed('CircleLifeRoom') then
-		print("to Stage")
-		room_controller:gotoRoom('Stage', 3)
-	end
-	if room_controller.current_room then room_controller.current_room:update(dt) end
-	if room_controller.current_room then
-		if input_handler:pressed('add_circle') and room_controller.current_room.type == "CircleRoom" then
-			print("add circle to the room_controller")
-			room_controller.current_room:addCircle(
-				love.math.random(0, love.graphics.getWidth()),
-				love.math.random(0, love.graphics.getHeight()),
-				love.math.random(1, 100))
-		end
-		if input_handler:pressed('add_rectangle') and room_controller.current_room.type == "RectangleRoom" then
-			print("add rectangle to the room_controller")
-			room_controller.current_room:addRectangle(
-				love.math.random(1, 100),
-				love.math.random(1, 100),
-				love.math.random(0, love.graphics.getWidth()),
-				love.math.random(0, love.graphics.getHeight()),
-				{ love.math.random(), love.math.random(), love.math.random() })
-		end
-	end
+	
 	room_controller:update(dt)
 end
 
@@ -72,15 +40,7 @@ function love.load()
 	loader:getRequireFiles('rooms')
 
 	room_controller = RoomController()
-
-
 	input_handler = Input()
-	input_handler:bind('a', 'add_circle')
-	input_handler:bind('a', 'add_rectangle')
-
-	input_handler:bind('f1', 'CircleRoom')
-	input_handler:bind('f2', 'RectangleRoom')
-	input_handler:bind('f3', 'CircleLifeRoom')
 
 end
 
