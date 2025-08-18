@@ -12,8 +12,9 @@ RoomController = require 'utils/RoomController'
 Area = require 'gameObject.Area'
 CircleGameObject = require 'gameObject.CircleGameObject'
 
--- define hear all the local main variables
 
+
+-- define hear all the local main variables
 local dt
 local input_handler
 -- loader of all the require in a specific folder
@@ -21,37 +22,46 @@ local loader
 -- room_controller controller
 local room_controller
 
+function love.resize(s)
+	UpdateScale() -- Recalculate scale when window is resized
+end
 
-
+function resize(s)
+    love.window.setMode(s*gw, s*gh) 
+    sx, sy = s, s
+end
 
 function love.draw()
 	room_controller:draw()
 end
 
 function love.update(dt)
-	
 	room_controller:update(dt)
 end
 
 function love.load()
+	love.resize(3)
+	love.graphics.setDefaultFilter('nearest')
+	love.graphics.setLineStyle('rough')
 	loader = Loader()
 	loader:getRequireFiles('gameObject')
 	loader:getRequireFiles('objects')
 	loader:getRequireFiles('rooms')
+	loader:getRequireFiles('GameFolder/Stage')
 
 	room_controller = RoomController()
 	input_handler = Input()
 
+	room_controller:gotoRoom('Stage', 1)
 end
 
 function love.run()
-	-- Make the window resizable with vsync disabled and a minimum size
+	--[[ Make the window resizable with vsync disabled and a minimum size
 	if love.window then
 		love.window.setMode(800, 600, { resizable = true, vsync = 1, minwidth = 400, minheight = 300 })
-
-
 		--love.window.setVSync(1)
 	end
+	]]
 	if love.math then -- check if love.math is nil, because we need it
 		love.math.setRandomSeed(os.time())
 	end
