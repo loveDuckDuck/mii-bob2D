@@ -41,5 +41,5 @@ luac.out
 
 
 #html files
-*html
+*.html
 
