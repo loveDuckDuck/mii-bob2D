@@ -16,6 +16,7 @@ end
 
 function GameObject:update(dt) -- Update function 🔄
     if self.timer then self.timer:update(dt) end -- Update the timer if any
+    if self.collider then self.x, self.y = self.collider:getPosition() end
 end
 
 function GameObject:draw() -- Draw function 🎨

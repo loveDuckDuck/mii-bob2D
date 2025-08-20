@@ -1,22 +1,20 @@
 -- in main.lua
+
+Loader = require 'Loader'
+
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
 Timer = require 'libraries/hump/timer'
+Camera = require 'libraries/hump/camera'
 EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
+Physics = require 'libraries/windfield'
 --utilities
-Loader = require 'Loader'
 Util = require 'utils/Utils'
 RoomController = require 'utils/RoomController'
-
-RoomController = require 'utils/RoomController'
-Area = require 'gameObject.Area'
-CircleGameObject = require 'gameObject.CircleGameObject'
-
+Area = require 'gameObject/Area'
 
 
 -- define hear all the local main variables
-local dt
-local input_handler
 -- loader of all the require in a specific folder
 local loader
 -- room_controller controller
@@ -24,11 +22,12 @@ local room_controller
 
 function love.resize(s)
 	UpdateScale() -- Recalculate scale when window is resized
+	--love.window.setMode(s * gw, s * gh)
 end
 
 function resize(s)
-    love.window.setMode(s*gw, s*gh) 
-    sx, sy = s, s
+	love.window.setMode(s * gw, s * gh)
+	sx, sy = s, s
 end
 
 function love.draw()
@@ -37,10 +36,10 @@ end
 
 function love.update(dt)
 	room_controller:update(dt)
+	camera:update(dt)
 end
 
 function love.load()
-	love.resize(3)
 	love.graphics.setDefaultFilter('nearest')
 	love.graphics.setLineStyle('rough')
 	loader = Loader()
@@ -49,19 +48,20 @@ function love.load()
 	loader:getRequireFiles('rooms')
 	loader:getRequireFiles('GameFolder/Stage')
 
+	InputHandler = Input()
+	InputHandler:bind('left', 'left')
+	InputHandler:bind('right', 'right')
+	camera = Camera()
 	room_controller = RoomController()
-	input_handler = Input()
 
 	room_controller:gotoRoom('Stage', 1)
+	resize(3)
+
 end
 
 function love.run()
-	--[[ Make the window resizable with vsync disabled and a minimum size
-	if love.window then
-		love.window.setMode(800, 600, { resizable = true, vsync = 1, minwidth = 400, minheight = 300 })
-		--love.window.setVSync(1)
-	end
-	]]
+	local dt
+
 	if love.math then -- check if love.math is nil, because we need it
 		love.math.setRandomSeed(os.time())
 	end
