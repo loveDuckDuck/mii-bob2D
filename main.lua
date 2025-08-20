@@ -49,13 +49,21 @@ function love.load()
 	loader:getRequireFiles('GameFolder/Stage')
 
 	InputHandler = Input()
+	InputHandler:bind('a', 'a')
+	InputHandler:bind('d', 'd')
+	InputHandler:bind('w', 'w')
+	InputHandler:bind('s', 's')
+	InputHandler:bind('down', 'down')
+	InputHandler:bind('up', 'up')
 	InputHandler:bind('left', 'left')
 	InputHandler:bind('right', 'right')
+	
+
 	camera = Camera()
 	room_controller = RoomController()
 
 	room_controller:gotoRoom('Stage', 1)
-	resize(3)
+	love.resize()
 
 end
 
