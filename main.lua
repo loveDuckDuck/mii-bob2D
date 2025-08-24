@@ -1,97 +1,86 @@
 -- in main.lua
+
+Loader = require 'Loader'
+
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
-Timer = require 'libraries/hump/timer'
-EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
+Timer = require 'libraries/enhanced_timer/EnhancedTimer'
+Camera = require 'libraries/hump/camera'
+--EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
+Physics = require 'libraries/windfield'
 --utilities
-Loader = require 'Loader'
 Util = require 'utils/Utils'
 RoomController = require 'utils/RoomController'
+Area = require 'gameObject/Area'
 
-RoomController = require 'utils/RoomController'
-Area = require 'gameObject.Area'
-CircleGameObject = require 'gameObject.CircleGameObject'
 
 -- define hear all the local main variables
-
-local dt
-local input_handler
 -- loader of all the require in a specific folder
 local loader
 -- room_controller controller
 local room_controller
 
-local circle_room
-local rectangle_room
-local area_circleLifeRoom
+function love.resize(s)
+	UpdateScale() -- Recalculate scale when window is resized
+	--love.window.setMode(s * gw, s * gh)
+end
 
+function resize(s)
+	love.window.setMode(s * gw, s * gh)
+	sx, sy = s, s
+end
 
 function love.draw()
 	room_controller:draw()
+	DrawGarbageCollector()
 end
 
 function love.update(dt)
-	if input_handler:pressed('CircleRoom') then
-		print("to circle_room")
-		room_controller:gotoRoom('CircleRoom', 1)
-	end
-	if input_handler:pressed('RectangleRoom') then
-		print("to rectangle_room")
-		room_controller:gotoRoom('RectangleRoom', 2)
-	end
-	if input_handler:pressed('CircleLifeRoom') then
-		print("to Stage")
-		room_controller:gotoRoom('Stage', 3)
-	end
-	if room_controller.current_room then room_controller.current_room:update(dt) end
-	if room_controller.current_room then
-		if input_handler:pressed('add_circle') and room_controller.current_room.type == "CircleRoom" then
-			print("add circle to the room_controller")
-			room_controller.current_room:addCircle(
-				love.math.random(0, love.graphics.getWidth()),
-				love.math.random(0, love.graphics.getHeight()),
-				love.math.random(1, 100))
-		end
-		if input_handler:pressed('add_rectangle') and room_controller.current_room.type == "RectangleRoom" then
-			print("add rectangle to the room_controller")
-			room_controller.current_room:addRectangle(
-				love.math.random(1, 100),
-				love.math.random(1, 100),
-				love.math.random(0, love.graphics.getWidth()),
-				love.math.random(0, love.graphics.getHeight()),
-				{ love.math.random(), love.math.random(), love.math.random() })
-		end
-	end
 	room_controller:update(dt)
+	GlobalCamera:update(dt)
 end
 
 function love.load()
+	love.graphics.setDefaultFilter('nearest')
+	love.graphics.setLineStyle('rough')
 	loader = Loader()
 	loader:getRequireFiles('gameObject')
 	loader:getRequireFiles('objects')
 	loader:getRequireFiles('rooms')
+	loader:getRequireFiles('GameFolder/Stage')
 
+	InputHandler = Input()
+	InputHandler:bind('a', 'a')
+	InputHandler:bind('d', 'd')
+	InputHandler:bind('w', 'w')
+	InputHandler:bind('s', 's')
+	InputHandler:bind('down', 'down')
+	InputHandler:bind('up', 'up')
+	InputHandler:bind('left', 'left')
+	InputHandler:bind('right', 'right')
+
+
+	GlobalCamera = Camera()
 	room_controller = RoomController()
 
+	room_controller:gotoRoom('Stage', 1)
+	InputHandler:bind('f1', function()
+		print("Before collection: " .. collectgarbage("count") / 1024)
+		collectgarbage()
+		print("After collection: " .. collectgarbage("count") / 1024)
+		print("Object count: ")
+		local counts = type_count()
+		for k, v in pairs(counts) do print(k, v) end
+		print("-------------------------------------")
+	end)
 
-	input_handler = Input()
-	input_handler:bind('a', 'add_circle')
-	input_handler:bind('a', 'add_rectangle')
 
-	input_handler:bind('f1', 'CircleRoom')
-	input_handler:bind('f2', 'RectangleRoom')
-	input_handler:bind('f3', 'CircleLifeRoom')
-
+	resize(2)
 end
 
 function love.run()
-	-- Make the window resizable with vsync disabled and a minimum size
-	if love.window then
-		love.window.setMode(800, 600, { resizable = true, vsync = 1, minwidth = 400, minheight = 300 })
+	local dt
 
-
-		--love.window.setVSync(1)
-	end
 	if love.math then -- check if love.math is nil, because we need it
 		love.math.setRandomSeed(os.time())
 	end

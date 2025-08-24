@@ -1,0 +1,59 @@
+Object = require 'libraries/classic/classic'
+
+Stage = Object:extend()
+
+function Stage:new()                                   -- Create new stage object 📝
+    print("stage created")                             -- Log stage creation ✅
+    self.area = Area(self)                             -- Create an area instance 🗺️
+
+    self.area:addPhysicsWorld()
+    self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
+    -- when instante this stage
+    self.player = self.area:addGameObject('Player', gw / 2, gh / 2)
+    InputHandler:bind('f3', function()
+        if self.player then
+            self.player.dead = true
+            self.player = nil
+            print("dead")
+        end
+    end)
+    InputHandler:bind('f4', function ()
+        self.objects = self.area:addGameObject('RectangleGameObject',GlobalRandom(0,100),GlobalRandom(0,100), {width = 10, height = 10})
+        
+    end)
+
+end
+
+function Stage:update(dt) -- Update stage logic here 🕹️
+    GlobalCamera.smoother = Camera.smooth.damped(5)
+    GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
+    self.area:update(dt) -- Update the area too 👍
+
+
+
+end
+
+function Stage:draw()                         -- Drawing stage visuals here 🎨
+    love.graphics.setCanvas(self.main_canvas) -- Set main canvas target 🎯
+    love.graphics.clear()                     -- Clear the current frame 🧹
+
+    GlobalCamera:attach(0, 0, gw, gh)
+
+    GlobalCamera:detach()
+    self.area:draw()                                     -- Draw the area now 👀
+    love.graphics.setCanvas()                            -- Reset the canvas 🔄
+
+    love.graphics.setColor(1, 1, 1, 1)                   -- New 0-1 range for LÖVE 11.5
+    love.graphics.setBlendMode('alpha', 'premultiplied') -- Set blend mode here ⚙️
+    local x = (love.graphics.getWidth() - gw * sx) / 2
+    local y = (love.graphics.getHeight() - gh * sy) / 2
+
+    love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
+
+    love.graphics.setBlendMode('alpha') -- Reset the blend mode 🔄
+end
+
+function Stage:destroy()
+    self.area:destroy()
+    self.area = nil
+end
