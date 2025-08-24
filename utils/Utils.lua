@@ -128,7 +128,7 @@ function ShortestRotationPath(currentAngle, targetAngle)
 end
 
 function RotateTowards(targetAngle, dt)
-    local rotationDiff = shortestRotationPath(self.rotation, targetAngle)
+    local rotationDiff = ShortestRotationPath(self.rotation, targetAngle)
 
     -- If we're close enough, snap to target
     if math.abs(rotationDiff) < 0.1 then
