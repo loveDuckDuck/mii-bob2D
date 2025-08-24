@@ -22,7 +22,10 @@ function Area:update(dt)
     for i = #self.game_objects, 1, -1 do
         local game_object = self.game_objects[i]
         game_object:update(dt)
-        if game_object.dead then table.remove(self.game_objects, i) end
+        if game_object.dead then
+            game_object:destroy()
+            table.remove(self.game_objects, i)
+        end
     end
 end
 
@@ -47,7 +50,26 @@ end
 
 function Area:addPhysicsWorld()
     self.world = Physics.newWorld(0, 0, true) -- it fall down if i set the Y to 512 crazy
-    
+end
+
+--[[
+Cycle on my area and destroy all the object thath i had referecend on it
+after that shat remove the table object and add a new own
+if I got a world physic add to it set it to null and destroy
+]]
+
+function Area:destroy()
+    for i = #self.game_objects, 1, -1 do
+        local game_object = self.game_objects[i]
+        game_object:destroy()
+        table.remove(self.game_objects, i)
+    end
+    self.game_objects = {}
+
+    if self.world then
+        self.world:destroy()
+        self.world = nil
+    end
 end
 
 return Area

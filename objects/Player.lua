@@ -1,12 +1,10 @@
 Player = GameObject:extend()
-
 function Player:new(area, x, y, opts)
     Player.super.new(self, area, x, y, opts)
     self.x, self.y = x, y
     self.w, self.h = 12, 12
     self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
     self.collider:setObject(self)
-
 
     self.rotation = math.pi / 2 -- look down
     self.rotationVelocity = 1.66 * math.pi
@@ -19,6 +17,16 @@ function Player:new(area, x, y, opts)
     self.speed = 500
 
     self.friction = 5
+
+    self.timer:every(0.24, function()
+        self:shoot()
+    end)
+end
+
+function Player:shoot()
+    local distance = 1.2 * self.w
+    self.area:addGameObject('ShootEffect', self.x + distance * math.cos(self.rotation),
+        self.y + distance * math.sin(self.rotation), { player = self, distance = distance })
 end
 
 function Player:physics(dt)
@@ -39,41 +47,6 @@ function Player:physics(dt)
     self.collider:setPosition(self.x, self.y)
 end
 
-function shortestRotationPath(currentAngle, targetAngle)
-    -- Normalize angles to [-π, π] range
-    local function normalizeAngle(angle)
-        while angle > math.pi do
-            angle = angle - 2 * math.pi
-        end
-        while angle < -math.pi do
-            angle = angle + 2 * math.pi
-        end
-        return angle
-    end
-    
-    -- Calculate the difference
-    local diff = normalizeAngle(targetAngle - currentAngle)
-    
-    return diff
-end
-
-function Player:rotateTowards(targetAngle, dt)
-    local rotationDiff = shortestRotationPath(self.rotation, targetAngle)
-    
-    -- If we're close enough, snap to target
-    if math.abs(rotationDiff) < 0.1 then
-        self.rotation = targetAngle
-    else
-        -- Rotate towards target at rotationVelocity speed
-        local rotationStep = self.rotationVelocity * dt
-        if rotationDiff > 0 then
-            self.rotation = self.rotation + math.min(rotationStep, rotationDiff)
-        else
-            self.rotation = self.rotation + math.max(-rotationStep, rotationDiff)
-        end
-    end
-end
-
 function Player:move(dt)
     if InputHandler:down("d") and self.xvel < self.speed then
         self.xvel = self.xvel + self.speed * dt
@@ -88,23 +61,47 @@ function Player:move(dt)
         self.yvel = self.yvel - self.speed * dt
     end
 
-    local targetRotation = self.rotation -- keep current if no input
+
+    --[[ love2D reference
+
+                        up 270 / -90
+                       |
+                       |
+                       |
+                       |
+                       |
+   right 0---------------------------180 left
+                       |
+                       |
+                       |
+                       |
+                       |
+                        down 90
+    ]]
 
 
-    if InputHandler:down("right") then
-        targetRotation = 0
-    elseif InputHandler:down("left") then
-        targetRotation = -math.pi
-    elseif InputHandler:down("down") then
-        targetRotation = math.pi / 2
-    elseif InputHandler:down("up") then
-        targetRotation = -math.pi / 2
-    end
-    if love.keyboard.isDown('up', 'right') then
-        print("both press")
-    end
-    if targetRotation ~= self.rotation then
-        self:rotateTowards(targetRotation, dt)
+
+    -- Check diagonal movements first (they require two keys)
+    if love.keyboard.isDown('up') and love.keyboard.isDown('right') then
+        self.rotation = -math.pi / 4     -- 45 degrees up-right
+    elseif love.keyboard.isDown('up') and love.keyboard.isDown('left') then
+        self.rotation = -3 * math.pi / 4 -- 135 degrees up-left
+    elseif love.keyboard.isDown('down') and love.keyboard.isDown('right') then
+        self.rotation = math.pi / 4      -- 45 degrees down-right
+    elseif love.keyboard.isDown('down') and love.keyboard.isDown('left') then
+        self.rotation = 3 * math.pi / 4  -- 135 degrees down-left
+        -- Then check single key movements
+    elseif love.keyboard.isDown('right') then
+        self.rotation = 0            -- 0 degrees (facing right)
+    elseif love.keyboard.isDown("left") then
+        self.rotation = math.pi      -- 180 degrees (facing left)
+    elseif love.keyboard.isDown("down") then
+        self.rotation = math.pi / 2  -- 90 degrees (facing down)
+    elseif love.keyboard.isDown("up") then
+        self.rotation = -math.pi / 2 -- -90 degrees (facing up)
+    else
+        -- Default rotation when no keys are pressed
+        self.rotation = math.pi / 2 -- Or whatever default you want
     end
 end
 

@@ -4,9 +4,9 @@ Loader = require 'Loader'
 
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
-Timer = require 'libraries/hump/timer'
+Timer = require 'libraries/enhanced_timer/EnhancedTimer'
 Camera = require 'libraries/hump/camera'
-EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
+--EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
 Physics = require 'libraries/windfield'
 --utilities
 Util = require 'utils/Utils'
@@ -32,11 +32,12 @@ end
 
 function love.draw()
 	room_controller:draw()
+	DrawGarbageCollector()
 end
 
 function love.update(dt)
 	room_controller:update(dt)
-	camera:update(dt)
+	GlobalCamera:update(dt)
 end
 
 function love.load()
@@ -57,14 +58,24 @@ function love.load()
 	InputHandler:bind('up', 'up')
 	InputHandler:bind('left', 'left')
 	InputHandler:bind('right', 'right')
-	
 
-	camera = Camera()
+
+	GlobalCamera = Camera()
 	room_controller = RoomController()
 
 	room_controller:gotoRoom('Stage', 1)
-	love.resize()
+	InputHandler:bind('f1', function()
+		print("Before collection: " .. collectgarbage("count") / 1024)
+		collectgarbage()
+		print("After collection: " .. collectgarbage("count") / 1024)
+		print("Object count: ")
+		local counts = type_count()
+		for k, v in pairs(counts) do print(k, v) end
+		print("-------------------------------------")
+	end)
 
+
+	resize(2)
 end
 
 function love.run()

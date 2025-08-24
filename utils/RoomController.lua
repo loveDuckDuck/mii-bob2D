@@ -1,4 +1,3 @@
-local Object = require 'libraries/classic/classic'
 
 local RoomController = Object:extend()
 
@@ -19,6 +18,15 @@ function RoomController:draw()
         self.current_room:draw()
     end
 end
+
+--[[
+    -- Cause im persistent i need to chage this
+    function gotoRoom(room_type, ...)
+        if current_room and current_room.destroy then current_room:destroy() end
+        current_room = _G[room_type](...)
+    end
+
+]]
 
 function RoomController:gotoRoom(room_type, room_name, ...)
     print("room_type : ", room_type, " room_name : ", room_name)
