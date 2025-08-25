@@ -1,6 +1,5 @@
-Object = require 'libraries/classic/classic'
 
-local Area = Object:extend()
+Area = Object:extend()
 
 function Area:new(room)
     self.room = room
@@ -40,9 +39,9 @@ end
 function Area:addGameObject(game_object_type, x, y, opts)
     local opts = opts or {}
 
-    print(game_object_type)
+    --print(game_object_type)
     local game_object = _G[game_object_type](self, x or 0, y or 0, opts)
-    print(game_object)
+    --print(game_object)
 
     table.insert(self.game_objects, game_object)
     return game_object
@@ -72,4 +71,3 @@ function Area:destroy()
     end
 end
 
-return Area

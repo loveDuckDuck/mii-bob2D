@@ -11,7 +11,7 @@ Physics = require 'libraries/windfield'
 --utilities
 Util = require 'utils/Utils'
 RoomController = require 'utils/RoomController'
-Area = require 'gameObject/Area'
+--Area = require 'gameObject/Area'
 
 
 -- define hear all the local main variables
@@ -37,7 +37,8 @@ end
 
 function love.update(dt)
 	room_controller:update(dt)
-	GlobalCamera:update(dt)
+	--Timer:update(dt * GlobalSlowAmount)
+	GlobalCamera:update(dt * 	GlobalSlowAmount)
 end
 
 function love.load()
@@ -47,7 +48,7 @@ function love.load()
 	loader:getRequireFiles('gameObject')
 	loader:getRequireFiles('objects')
 	loader:getRequireFiles('rooms')
-	loader:getRequireFiles('GameFolder/Stage')
+	loader:getRequireFiles('gameFolder/Stage')
 
 	InputHandler = Input()
 	InputHandler:bind('a', 'a')
@@ -73,9 +74,9 @@ function love.load()
 		for k, v in pairs(counts) do print(k, v) end
 		print("-------------------------------------")
 	end)
-
-
-	resize(2)
+	love.resize()
+	GlobalSlowAmount = 1
+	--resize(3)
 end
 
 function love.run()

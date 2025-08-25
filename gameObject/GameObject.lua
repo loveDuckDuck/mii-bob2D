@@ -1,5 +1,4 @@
-
-GameObject = Object:extend()                              -- Extend the object
+GameObject = Object:extend()                                    -- Extend the object
 
 function GameObject:new(area, x, y, opts)                       -- Constructor function 🛠️
     local opts = opts or {}                                     -- Use opts or empty table
@@ -23,7 +22,6 @@ function GameObject:draw() -- Draw function 🎨
 end
 
 function GameObject:destroy()
-    
     self.timer:destroy()
     if self.collider then self.collider:destroy() end
     self.collider = nil

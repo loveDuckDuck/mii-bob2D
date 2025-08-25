@@ -1,5 +1,5 @@
 
-local RoomController = Object:extend()
+RoomController = Object:extend()
 
 
 function RoomController:new()
@@ -9,7 +9,7 @@ end
 
 function RoomController:update(dt)
     if self.current_room then
-        self.current_room:update(dt)
+        self.current_room:update(dt * GlobalSlowAmount)
     end
 end
 
@@ -45,5 +45,4 @@ function RoomController:addRoom(room_type, room_name, ...)
     self.rooms[room_name] = room
     return room
 end
-
 return RoomController

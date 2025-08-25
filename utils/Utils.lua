@@ -15,8 +15,8 @@ function UpdateScale()
     sx = gw / window_width  -- If window is 960px and gw=480px, sx = 0.5 (half size)
     sy = gh / window_height -- If window is 540px and gh=270px, sy = 0.5 (half size)
 
-    gw = window_width
-    gh = window_height
+    gw = window_width * sx
+    gh = window_height * sy
 
     print("Scale updated: sx =", sx, "sy =", sy)
     -- Optional: Use uniform scaling (same scale for both axes)
@@ -127,19 +127,24 @@ function ShortestRotationPath(currentAngle, targetAngle)
     return diff
 end
 
-function RotateTowards(targetAngle, dt)
-    local rotationDiff = ShortestRotationPath(self.rotation, targetAngle)
+function RotateTowards(player, targetAngle, dt)
+    local rotationDiff = ShortestRotationPath(player.rotation, targetAngle)
 
     -- If we're close enough, snap to target
     if math.abs(rotationDiff) < 0.1 then
-        self.rotation = targetAngle
+        player.rotation = targetAngle
     else
         -- Rotate towards target at rotationVelocity speed
-        local rotationStep = self.rotationVelocity * dt
+        local rotationStep = player.rotationVelocity * dt
         if rotationDiff > 0 then
-            self.rotation = self.rotation + math.min(rotationStep, rotationDiff)
+            player.rotation = player.rotation + math.min(rotationStep, rotationDiff)
         else
-            self.rotation = self.rotation + math.max(-rotationStep, rotationDiff)
+            player.rotation = player.rotation + math.max(-rotationStep, rotationDiff)
         end
     end
+end
+
+function Slow(amount, duration)
+    GlobalSlowAmount = amount
+    Timer:tween('slow', duration, _G, {GlobalSlowAmount = 1}, 'in-out-cubic')
 end

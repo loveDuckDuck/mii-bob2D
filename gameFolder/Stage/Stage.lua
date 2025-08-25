@@ -1,4 +1,3 @@
-Object = require 'libraries/classic/classic'
 
 Stage = Object:extend()
 
@@ -17,19 +16,12 @@ function Stage:new()                                   -- Create new stage objec
             print("dead")
         end
     end)
-    InputHandler:bind('f4', function ()
-        self.objects = self.area:addGameObject('RectangleGameObject',GlobalRandom(0,100),GlobalRandom(0,100), {width = 10, height = 10})
-        
-    end)
-
 end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
     GlobalCamera.smoother = Camera.smooth.damped(5)
     GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
     self.area:update(dt) -- Update the area too 👍
-
-
 
 end
 

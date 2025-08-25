@@ -21,12 +21,24 @@ function Player:new(area, x, y, opts)
     self.timer:every(0.24, function()
         self:shoot()
     end)
+    InputHandler:bind('f4', function() self:die() end)
 end
 
 function Player:shoot()
     local distance = 1.2 * self.w
     self.area:addGameObject('ShootEffect', self.x + distance * math.cos(self.rotation),
         self.y + distance * math.sin(self.rotation), { player = self, distance = distance })
+    self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation),
+        self.y + 1.5 * distance * math.sin(self.rotation), { rotation = self.rotation })
+
+
+    --[[ the idea is to reduce the angle of the position of the spawn, to this is simple math
+    self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 6),
+        self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 6), { rotation = self.rotation + math.pi / 6 })
+
+    self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 6),
+    self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 6), { rotation = self.rotation - math.pi / 6 })
+    ]]
 end
 
 function Player:physics(dt)
@@ -62,47 +74,41 @@ function Player:move(dt)
     end
 
 
-    --[[ love2D reference
-
-                        up 270 / -90
-                       |
-                       |
-                       |
-                       |
-                       |
-   right 0---------------------------180 left
-                       |
-                       |
-                       |
-                       |
-                       |
-                        down 90
+    --[[ 
+        love2D reference
+        up 270 / -90
+        right == 0
+        180 left
+        down 90
     ]]
 
+    local targetAngle
 
-
-    -- Check diagonal movements first (they require two keys)
+    --Check diagonal movements first (they require two keys)
     if love.keyboard.isDown('up') and love.keyboard.isDown('right') then
-        self.rotation = -math.pi / 4     -- 45 degrees up-right
+       targetAngle= -math.pi / 4     -- 45 degrees up-right
     elseif love.keyboard.isDown('up') and love.keyboard.isDown('left') then
-        self.rotation = -3 * math.pi / 4 -- 135 degrees up-left
+       targetAngle= -3 * math.pi / 4 -- 135 degrees up-left
     elseif love.keyboard.isDown('down') and love.keyboard.isDown('right') then
-        self.rotation = math.pi / 4      -- 45 degrees down-right
+       targetAngle= math.pi / 4      -- 45 degrees down-right
     elseif love.keyboard.isDown('down') and love.keyboard.isDown('left') then
-        self.rotation = 3 * math.pi / 4  -- 135 degrees down-left
-        -- Then check single key movements
+       targetAngle= 3 * math.pi / 4  -- 135 degrees down-left
+    
+    -- Then check single key movements
     elseif love.keyboard.isDown('right') then
-        self.rotation = 0            -- 0 degrees (facing right)
+        targetAngle = 0            -- 0 degrees (facing right)
     elseif love.keyboard.isDown("left") then
-        self.rotation = math.pi      -- 180 degrees (facing left)
+        targetAngle = math.pi      -- 180 degrees (facing left)
     elseif love.keyboard.isDown("down") then
-        self.rotation = math.pi / 2  -- 90 degrees (facing down)
+        targetAngle = math.pi / 2  -- 90 degrees (facing down)
     elseif love.keyboard.isDown("up") then
-        self.rotation = -math.pi / 2 -- -90 degrees (facing up)
+        targetAngle = -math.pi / 2 -- -90 degrees (facing up)
     else
         -- Default rotation when no keys are pressed
-        self.rotation = math.pi / 2 -- Or whatever default you want
+        targetAngle = math.pi / 2 -- Or whatever default you want
     end
+
+    RotateTowards(self, targetAngle, dt)
 end
 
 function Player:update(dt)
@@ -113,7 +119,14 @@ function Player:update(dt)
 end
 
 function Player:draw()
-    love.graphics.circle('line', self.x, self.y, 25)
-    love.graphics.line(self.x, self.y, self.x + 2 * self.w * math.cos(self.rotation),
-        self.y + 2 * self.w * math.sin(self.rotation))
+    -- love.graphics.circle('line', self.x, self.y, 25)
+    --love.graphics.line(self.x, self.y, self.x + 2 * self.w * math.cos(self.rotation),
+    --    self.y + 2 * self.w * math.sin(self.rotation))
+end
+
+function Player:die()
+    self.dead = true
+    for i = 1, love.math.random(8, 12) do
+        self.area:addGameObject('ExplodeParticle', self.x, self.y,{color = {255/255,105/255,180/255}})
+    end
 end
