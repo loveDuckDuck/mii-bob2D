@@ -6,6 +6,9 @@ Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
 Timer = require 'libraries/enhanced_timer/EnhancedTimer'
 Camera = require 'libraries/hump/camera'
+Push = require ("libraries.push.push")
+
+
 --EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
 Physics = require 'libraries/windfield'
 --utilities
@@ -14,36 +17,34 @@ RoomController = require 'utils/RoomController'
 --Area = require 'gameObject/Area'
 
 
--- define hear all the local main variables
--- loader of all the require in a specific folder
-local loader
--- room_controller controller
-local room_controller
 
-function love.resize(s)
-	UpdateScale() -- Recalculate scale when window is resized
-	--love.window.setMode(s * gw, s * gh)
+function love.resize(widht,height)
+	Push:resize(widht,height)
 end
 
-function resize(s)
-	love.window.setMode(s * gw, s * gh)
-	sx, sy = s, s
-end
 
 function love.draw()
-	room_controller:draw()
+	Push:start()
+	roomController:draw()
+		Push:finish()
 	DrawGarbageCollector()
+	
 end
 
 function love.update(dt)
-	room_controller:update(dt)
+	roomController:update(dt)
 	--Timer:update(dt * GlobalSlowAmount)
 	GlobalCamera:update(dt * 	GlobalSlowAmount)
 end
 
 function love.load()
-	love.graphics.setDefaultFilter('nearest')
+	love.graphics.setDefaultFilter("nearest","nearest")
 	love.graphics.setLineStyle('rough')
+	WINDOW_WIDTH,WINDOW_HEIGHT = love.window.getDesktopDimensions() 
+	WINDOW_WIDTH,WINDOW_HEIGHT =WINDOW_WIDTH * 0.7,WINDOW_HEIGHT * 0.7
+	
+	Push:setupScreen(gw,gh,WINDOW_WIDTH,WINDOW_HEIGHT, {resizable = true})
+
 	loader = Loader()
 	loader:getRequireFiles('gameObject')
 	loader:getRequireFiles('objects')
@@ -62,9 +63,9 @@ function love.load()
 
 
 	GlobalCamera = Camera()
-	room_controller = RoomController()
+	roomController = RoomController()
 
-	room_controller:gotoRoom('Stage', 1)
+	roomController:gotoRoom('Stage', 1)
 	InputHandler:bind('f1', function()
 		print("Before collection: " .. collectgarbage("count") / 1024)
 		collectgarbage()
@@ -74,9 +75,7 @@ function love.load()
 		for k, v in pairs(counts) do print(k, v) end
 		print("-------------------------------------")
 	end)
-	love.resize()
 	GlobalSlowAmount = 1
-	--resize(3)
 end
 
 function love.run()
