@@ -7,7 +7,7 @@ Loader = require 'Loader'
 Input = require 'libraries/input/Input'
 Timer = require 'libraries/enhanced_timer/EnhancedTimer'
 Camera = require 'libraries/hump/camera'
-Push = require'libraries/push/push'
+Push = require 'libraries/push/push'
 
 
 --EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
@@ -18,7 +18,12 @@ RoomController = require 'utils/RoomController'
 --Area = require 'gameObject/Area'
 
 function flash(frames)
-    FlashFrames = frames
+	FlashFrames = frames
+end
+
+function resize(s)
+	love.window.setMode(s * gw, s * gh)
+	sx, sy = s, s
 end
 
 function love.resize(widht, height)
@@ -26,9 +31,7 @@ function love.resize(widht, height)
 end
 
 function love.draw()
-	Push:start()
 	roomController:draw()
-	Push:finish()
 	DrawGarbageCollector()
 end
 
@@ -38,15 +41,9 @@ function love.update(dt)
 	GlobalCamera:update(dt * GlobalSlowAmount)
 end
 
-
-
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setLineStyle('rough')
-	WINDOW_WIDTH, WINDOW_HEIGHT = love.window.getDesktopDimensions()
-	WINDOW_WIDTH, WINDOW_HEIGHT = WINDOW_WIDTH*.7, WINDOW_HEIGHT*.7 --make the window a bit smaller than the screen itself
-
-	Push:setupScreen(gw, gh, WINDOW_WIDTH, WINDOW_HEIGHT, { resizable = true, v })
 
 	loader = Loader()
 	loader:getRequireFiles('gameObject')
@@ -80,8 +77,9 @@ function love.load()
 		for k, v in pairs(counts) do print(k, v) end
 		print("-------------------------------------")
 	end)
+	resize(2)
 	GlobalSlowAmount = 1
-	FlashFrames  = 0
+	FlashFrames      = 0
 end
 
 function love.run()

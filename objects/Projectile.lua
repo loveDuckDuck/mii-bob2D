@@ -37,8 +37,7 @@ end
 
 function Projectile:die()
     self.dead = true
-    print("self.x" .. self.x )
-    print("self.y" .. self.y )
+
     
     self.area:addGameObject('ProjectileDeathEffect', self.x, self.y, 
     {color = G_hp_color, w = 3*self.s})

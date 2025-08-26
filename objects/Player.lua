@@ -13,15 +13,18 @@ function Player:new(area, x, y, opts)
     self.velocity = 0
     self.maxVelocity = 100
     self.acceleration = 100
+    self.enabledToShoot = false
 
     self.speed = 500
 
     self.friction = 5
 
-    self.timer:every(0.24, function()
-        self:shoot()
-    end)
     InputHandler:bind('f4', function() self:die() end)
+    self.timer:every(0.24, function()
+        if self.enabledToShoot then
+            self:shoot()
+        end
+    end)
 end
 
 function Player:shoot()
@@ -30,6 +33,8 @@ function Player:shoot()
         self.y + distance * math.sin(self.rotation), { player = self, distance = distance })
     self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation),
         self.y + 1.5 * distance * math.sin(self.rotation), { rotation = self.rotation })
+
+
 
 
     --[[ the idea is to reduce the angle of the position of the spawn, to this is simple math
@@ -84,7 +89,7 @@ function Player:move(dt)
         down 90
     ]]
 
-    local targetAngle
+    local targetAngle = self.rotation
 
     --Check diagonal movements first (they require two keys)
     if love.keyboard.isDown('up') and love.keyboard.isDown('right') then
@@ -105,9 +110,19 @@ function Player:move(dt)
         targetAngle = math.pi / 2  -- 90 degrees (facing down)
     elseif love.keyboard.isDown("up") then
         targetAngle = -math.pi / 2 -- -90 degrees (facing up)
+    end
+    --[[
     else
         -- Default rotation when no keys are pressed
         targetAngle = math.pi / 2 -- Or whatever default you want
+    end
+    ]]
+
+
+    if love.keyboard.isDown('up', 'down', 'right', 'left') then
+        self.enabledToShoot = true
+    else
+        self.enabledToShoot = false
     end
 
     RotateTowards(self, targetAngle, dt)

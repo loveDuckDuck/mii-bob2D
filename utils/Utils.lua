@@ -89,7 +89,6 @@ function DrawGarbageCollector()
     
     love.graphics.print(gw .. " : " .. gh, 0,y_offset)
     y_offset = y_offset + 20
-    love.graphics.print(WINDOW_WIDTH .. " : " .. WINDOW_HEIGHT, 0,y_offset)
     
     love.graphics.setColor(1, 1, 1, 1)
     
