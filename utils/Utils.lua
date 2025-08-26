@@ -86,7 +86,13 @@ function DrawGarbageCollector()
         love.graphics.print(k .. ": " .. v, 0, y_offset)
         y_offset = y_offset + 20 -- Increment the y-coordinate for the next line
     end
+    
+    love.graphics.print(gw .. " : " .. gh, 0,y_offset)
+    y_offset = y_offset + 20
+    love.graphics.print(WINDOW_WIDTH .. " : " .. WINDOW_HEIGHT, 0,y_offset)
+    
     love.graphics.setColor(1, 1, 1, 1)
+    
 end
 
 
@@ -146,5 +152,5 @@ end
 
 function Slow(amount, duration)
     GlobalSlowAmount = amount
-    Timer:tween('slow', duration, _G, {GlobalSlowAmount = 1}, 'in-out-cubic')
+    GlobalTimer:tween('Slow', duration, _G, {GlobalSlowAmount = 1}, 'in-out-cubic')
 end

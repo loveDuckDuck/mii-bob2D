@@ -9,13 +9,22 @@ end
 
 function RoomController:update(dt)
     if self.current_room then
-        self.current_room:update(dt * GlobalSlowAmount)
+        self.current_room:update(dt )
     end
 end
 
 function RoomController:draw()
     if self.current_room then
         self.current_room:draw()
+    end
+        if FlashFrames then 
+        FlashFrames = FlashFrames - 1
+        if FlashFrames == -1 then FlashFrames = nil end
+    end
+    if FlashFrames then
+        love.graphics.setColor(G_background_color)
+        love.graphics.rectangle('fill', 0, 0, sx*gw, sy*gh)
+        love.graphics.setColor(255, 255, 255)
     end
 end
 

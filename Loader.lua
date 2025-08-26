@@ -1,4 +1,3 @@
-Object = require 'libraries/classic/classic' -- Get classic lib 📚
 
 local Loader = Object:extend() -- Extends the object class 👨‍💻
 
@@ -31,4 +30,4 @@ function Loader:requireFiles(files_list) -- Require the files 🧐
     end
 end
 
-return Loader -- Return the Loader class 📦
+return Loader

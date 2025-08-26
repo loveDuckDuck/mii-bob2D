@@ -37,9 +37,11 @@ function Stage:draw()                         -- Drawing stage visuals here 🎨
 
     love.graphics.setColor(1, 1, 1, 1)                   -- New 0-1 range for LÖVE 11.5
     love.graphics.setBlendMode('alpha', 'premultiplied') -- Set blend mode here ⚙️
+    --[[
+        XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND 
+    ]]
     local x = (love.graphics.getWidth() - gw * sx) / 2
     local y = (love.graphics.getHeight() - gh * sy) / 2
-
     love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
 
     love.graphics.setBlendMode('alpha') -- Reset the blend mode 🔄

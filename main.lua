@@ -1,12 +1,13 @@
 -- in main.lua
 
+Object = require 'libraries/classic/classic'
+
 Loader = require 'Loader'
 
-Object = require 'libraries/classic/classic'
 Input = require 'libraries/input/Input'
 Timer = require 'libraries/enhanced_timer/EnhancedTimer'
 Camera = require 'libraries/hump/camera'
-Push = require ("libraries.push.push")
+Push = require'libraries/push/push'
 
 
 --EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
@@ -16,34 +17,36 @@ Util = require 'utils/Utils'
 RoomController = require 'utils/RoomController'
 --Area = require 'gameObject/Area'
 
-
-
-function love.resize(widht,height)
-	Push:resize(widht,height)
+function flash(frames)
+    FlashFrames = frames
 end
 
+function love.resize(widht, height)
+	Push:resize(widht, height)
+end
 
 function love.draw()
 	Push:start()
 	roomController:draw()
-		Push:finish()
+	Push:finish()
 	DrawGarbageCollector()
-	
 end
 
 function love.update(dt)
-	roomController:update(dt)
+	roomController:update(dt * GlobalSlowAmount)
 	--Timer:update(dt * GlobalSlowAmount)
-	GlobalCamera:update(dt * 	GlobalSlowAmount)
+	GlobalCamera:update(dt * GlobalSlowAmount)
 end
 
+
+
 function love.load()
-	love.graphics.setDefaultFilter("nearest","nearest")
+	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setLineStyle('rough')
-	WINDOW_WIDTH,WINDOW_HEIGHT = love.window.getDesktopDimensions() 
-	WINDOW_WIDTH,WINDOW_HEIGHT =WINDOW_WIDTH * 0.7,WINDOW_HEIGHT * 0.7
-	
-	Push:setupScreen(gw,gh,WINDOW_WIDTH,WINDOW_HEIGHT, {resizable = true})
+	WINDOW_WIDTH, WINDOW_HEIGHT = love.window.getDesktopDimensions()
+	WINDOW_WIDTH, WINDOW_HEIGHT = WINDOW_WIDTH*.7, WINDOW_HEIGHT*.7 --make the window a bit smaller than the screen itself
+
+	Push:setupScreen(gw, gh, WINDOW_WIDTH, WINDOW_HEIGHT, { resizable = true, v })
 
 	loader = Loader()
 	loader:getRequireFiles('gameObject')
@@ -56,12 +59,14 @@ function love.load()
 	InputHandler:bind('d', 'd')
 	InputHandler:bind('w', 'w')
 	InputHandler:bind('s', 's')
+	InputHandler:bind('b', 'b')
+
 	InputHandler:bind('down', 'down')
 	InputHandler:bind('up', 'up')
 	InputHandler:bind('left', 'left')
 	InputHandler:bind('right', 'right')
 
-
+	GlobalTimer = Timer()
 	GlobalCamera = Camera()
 	roomController = RoomController()
 
@@ -76,6 +81,7 @@ function love.load()
 		print("-------------------------------------")
 	end)
 	GlobalSlowAmount = 1
+	FlashFrames  = 0
 end
 
 function love.run()

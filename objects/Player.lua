@@ -73,8 +73,10 @@ function Player:move(dt)
         self.yvel = self.yvel - self.speed * dt
     end
 
-
-    --[[ 
+    if InputHandler:down("b") then
+        Slow(0.15, 1)
+    end
+    --[[
         love2D reference
         up 270 / -90
         right == 0
@@ -86,15 +88,15 @@ function Player:move(dt)
 
     --Check diagonal movements first (they require two keys)
     if love.keyboard.isDown('up') and love.keyboard.isDown('right') then
-       targetAngle= -math.pi / 4     -- 45 degrees up-right
+        targetAngle = -math.pi / 4     -- 45 degrees up-right
     elseif love.keyboard.isDown('up') and love.keyboard.isDown('left') then
-       targetAngle= -3 * math.pi / 4 -- 135 degrees up-left
+        targetAngle = -3 * math.pi / 4 -- 135 degrees up-left
     elseif love.keyboard.isDown('down') and love.keyboard.isDown('right') then
-       targetAngle= math.pi / 4      -- 45 degrees down-right
+        targetAngle = math.pi / 4      -- 45 degrees down-right
     elseif love.keyboard.isDown('down') and love.keyboard.isDown('left') then
-       targetAngle= 3 * math.pi / 4  -- 135 degrees down-left
-    
-    -- Then check single key movements
+        targetAngle = 3 * math.pi / 4  -- 135 degrees down-left
+
+        -- Then check single key movements
     elseif love.keyboard.isDown('right') then
         targetAngle = 0            -- 0 degrees (facing right)
     elseif love.keyboard.isDown("left") then
@@ -126,7 +128,11 @@ end
 
 function Player:die()
     self.dead = true
+    flash(4)
+    GlobalCamera:shake(6, 60, 0.4)
+
+    Slow(0.15, 1)
     for i = 1, love.math.random(8, 12) do
-        self.area:addGameObject('ExplodeParticle', self.x, self.y,{color = {255/255,105/255,180/255}})
+        self.area:addGameObject('ExplodeParticle', self.x, self.y, { color = G_hp_color })
     end
 end
