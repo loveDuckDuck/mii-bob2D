@@ -1,20 +1,18 @@
 -- in main.lua
 
-Object = require 'libraries/classic/classic'
+Object = require("libraries/classic/classic")
 
-Loader = require 'Loader'
+Loader = require("Loader")
 
-Input = require 'libraries/input/Input'
-Timer = require 'libraries/enhanced_timer/EnhancedTimer'
-Camera = require 'libraries/hump/camera'
-Push = require 'libraries/push/push'
-
-
+Input = require("libraries/input/Input")
+Timer = require("libraries/enhanced_timer/EnhancedTimer")
+Camera = require("libraries/hump/camera")
+Push = require("libraries/push/push")
 --EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
-Physics = require 'libraries/windfield'
+Physics = require("libraries/windfield")
 --utilities
-Util = require 'utils/Utils'
-RoomController = require 'utils/RoomController'
+Util = require("utils/Utils")
+RoomController = require("utils/RoomController")
 --Area = require 'gameObject/Area'
 
 function flash(frames)
@@ -31,55 +29,51 @@ function love.resize(widht, height)
 end
 
 function love.draw()
-	roomController:draw()
+	GlobalRoomController:draw()
 	DrawGarbageCollector()
 end
 
 function love.update(dt)
-	roomController:update(dt * GlobalSlowAmount)
+	if InputHandler:pressed("DeleteEveryThing") then
+		DeleteEveryThing()
+	end
+
+	GlobalRoomController:update(dt * GlobalSlowAmount)
 	--Timer:update(dt * GlobalSlowAmount)
 	GlobalCamera:update(dt * GlobalSlowAmount)
 end
 
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	love.graphics.setLineStyle('rough')
+	love.graphics.setLineStyle("rough")
 
 	loader = Loader()
-	loader:getRequireFiles('gameObject')
-	loader:getRequireFiles('objects')
-	loader:getRequireFiles('rooms')
-	loader:getRequireFiles('gameFolder/Stage')
+	loader:getRequireFiles("gameObject")
+	loader:getRequireFiles("objects")
+	loader:getRequireFiles("gameFolder/Stage")
 
 	InputHandler = Input()
-	InputHandler:bind('a', 'a')
-	InputHandler:bind('d', 'd')
-	InputHandler:bind('w', 'w')
-	InputHandler:bind('s', 's')
-	InputHandler:bind('b', 'b')
+	InputHandler:bind("a", "a")
+	InputHandler:bind("d", "d")
+	InputHandler:bind("w", "w")
+	InputHandler:bind("s", "s")
+	InputHandler:bind("b", "b")
 
-	InputHandler:bind('down', 'down')
-	InputHandler:bind('up', 'up')
-	InputHandler:bind('left', 'left')
-	InputHandler:bind('right', 'right')
+	InputHandler:bind("down", "down")
+	InputHandler:bind("up", "up")
+	InputHandler:bind("left", "left")
+	InputHandler:bind("right", "right")
+
+	InputHandler:bind("escape", "DeleteEveryThing")
 
 	GlobalTimer = Timer()
 	GlobalCamera = Camera()
-	roomController = RoomController()
+	GlobalRoomController = RoomController()
 
-	roomController:gotoRoom('Stage', 1)
-	InputHandler:bind('f1', function()
-		print("Before collection: " .. collectgarbage("count") / 1024)
-		collectgarbage()
-		print("After collection: " .. collectgarbage("count") / 1024)
-		print("Object count: ")
-		local counts = type_count()
-		for k, v in pairs(counts) do print(k, v) end
-		print("-------------------------------------")
-	end)
+	GlobalRoomController:gotoRoom("Stage", UUID())
 	resize(2)
 	GlobalSlowAmount = 1
-	FlashFrames      = 0
+	FlashFrames = 0
 end
 
 function love.run()
@@ -98,7 +92,6 @@ function love.run()
 		love.timer.step()
 		dt = love.timer.getDelta() -- with this im gone insert define the fixed delta time
 	end
-
 
 	-- Main loop time.
 	while true do

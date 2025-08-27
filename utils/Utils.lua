@@ -153,3 +153,10 @@ function Slow(amount, duration)
     GlobalSlowAmount = amount
     GlobalTimer:tween('Slow', duration, _G, {GlobalSlowAmount = 1}, 'in-out-cubic')
 end
+
+
+function DeleteEveryThing ()
+    print("DeleteEveryThing")
+
+    GlobalRoomController:printRoomNames()
+end
