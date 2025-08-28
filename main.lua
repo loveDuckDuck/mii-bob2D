@@ -58,6 +58,7 @@ function love.load()
 	InputHandler:bind("w", "w")
 	InputHandler:bind("s", "s")
 	InputHandler:bind("b", "b")
+	InputHandler:bind("space", "boosting")
 
 	InputHandler:bind("down", "down")
 	InputHandler:bind("up", "up")
