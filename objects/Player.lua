@@ -81,6 +81,8 @@ function Player:move(dt)
 	if InputHandler:down("b") then
 		Slow(0.15, 1)
 	end
+
+	
 	if InputHandler:down("boosting") then
 		-- turbo nigga
 

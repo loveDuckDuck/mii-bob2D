@@ -5,6 +5,7 @@ function TickEffect:new(area, x, y, opts)
     --[[
     TODO: avoid hard coding size of the reactangle evaulate the size of the player
     ]]
+    self.depth = 75
     self.w, self.h = 48, 32
     self.y_offset = 0
     self.timer:tween(0.13, self, { h = 0, y_offset = 32 }, 'in-out-cubic',
