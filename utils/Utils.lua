@@ -151,6 +151,7 @@ end
 
 function Slow(amount, duration)
     GlobalSlowAmount = amount
+    print("GlobalSlowAmount : " .. GlobalSlowAmount)
     GlobalTimer:tween('Slow', duration, _G, {GlobalSlowAmount = 1}, 'in-out-cubic')
 end
 
@@ -158,5 +159,34 @@ end
 function DeleteEveryThing ()
     print("DeleteEveryThing")
 
-    GlobalRoomController:printRoomNames()
+end
+
+--[[
+    -- Use:
+    local dy = target.y - self.y
+    local dx = target.x - self.x
+    local angle = my_atan2(dy, dx)
+    i need to use this because atan2 it deprecated
+    so i need to calculate manually the quadranct, becuase atan, is not safe with x = 0 and
+    return only anglese in Q1 and Q4
+        y
+        ↑
+    Q2  |  Q1     atan2 handles: Q1, Q2, Q3, Q4
+    ------+------  atan handles:   Q1, Q4 only (and maps Q2,Q3 to Q4,Q1)
+    Q3  |  Q4
+
+    ]]
+
+function GlobalAtan2(y, x)
+    if x > 0 then
+        return math.atan(y / x)
+    elseif x < 0 then
+        return math.atan(y / x) + math.pi * (y >= 0 and 1 or -1)
+    elseif y > 0 then
+        return math.pi / 2
+    elseif y < 0 then
+        return -math.pi / 2
+    else
+        return 0  -- x = 0, y = 0 (undefined)
+    end
 end

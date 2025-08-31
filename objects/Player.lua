@@ -5,7 +5,7 @@ function Player:new(area, x, y, opts)
 	self.w, self.h = 12, 12
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
 	self.collider:setObject(self)
-
+	self.collider:setCollisionClass("Player")
 	self.rotation = math.pi / 2 -- look down
 	self.rotationVelocity = 1.66 * math.pi
 	self.xvel = 0
@@ -32,6 +32,8 @@ function Player:new(area, x, y, opts)
 	end)
 
 	self.friction = 5
+
+	self.isBounce = false
 
 	InputHandler:bind("f4", function()
 		self:die()
@@ -82,10 +84,9 @@ function Player:move(dt)
 		Slow(0.15, 1)
 	end
 
-	
 	if InputHandler:down("boosting") then
 		-- turbo nigga
-
+		self.isBounce = not self.isBounce
 		self.maxVelocity = self.boosting and 1.5 * self.baseMaxVelocity or 0.5 * self.baseMaxVelocity
 		self.boosting = not self.boosting
 	end
@@ -136,11 +137,22 @@ function Player:move(dt)
 	RotateTowards(self, targetAngle, dt)
 end
 
+function Player:checkCollision(dt)
+	if self.collider:enter("Collectable") then
+		local collision_data = self.collider:getEnterCollisionData("Collectable")
+        local object = collision_data.collider:getObject()
+        if object:is(Ammo) then
+            object:die()
+        end
+	end
+end
+
 function Player:update(dt)
 	Player.super.update(self, dt)
 
 	self:physics(dt)
 	self:move(dt)
+	self:checkCollision(dt)
 end
 
 function Player:draw()
@@ -150,7 +162,6 @@ function Player:draw()
 end
 
 function Player:tick()
-	print("recntagle appear")
 	self.area:addGameObject("TickEffect", self.x, self.y, { parent = self })
 end
 
@@ -166,7 +177,7 @@ function Player:shoot()
 		"Projectile",
 		self.x + 1.5 * distance * math.cos(self.rotation),
 		self.y + 1.5 * distance * math.sin(self.rotation),
-		{ rotation = self.rotation }
+		{ rotation = self.rotation, isBounce = self.isBounce }
 	)
 	--[[ the idea is to reduce the angle of the position of the spawn, to this is simple math
     self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 6),

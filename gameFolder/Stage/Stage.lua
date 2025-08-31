@@ -5,14 +5,25 @@ function Stage:new() -- Create new stage object 📝
 	self.area = Area(self) -- Create an area instance 🗺️
 
 	self.area:addPhysicsWorld()
+	self.area.world:addCollisionClass("Player")
+	self.area.world:addCollisionClass("Projectile", { ignores = { "Projectile" } }) -- the world need to check
+	self.area.world:addCollisionClass("Collectable", { ignores = { "Player", "Projectile" } })
+
 	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
+
+	InputHandler:bind("p", function()
+		self.area:addGameObject("Ammo", GlobalRandom(0, gw), GlobalRandom(0, gh))
+	end)
+		GlobalCamera.smoother = Camera.smooth.damped(100)
+
 end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
-	GlobalCamera.smoother = Camera.smooth.damped(5)
-	GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
+	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
+	GlobalCamera:lookAt(self.player.x, self.player.y)
+	GlobalCamera:update(dt)
 	self.area:update(dt) -- Update the area too 👍
 end
 
@@ -20,13 +31,14 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	love.graphics.setCanvas(self.main_canvas) -- Set main canvas target 🎯
 	love.graphics.clear() -- Clear the current frame 🧹
 
+	--GlobalCamera:attach()
 	GlobalCamera:attach(0, 0, gw, gh)
+		self.area:draw() -- Draw the area now 👀
 
 	GlobalCamera:detach()
-	self.area:draw() -- Draw the area now 👀
 	love.graphics.setCanvas() -- Reset the canvas 🔄
 
-	love.graphics.setColor(1, 1, 1, 1) -- New 0-1 range for LÖVE 11.5
+	love.graphics.setColor(0, 1, 1, 1) -- New 0-1 range for LÖVE 11.5
 	love.graphics.setBlendMode("alpha", "premultiplied") -- Set blend mode here ⚙️
 	--[[
         XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND

@@ -8,6 +8,10 @@ Input = require("libraries/input/Input")
 Timer = require("libraries/enhanced_timer/EnhancedTimer")
 Camera = require("libraries/hump/camera")
 Push = require("libraries/push/push")
+
+Draft = require("libraries/draft/draft")
+Vector = require("libraries/hump/vector")
+
 --EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
 Physics = require("libraries/windfield")
 --utilities
@@ -46,6 +50,7 @@ end
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setLineStyle("rough")
+	DraftDrawer = Draft()
 
 	loader = Loader()
 	loader:getRequireFiles("gameObject")
@@ -66,6 +71,7 @@ function love.load()
 	InputHandler:bind("right", "right")
 
 	InputHandler:bind("escape", "DeleteEveryThing")
+	
 
 	GlobalTimer = Timer()
 	GlobalCamera = Camera()
@@ -137,3 +143,4 @@ function love.run()
 		end
 	end
 end
+
