@@ -4,7 +4,7 @@ function Projectile:new(area, x, y, opts)
 	Projectile.super.new(self, area, x, y, opts)
 	-- s rappresente the radius of the collider
 	self.s = opts.s or 2.5
-	self.velocity = opts.velocity or 200
+	self.velocity = opts.velocity or G_default_player_velocity
 
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.s)
 	self.collider:setObject(self)
@@ -31,8 +31,8 @@ function Projectile:update(dt)
 
 	local vx, vy = self.collider:getLinearVelocity()
 
-	local top_bound = self.parent.x - gh / 2
-	local bottom_bound = self.parent.x + gh / 2
+	local top_bound = self.parent.y - gh / 2
+	local bottom_bound = self.parent.y + gh / 2
 	local left_bound = self.parent.x - gw / 2
 	local right_bound = self.parent.x + gw / 2
 

@@ -34,10 +34,10 @@ function Area:draw()
 		self.world:draw()
 	end
 	table.sort(self.game_objects, function(a, b)
-		if a.depth == b.depth then
+		if a.layer == b.layer then
 			return a.creation_time < b.creation_time
 		else
-			return a.depth < b.depth
+			return a.layer < b.layer
 		end
 	end)
 

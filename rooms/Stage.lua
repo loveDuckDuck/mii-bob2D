@@ -15,6 +15,8 @@ function Stage:new() -- Create new stage object 📝
 
 	InputHandler:bind("p", function()
 		self.area:addGameObject("Ammo", GlobalRandom(0, GlobalWordlSizeX), GlobalRandom(0, GlobalWordlSizeY))
+		self.area:addGameObject("BoostCoin", GlobalRandom(self.player.x - gw/2, self.player.x + gw/2), GlobalRandom(self.player.y - gh/2, self.player.y + gh/2))
+	
 	end)
 		GlobalCamera.smoother = Camera.smooth.damped(100)
 

@@ -9,7 +9,7 @@ function GameObject:new(area, x, y, opts)                       -- Constructor f
     self.id = UUID()                                            -- Generate a unique id
     self.creation_time = love.timer.getTime()                   -- Get creation time ⏳
     self.timer = Timer()                                        -- Initialize the timer
-    self.depth = 50                                             -- Depth to drawn, same idea of layer, so biggest is the layer more its infront
+    self.layer = 50                                             -- Depth to drawn, same idea of layer, so biggest is the layer more its infront
     self.dead = false                                           -- Not dead yet 😇
 end
 

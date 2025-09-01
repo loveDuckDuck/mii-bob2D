@@ -190,3 +190,7 @@ function GlobalAtan2(y, x)
         return 0  -- x = 0, y = 0 (undefined)
     end
 end
+
+function table.random(t)
+    return t[love.math.random(1, #t)]
+end

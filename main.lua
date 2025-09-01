@@ -3,20 +3,20 @@
 Object = require("libraries/classic/classic")
 
 Loader = require("Loader")
-
 Input = require("libraries/input/Input")
 Timer = require("libraries/enhanced_timer/EnhancedTimer")
 Camera = require("libraries/hump/camera")
 Push = require("libraries/push/push")
-
 Draft = require("libraries/draft/draft")
 Vector = require("libraries/hump/vector")
-
---EnhancedTimer = require 'libraries/enhanced_timer/EnhancedTimer'
 Physics = require("libraries/windfield")
+Moses = require("libraries/moses/moses")
 --utilities
 Util = require("utils/Utils")
 RoomController = require("utils/RoomController")
+
+require("libraries/string/utf8")
+
 --Area = require 'gameObject/Area'
 
 function flash(frames)
@@ -29,15 +29,14 @@ function resize(s)
 end
 
 function love.resize(widht, height)
-	Push:resize(widht, height)
+	resize(3)
 end
 
 function love.draw()
 	GlobalRoomController:draw()
 	DrawGarbageCollector()
-		love.graphics.setColor(G_ammo_color)
+	love.graphics.setColor(G_ammo_color)
 	love.graphics.setColor(G_default_color)
-
 end
 
 function love.update(dt)
@@ -50,18 +49,16 @@ function love.update(dt)
 	GlobalCamera:update(dt * GlobalSlowAmount)
 end
 
-function love.load()
+local function graphicSetter()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	love.graphics.setLineStyle("rough")
-	DraftDrawer = Draft()
+	Font = love.graphics.newFont("resource/m5x7.ttf")
+	if Font then
+		print("loaded")
+	end
+end
 
-	Globalloader = Loader()
-	Globalloader:getRequireFiles("gameObject")
-	Globalloader:getRequireFiles("objectsEffect")
-
-	Globalloader:getRequireFiles("objects")
-	Globalloader:getRequireFiles("rooms")
-
+local function inputBinder()
 	InputHandler = Input()
 	InputHandler:bind("a", "a")
 	InputHandler:bind("d", "d")
@@ -76,14 +73,35 @@ function love.load()
 	InputHandler:bind("right", "right")
 
 	InputHandler:bind("escape", "DeleteEveryThing")
-	
+end
+
+function love.load()
+	graphicSetter()
+	DraftDrawer = Draft()
+	Globalloader = Loader()
+
+	-- G_negative_colors = {
+	-- 	{ 1 - G_default_colors[1][1], 1 - G_default_colors[1][2], 1 - G_default_colors[1][3] },
+	-- 	{ 1 - G_hp_color[2][1], 1 - G_hp_color[2][2], 1 - G_hp_color[2][3] },
+	-- 	{ 1 - G_ammo_color[3][1], 1 - G_ammo_color[3][2], 1 - G_ammo_color[3][3] },
+	-- 	{ 1 - G_boost_color[4][1], 1 - G_boost_color[4][2], 1 - G_boost_color[4][3] },
+	-- 	{ 1 - G_skill_point_color[5][1], 1 - G_skill_point_color[5][2], 1 - G_skill_point_color[5][3] },
+	-- }
+
+	Globalloader:getRequireFiles("gameObject")
+	Globalloader:getRequireFiles("objectsEffect")
+
+	Globalloader:getRequireFiles("objects")
+	Globalloader:getRequireFiles("rooms")
+
+	inputBinder()
 
 	GlobalTimer = Timer()
 	GlobalCamera = Camera()
 	GlobalRoomController = RoomController()
 
 	GlobalRoomController:gotoRoom("Stage", UUID())
-	resize(2)
+	--resize(2)
 	GlobalSlowAmount = 1
 	FlashFrames = 0
 end
@@ -148,4 +166,3 @@ function love.run()
 		end
 	end
 end
-

@@ -22,6 +22,10 @@ function Player:new(area, x, y, opts)
 	self.maxVelocity = self.baseMaxVelocity
 	self.boosting = false
 	self.trailColor = G_skill_point_color
+
+	self.ammo = 0
+	self.maxAmmo = 1000
+
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
 			"TrailParticle",
@@ -140,10 +144,13 @@ end
 function Player:checkCollision(dt)
 	if self.collider:enter("Collectable") then
 		local collision_data = self.collider:getEnterCollisionData("Collectable")
-        local object = collision_data.collider:getObject()
-        if object:is(Ammo) then
-            object:die()
-        end
+		local object = collision_data.collider:getObject()
+		if object:is(Ammo) then
+			self:addAmmo(object.ammoValue)
+			object:die()
+		elseif object:is(BoostCoinEffect) then
+			object:die()
+		end
 	end
 end
 
@@ -163,6 +170,10 @@ end
 
 function Player:tick()
 	self.area:addGameObject("TickEffect", self.x, self.y, { parent = self })
+end
+
+function Player:addAmmo(amount)
+	self.ammo = math.min(self.ammo + amount, self.maxAmmo)
 end
 
 function Player:shoot()

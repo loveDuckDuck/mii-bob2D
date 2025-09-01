@@ -13,6 +13,7 @@ function Ammo:new(area, x, y, opts)
 	self.velocity = GlobalRandom(10, 20)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:applyAngularImpulse(GlobalRandom(-24, 24))
+	self.ammoValue = 5
 end
 
 function Ammo:update(dt)
@@ -44,10 +45,10 @@ function Ammo:draw()
 end
 
 function Ammo:die()
-    self.dead = true
-    self.area:addGameObject('AmmoEffect', self.x, self.y, 
-    {color = G_ammo_color, w = self.w, h = self.h})
-    for i = 1, love.math.random(4, 8) do 
-    	self.area:addGameObject('ExplodeParticle', self.x, self.y, {s = 3, color = G_ammo_color}) 
-    end
+	self.dead = true
+	self.area:addGameObject("InfoText", self.x, self.y, { text = ("+" .. self.ammoValue), color = G_boost_color })
+	self.area:addGameObject("AmmoEffect", self.x, self.y, { color = G_ammo_color, w = self.w, h = self.h })
+	for i = 1, love.math.random(4, 8) do
+		self.area:addGameObject("ExplodeParticle", self.x, self.y, { s = 3, color = G_ammo_color })
+	end
 end
