@@ -35,6 +35,9 @@ end
 function love.draw()
 	GlobalRoomController:draw()
 	DrawGarbageCollector()
+		love.graphics.setColor(G_ammo_color)
+	love.graphics.setColor(G_default_color)
+
 end
 
 function love.update(dt)
@@ -52,10 +55,12 @@ function love.load()
 	love.graphics.setLineStyle("rough")
 	DraftDrawer = Draft()
 
-	loader = Loader()
-	loader:getRequireFiles("gameObject")
-	loader:getRequireFiles("objects")
-	loader:getRequireFiles("gameFolder/Stage")
+	Globalloader = Loader()
+	Globalloader:getRequireFiles("gameObject")
+	Globalloader:getRequireFiles("objectsEffect")
+
+	Globalloader:getRequireFiles("objects")
+	Globalloader:getRequireFiles("rooms")
 
 	InputHandler = Input()
 	InputHandler:bind("a", "a")

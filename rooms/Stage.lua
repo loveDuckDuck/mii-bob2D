@@ -11,10 +11,10 @@ function Stage:new() -- Create new stage object 📝
 
 	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
 	-- when instante this stage
-	self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
+	self.player = self.area:addGameObject("Player", GlobalWordlSizeX / 2, GlobalWordlSizeY / 2)
 
 	InputHandler:bind("p", function()
-		self.area:addGameObject("Ammo", GlobalRandom(0, gw), GlobalRandom(0, gh))
+		self.area:addGameObject("Ammo", GlobalRandom(0, GlobalWordlSizeX), GlobalRandom(0, GlobalWordlSizeY))
 	end)
 		GlobalCamera.smoother = Camera.smooth.damped(100)
 
@@ -24,6 +24,7 @@ function Stage:update(dt) -- Update stage logic here 🕹️
 	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
 	GlobalCamera:lookAt(self.player.x, self.player.y)
 	GlobalCamera:update(dt)
+--	print(self.player.x .. " " .. self.player.y)
 	self.area:update(dt) -- Update the area too 👍
 end
 
@@ -35,10 +36,10 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	GlobalCamera:attach(0, 0, gw, gh)
 		self.area:draw() -- Draw the area now 👀
 
-	GlobalCamera:detach()
+		GlobalCamera:detach()
 	love.graphics.setCanvas() -- Reset the canvas 🔄
 
-	love.graphics.setColor(0, 1, 1, 1) -- New 0-1 range for LÖVE 11.5
+	love.graphics.setColor(1, 1, 1, 1) -- New 0-1 range for LÖVE 11.5
 	love.graphics.setBlendMode("alpha", "premultiplied") -- Set blend mode here ⚙️
 	--[[
         XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND

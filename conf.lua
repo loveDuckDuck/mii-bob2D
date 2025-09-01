@@ -1,5 +1,12 @@
 gw = 480
 gh = 270
+
+GlobalWordlSizeX = 2000
+GlobalWordlSizeY = 2000
+
+
+
+
 --gw = 720    
 --gh = 360
 

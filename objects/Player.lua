@@ -177,7 +177,7 @@ function Player:shoot()
 		"Projectile",
 		self.x + 1.5 * distance * math.cos(self.rotation),
 		self.y + 1.5 * distance * math.sin(self.rotation),
-		{ rotation = self.rotation, isBounce = self.isBounce }
+		{ rotation = self.rotation, isBounce = self.isBounce, parent = self }
 	)
 	--[[ the idea is to reduce the angle of the position of the spawn, to this is simple math
     self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 6),
