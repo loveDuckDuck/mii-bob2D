@@ -16,6 +16,8 @@ Util = require("utils/Utils")
 RoomController = require("utils/RoomController")
 
 require("libraries/string/utf8")
+require("globals")
+
 
 --Area = require 'gameObject/Area'
 
@@ -54,7 +56,11 @@ local function graphicSetter()
 	love.graphics.setLineStyle("rough")
 	Font = love.graphics.newFont("resource/m5x7.ttf")
 	if Font then
+		--[[
+			TODO : fix this font and understand how the resize work
+		]]
 		print("loaded")
+		love.graphics.setNewFont(10)
 	end
 end
 
@@ -89,6 +95,8 @@ function love.load()
 	-- }
 
 	Globalloader:getRequireFiles("gameObject")
+	Globalloader:getRequireFiles("gameObject")
+	Globalloader:getRequireFiles("metaGameObject")
 	Globalloader:getRequireFiles("objectsEffect")
 
 	Globalloader:getRequireFiles("objects")

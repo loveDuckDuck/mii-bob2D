@@ -1,5 +1,5 @@
-gw = 480
-gh = 270
+gw = 640
+gh = 480
 
 GlobalWordlSizeX = 2000
 GlobalWordlSizeY = 2000
@@ -54,6 +54,7 @@ function love.conf(t)
 	G_boost_color = { 0.29, 0.76, 0.85, 1.0 }
 	G_hp_color = { 0.94, 0.40, 0.27, 1.0 }
 	G_skill_point_color = { 1.0000, 0.7765, 0.3647, 1.0 }
+	G_white_cream = {1.0, 0.9921, 0.8115,1}
 
 	G_random_characters = "0123456789!@#$%¨&*()-=+[]^~/;?><.,|abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ"
 	G_default_player_velocity = 300
@@ -66,4 +67,13 @@ function love.conf(t)
 		{ 1 - G_boost_color[1], 1 - G_boost_color[2], 1 - G_boost_color[3] },
 		{ 1 - G_skill_point_color[1], 1 - G_skill_point_color[2], 1 - G_skill_point_color[3] },
 	}
+
+	-- Const value for the coin object
+	COIN_MIN_RANDOM_ROTATION = 0
+	COIN_MAX_RANDOM_ROTATION = 2 * math.pi
+	COIN_MIN_RANDOM_VELOCITY = 10
+	COIN_MAX_RANDOM_VELOCITY = 20
+
+	COIN_BASE_VALUE = 5
+	COIN_ANGULAR_IMPULSE = 24
 end

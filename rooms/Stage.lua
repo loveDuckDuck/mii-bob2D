@@ -6,7 +6,7 @@ function Stage:new() -- Create new stage object 📝
 
 	self.area:addPhysicsWorld()
 	self.area.world:addCollisionClass("Player")
-	self.area.world:addCollisionClass("Projectile", { ignores = { "Projectile" } }) -- the world need to check
+	self.area.world:addCollisionClass("Projectile", { ignores = {  "Player" } }) -- the world need to check
 	self.area.world:addCollisionClass("Collectable", { ignores = { "Player", "Projectile" } })
 
 	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️

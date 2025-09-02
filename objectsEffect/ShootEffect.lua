@@ -2,6 +2,7 @@ ShootEffect = GameObject:extend()
 function ShootEffect:new(area, x, y, opts)
     ShootEffect.super.new(self, area, x, y, opts)
     self.x, self.y = x, y
+    self.color = opts.color or G_default_color
     self.w = 8
     self.timer:tween(0.1, self, { w = 0 }, 'in-out-cubic', function() self.dead = true end)
 end
@@ -16,7 +17,7 @@ end
 
 function ShootEffect:draw()
     PushRotate(self.x, self.y, self.player.rotation + math.pi / 4)
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(self.color)
     love.graphics.rectangle('fill', self.x - self.w / 2, self.y - self.w / 2, self.w, self.w)
     love.graphics.pop()
 

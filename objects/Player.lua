@@ -23,8 +23,13 @@ function Player:new(area, x, y, opts)
 	self.boosting = false
 	self.trailColor = G_skill_point_color
 
-	self.ammo = 0
+	self.ammoCount = 0
 	self.maxAmmo = 1000
+
+	self.shoot_timer = 0
+	self.shoot_cooldown = 0.24
+
+	self:setAttack("Neutral")
 
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
@@ -41,11 +46,6 @@ function Player:new(area, x, y, opts)
 
 	InputHandler:bind("f4", function()
 		self:die()
-	end)
-	self.timer:every(0.24, function()
-		if self.enabledToShoot then
-			self:shoot()
-		end
 	end)
 
 	self.timer:every(5, function()
@@ -136,6 +136,15 @@ function Player:move(dt)
 		self.enabledToShoot = true
 	else
 		self.enabledToShoot = false
+		self.shoot_timer = 0
+	end
+
+	if self.enabledToShoot then
+		self.shoot_timer = self.shoot_timer + dt
+		if self.shoot_timer > self.shoot_cooldown then
+			self.shoot_timer = 0
+			self:shoot()
+		end
 	end
 
 	RotateTowards(self, targetAngle, dt)
@@ -146,9 +155,9 @@ function Player:checkCollision(dt)
 		local collision_data = self.collider:getEnterCollisionData("Collectable")
 		local object = collision_data.collider:getObject()
 		if object:is(Ammo) then
-			self:addAmmo(object.ammoValue)
+			self:addAmmo(object.cointValue)
 			object:die()
-		elseif object:is(BoostCoinEffect) then
+		elseif object:is(BoostCoin) then
 			object:die()
 		end
 	end
@@ -163,9 +172,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
-	-- love.graphics.circle('line', self.x, self.y, 25)
-	--love.graphics.line(self.x, self.y, self.x + 2 * self.w * math.cos(self.rotation),
-	--    self.y + 2 * self.w * math.sin(self.rotation))
+
 end
 
 function Player:tick()
@@ -173,7 +180,12 @@ function Player:tick()
 end
 
 function Player:addAmmo(amount)
-	self.ammo = math.min(self.ammo + amount, self.maxAmmo)
+	self.ammoCount = self.ammoCount + amount
+	if self.ammoCount == 0 then
+		self.ammoCount = 0
+	else
+		self.ammoCount = math.min(self.ammoCount + amount, self.maxAmmo)
+	end
 end
 
 function Player:shoot()
@@ -182,21 +194,22 @@ function Player:shoot()
 		"ShootEffect",
 		self.x + distance * math.cos(self.rotation),
 		self.y + distance * math.sin(self.rotation),
-		{ player = self, distance = distance }
+		{ player = self, distance = distance, color = self.attack.color} -- {self.attack.color[1],self.attack.color[2],self.attack.color[3],self.attack.color[4]}
 	)
-	self.area:addGameObject(
-		"Projectile",
-		self.x + 1.5 * distance * math.cos(self.rotation),
-		self.y + 1.5 * distance * math.sin(self.rotation),
-		{ rotation = self.rotation, isBounce = self.isBounce, parent = self }
-	)
-	--[[ the idea is to reduce the angle of the position of the spawn, to this is simple math
-    self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 6),
-        self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 6), { rotation = self.rotation + math.pi / 6 })
+	if self.attack.abbreviation == "N" then
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation),
+			self.y + 1.5 * distance * math.sin(self.rotation),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self }
+		)
+	end
+end
 
-    self.area:addGameObject('Projectile', self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 6),
-    self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 6), { rotation = self.rotation - math.pi / 6 })
-    ]]
+function Player:setAttack(attack)
+	self.attack =  Attacks[attack]
+	self.shoot_cooldown = Attacks[attack].cooldown
+	self.ammo = self.max_ammo
 end
 
 function Player:die()

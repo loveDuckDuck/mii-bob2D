@@ -2,15 +2,17 @@ Projectile = GameObject:extend()
 
 function Projectile:new(area, x, y, opts)
 	Projectile.super.new(self, area, x, y, opts)
-	-- s rappresente the radius of the collider
-	self.s = opts.s or 2.5
+	-- s rappresente the radius of the collider and the surroi
+	self.radiusSpace = opts.s or 2.5
 	self.velocity = opts.velocity or G_default_player_velocity
 
-	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.s)
+	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("Projectile")
 
+
+	
 	self.acceleration = 0
 	-- increase in a linear way my velocity
 	--self.timer:tween(0.5, self, { velocity = 400 }, 'linear')
@@ -56,11 +58,15 @@ function Projectile:update(dt)
 end
 
 function Projectile:draw()
-	love.graphics.setColor(G_default_color)
-	love.graphics.circle("line", self.x, self.y, self.s)
+	love.graphics.setColor(G_hp_color)
+
+	PushRotate(self.x, self.y, self.collider:getAngle())
+	love.graphics.circle("line", self.x, self.y, self.radiusSpace)
+
+	love.graphics.pop()
 end
 
 function Projectile:die()
 	self.dead = true
-	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = G_hp_color, w = 3 * self.s })
+	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = G_hp_color, w = 3 * self.radiusSpace })
 end
