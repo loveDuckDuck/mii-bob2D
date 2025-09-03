@@ -50,7 +50,7 @@ function love.conf(t)
 
 	G_default_color = { 0.31, 1, 0.81, 1.0 }
 	G_background_color = { 0.06, 0.06, 0.06, 1.0 }
-	G_ammo_color =  {1.0,0.0,0.0,1.0}--{ 0.48, 0.78, 0.64, 1.0 }
+	G_ammo_color =  { 0.48, 0.78, 0.64, 1.0 }
 	G_boost_color = { 0.29, 0.76, 0.85, 1.0 }
 	G_hp_color = { 0.94, 0.40, 0.27, 1.0 }
 	G_skill_point_color = { 1.0000, 0.7765, 0.3647, 1.0 }
