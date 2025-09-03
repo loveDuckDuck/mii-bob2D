@@ -5,6 +5,7 @@ function Projectile:new(area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
 	self.velocity = opts.velocity or G_default_player_velocity
+    self.color = Attacks[self.attack].color or G_hp_color
 
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
@@ -58,7 +59,7 @@ function Projectile:update(dt)
 end
 
 function Projectile:draw()
-	love.graphics.setColor(G_hp_color)
+	love.graphics.setColor(self.color)
 
 	PushRotate(self.x, self.y, self.collider:getAngle())
 	love.graphics.circle("line", self.x, self.y, self.radiusSpace)
@@ -68,5 +69,5 @@ end
 
 function Projectile:die()
 	self.dead = true
-	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = G_hp_color, w = 3 * self.radiusSpace })
+	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
 end

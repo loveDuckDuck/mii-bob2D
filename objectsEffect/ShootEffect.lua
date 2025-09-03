@@ -2,7 +2,7 @@ ShootEffect = GameObject:extend()
 function ShootEffect:new(area, x, y, opts)
     ShootEffect.super.new(self, area, x, y, opts)
     self.x, self.y = x, y
-    self.color = opts.color or G_default_color
+    self.color = Attacks[self.attack].color or G_default_color
     self.w = 8
     self.timer:tween(0.1, self, { w = 0 }, 'in-out-cubic', function() self.dead = true end)
 end

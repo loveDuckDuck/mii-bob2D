@@ -23,13 +23,13 @@ function Player:new(area, x, y, opts)
 	self.boosting = false
 	self.trailColor = G_skill_point_color
 
-	self.ammoCount = 0
-	self.maxAmmo = 1000
+	self.maxAmmo = 100
+	self.ammo = self.maxAmmo
 
 	self.shoot_timer = 0
 	self.shoot_cooldown = 0.24
 
-	self:setAttack("Neutral")
+	self:setAttack("Rapid")
 
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
@@ -159,20 +159,24 @@ function Player:checkCollision(dt)
 			object:die()
 		elseif object:is(BoostCoin) then
 			object:die()
+		elseif object:is(ResourceCoin) then
+			self.attack = object.power.name
+			self:setAttack(self.attack)
+			print("self.attack", self.attack)
+			object:die()
 		end
 	end
 end
 
 function Player:update(dt)
 	Player.super.update(self, dt)
-
 	self:physics(dt)
-	self:move(dt)
 	self:checkCollision(dt)
+	self:move(dt)
 end
 
 function Player:draw()
-
+	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
 end
 
 function Player:tick()
@@ -180,11 +184,9 @@ function Player:tick()
 end
 
 function Player:addAmmo(amount)
-	self.ammoCount = self.ammoCount + amount
-	if self.ammoCount == 0 then
-		self.ammoCount = 0
-	else
-		self.ammoCount = math.min(self.ammoCount + amount, self.maxAmmo)
+	self.ammo = self.ammo + amount
+	if self.ammo < 0 then
+		self.ammo = 0
 	end
 end
 
@@ -194,22 +196,67 @@ function Player:shoot()
 		"ShootEffect",
 		self.x + distance * math.cos(self.rotation),
 		self.y + distance * math.sin(self.rotation),
-		{ player = self, distance = distance, color = self.attack.color} -- {self.attack.color[1],self.attack.color[2],self.attack.color[3],self.attack.color[4]}
+		{ player = self, distance = distance, attack = self.attack } -- {self.attack.color[1],self.attack.color[2],self.attack.color[3],self.attack.color[4]}
 	)
-	if self.attack.abbreviation == "N" then
+
+	if self.ammo == 0 then
+		self:setAttack("Neutral")
+	end
+
+	if self.attack == "Neutral" then
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation),
 			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self }
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+		)
+	elseif self.attack == "Double" then
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 12),
+			self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 12),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+		)
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 12),
+			self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 12),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+		)
+	elseif self.attack == "Triple" then
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 4),
+			self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 4),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+		)
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation),
+			self.y + 1.5 * distance * math.sin(self.rotation),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+		)
+
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 4),
+			self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 4),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+		)
+	elseif self.attack == "Rapid" then
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation),
+			self.y + 1.5 * distance * math.sin(self.rotation),
+			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
 		)
 	end
+	self:addAmmo(-Attacks[self.attack].ammo)
 end
 
 function Player:setAttack(attack)
-	self.attack =  Attacks[attack]
+	self.attack = attack
 	self.shoot_cooldown = Attacks[attack].cooldown
-	self.ammo = self.max_ammo
 end
 
 function Player:die()

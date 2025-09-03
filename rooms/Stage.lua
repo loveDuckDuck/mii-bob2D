@@ -6,27 +6,37 @@ function Stage:new() -- Create new stage object 📝
 
 	self.area:addPhysicsWorld()
 	self.area.world:addCollisionClass("Player")
-	self.area.world:addCollisionClass("Projectile", { ignores = {  "Player" } }) -- the world need to check
+	self.area.world:addCollisionClass("Projectile", { ignores = { "Player" } }) -- the world need to check
 	self.area.world:addCollisionClass("Collectable", { ignores = { "Player", "Projectile" } })
 
 	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", GlobalWordlSizeX / 2, GlobalWordlSizeY / 2)
 
+	--[[
+	XXX : remaind to fix
+	]]
 	InputHandler:bind("p", function()
 		self.area:addGameObject("Ammo", GlobalRandom(0, GlobalWordlSizeX), GlobalRandom(0, GlobalWordlSizeY))
-		self.area:addGameObject("BoostCoin", GlobalRandom(self.player.x - gw/2, self.player.x + gw/2), GlobalRandom(self.player.y - gh/2, self.player.y + gh/2))
-	
+		self.area:addGameObject(
+			"BoostCoin",
+			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		)
+		self.area:addGameObject(
+			"ResourceCoin",
+			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		)
 	end)
-		GlobalCamera.smoother = Camera.smooth.damped(100)
-
+	GlobalCamera.smoother = Camera.smooth.damped(100)
 end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
 	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
 	GlobalCamera:lookAt(self.player.x, self.player.y)
 	GlobalCamera:update(dt)
---	print(self.player.x .. " " .. self.player.y)
+	--	print(self.player.x .. " " .. self.player.y)
 	self.area:update(dt) -- Update the area too 👍
 end
 
@@ -36,9 +46,9 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 
 	--GlobalCamera:attach()
 	GlobalCamera:attach(0, 0, gw, gh)
-		self.area:draw() -- Draw the area now 👀
+	self.area:draw() -- Draw the area now 👀
 
-		GlobalCamera:detach()
+	GlobalCamera:detach()
 	love.graphics.setCanvas() -- Reset the canvas 🔄
 
 	love.graphics.setColor(1, 1, 1, 1) -- New 0-1 range for LÖVE 11.5

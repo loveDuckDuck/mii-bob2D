@@ -95,7 +95,6 @@ function love.load()
 	-- }
 
 	Globalloader:getRequireFiles("gameObject")
-	Globalloader:getRequireFiles("gameObject")
 	Globalloader:getRequireFiles("metaGameObject")
 	Globalloader:getRequireFiles("objectsEffect")
 
@@ -103,6 +102,13 @@ function love.load()
 	Globalloader:getRequireFiles("rooms")
 
 	inputBinder()
+
+	--[[
+		TODO: do music
+	]]
+	-- Sounds = {}
+	-- Sounds.music = love.audio.newSource("sound/output.wav","stream")
+	-- Sounds.music:play()
 
 	GlobalTimer = Timer()
 	GlobalCamera = Camera()

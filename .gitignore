@@ -43,3 +43,12 @@ luac.out
 #html files
 *.html
 
+# Temporary files
+*.tmp
+
+# Audio files
+*.mp3
+*.wav
+*.aac
+*.flac
+*.ogg

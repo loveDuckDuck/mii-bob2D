@@ -2,7 +2,7 @@ Ammo = CoinObject:extend()
 
 function Ammo:new(area, x, y, opts)
 	Ammo.super.new(self, area, x, y, opts)
-
+	self.cointValue = 5
 end
 
 function Ammo:update(dt)
