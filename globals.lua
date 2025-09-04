@@ -35,7 +35,6 @@ Attacks = {
 	},
 	["Rapid"] = {
 		name = "Rapid",
-
 		cooldown = 0.10,
 		ammo = 1,
 		abbreviation = "R",
