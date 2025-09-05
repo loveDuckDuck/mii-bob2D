@@ -24,8 +24,8 @@ function Rock:update(dt)
 end
 
 function Rock:draw()
-    love.graphics.setColor(hp_color)
+    love.graphics.setColor(G_hp_color)
     local points = {self.collider:getWorldPoints(self.collider.shapes.main:getPoints())}
     love.graphics.polygon('line', points)
-    love.graphics.setColor(default_color)
+    love.graphics.setColor(G_default_color)
 end

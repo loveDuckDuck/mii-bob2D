@@ -11,6 +11,8 @@ Draft = require("libraries/draft/draft")
 Vector = require("libraries/hump/vector")
 Physics = require("libraries/windfield")
 Moses = require("libraries/moses/moses")
+Bitumbra = require("libraries/bitumbra/bitumbra")
+
 --utilities
 Util = require("utils/Utils")
 RoomController = require("utils/RoomController")
@@ -41,11 +43,30 @@ function love.draw()
 	love.graphics.setColor(G_default_color)
 end
 
+	--[[
+		XXX : need to fix the room controller
+		now uuid is constanst
+	]]
+	
+local function goToGame()
+	GlobalRoomController:gotoRoom("Stage", 0)
+end
+local function goToLight()
+	GlobalRoomController:gotoRoom("LightStage", 1)
+end
+
+
 function love.update(dt)
 	if InputHandler:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
+	if InputHandler:pressed("game") then
+		goToGame()
+	end
 
+	if InputHandler:pressed("light") then
+		goToLight()
+	end
 	GlobalRoomController:update(dt * GlobalSlowAmount)
 	--Timer:update(dt * GlobalSlowAmount)
 	GlobalCamera:update(dt * GlobalSlowAmount)
@@ -64,6 +85,8 @@ local function graphicSetter()
 	end
 end
 
+
+
 local function inputBinder()
 	InputHandler = Input()
 	InputHandler:bind("a", "a")
@@ -79,6 +102,9 @@ local function inputBinder()
 	InputHandler:bind("right", "right")
 
 	InputHandler:bind("escape", "DeleteEveryThing")
+
+	InputHandler:bind("f1", "game")
+	InputHandler:bind("f2", "light")
 end
 
 function love.load()
@@ -101,7 +127,7 @@ function love.load()
 	Globalloader:getRequireFiles("objects")
 	Globalloader:getRequireFiles("rooms")
 
-	inputBinder()
+
 
 	--[[
 		TODO: do music
@@ -114,7 +140,8 @@ function love.load()
 	GlobalCamera = Camera()
 	GlobalRoomController = RoomController()
 
-	GlobalRoomController:gotoRoom("Stage", UUID())
+	inputBinder()
+	GlobalRoomController:gotoRoom("Stage", 0)
 	--resize(2)
 	GlobalSlowAmount = 1
 	FlashFrames = 0
