@@ -12,7 +12,7 @@ Vector = require("libraries/hump/vector")
 Physics = require("libraries/windfield")
 Moses = require("libraries/moses/moses")
 Bitumbra = require("libraries/bitumbra/bitumbra")
-
+Lib = require ("libraries/lightShadow")
 --utilities
 Util = require("utils/Utils")
 RoomController = require("utils/RoomController")
@@ -55,6 +55,11 @@ local function goToLight()
 	GlobalRoomController:gotoRoom("LightStage", 1)
 end
 
+local function goToSimpleLight()
+	GlobalRoomController:gotoRoom("SimpleLightStage", 2)
+end
+
+
 
 function love.update(dt)
 	if InputHandler:pressed("DeleteEveryThing") then
@@ -67,6 +72,10 @@ function love.update(dt)
 	if InputHandler:pressed("light") then
 		goToLight()
 	end
+	if InputHandler:pressed("simpleLight") then
+		goToSimpleLight()
+	end
+	
 	GlobalRoomController:update(dt * GlobalSlowAmount)
 	--Timer:update(dt * GlobalSlowAmount)
 	GlobalCamera:update(dt * GlobalSlowAmount)
@@ -105,6 +114,7 @@ local function inputBinder()
 
 	InputHandler:bind("f1", "game")
 	InputHandler:bind("f2", "light")
+	InputHandler:bind("f3","simpleLight")
 end
 
 function love.load()
