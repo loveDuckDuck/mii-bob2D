@@ -56,7 +56,6 @@ function love.conf(t)
 	G_skill_point_color = { 1.0000, 0.7765, 0.3647, 1.0 }
 	G_white_cream = {1.0, 0.9921, 0.8115,1}
 
-	G_random_characters = "0123456789!@#$%¨&*()-=+[]^~/;?><.,|abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ"
 	G_default_player_velocity = 300
 	G_default_colors = { G_default_color, G_hp_color, G_ammo_color, G_boost_color, G_skill_point_color }
 

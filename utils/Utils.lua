@@ -232,6 +232,7 @@ function CreateIrregularPolygon(size, point_amount)
         local angle = (i-1)*angle_interval + GlobalRandom(-angle_interval/4, angle_interval/4)
         table.insert(points, distance*math.cos(angle))
         table.insert(points, distance*math.sin(angle))
+	
     end
     return points
 end

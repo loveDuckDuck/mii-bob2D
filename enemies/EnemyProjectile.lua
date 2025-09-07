@@ -1,67 +1,53 @@
-Projectile = GameObject:extend()
+EnemyProjectile = GameObject:extend()
 
-function Projectile:new(area, x, y, opts)
-	Projectile.super.new(self, area, x, y, opts)
+function EnemyProjectile:new(area, x, y, opts)
+	EnemyProjectile.super.new(self, area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
 	self.velocity = opts.velocity or G_default_player_velocity
-    self.color = Attacks[self.attack].color or G_hp_color
-	self.damage = Attacks[self.attack].damage or 1
+	self.color = opts.color or G_hp_color
+	self.damage = opts.damage or 2
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
-	self.collider:setCollisionClass("Projectile")
-	self.acceleration = 0
-	-- increase in a linear way my velocity
-	--self.timer:tween(0.5, self, { velocity = 400 }, 'linear')
-	self.bounce = false or self.isBounce
-
+	self.collider:setCollisionClass("EnemyProjectile")
+end
+function EnemyProjectile:checkCollision(dt)
+	if self.collider:enter("Player") then
+		local collision_data = self.collider:getEnterCollisionData("Player")
+		local object = collision_data.collider:getObject()
+		print(object.speed, "object.speed")
+	end
 end
 
-function Projectile:update(dt)
-	Projectile.super.update(self, dt)
+function EnemyProjectile:update(dt)
+	EnemyProjectile.super.update(self, dt)
 	--[[
         XXX: PROBLEM with distance projectile
     ]]
-
-	local vx, vy = self.collider:getLinearVelocity()
-
 	local top_bound = self.parent.y - gh / 2
 	local bottom_bound = self.parent.y + gh / 2
 	local left_bound = self.parent.x - gw / 2
 	local right_bound = self.parent.x + gw / 2
-
 	if self.x < left_bound or self.x > right_bound then
-		if not self.bounce then
-			self:die()
-		else
-			-- Reverse the horizontal velocity for a bounce
-			self.collider:setLinearVelocity(-vx, vy)
-		end
+		self:die()
 	end
 
 	if self.y < top_bound or self.y > bottom_bound then
-		if not self.bounce then
-			self:die()
-		else
-			-- Reverse the vertical velocity for a bounce
-			self.collider:setLinearVelocity(vx, -vy)
-		end
+		self:die()
 	end
+	self:checkCollision(dt)
 end
 
-function Projectile:draw()
+function EnemyProjectile:draw()
 	love.graphics.setColor(self.color)
-
 	PushRotate(self.x, self.y, self.collider:getAngle())
 	love.graphics.circle("line", self.x, self.y, self.radiusSpace)
-
 	love.graphics.pop()
-		love.graphics.setColor(G_default_color)
-
+	love.graphics.setColor(G_default_color)
 end
 
-function Projectile:die()
+function EnemyProjectile:die()
 	self.dead = true
 	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
 end
