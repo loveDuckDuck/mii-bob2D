@@ -8,6 +8,8 @@ function Stage:new() -- Create new stage object 📝
 	self.area.world:addCollisionClass("Player")
 	self.area.world:addCollisionClass("Projectile", { ignores = { "Player" } }) -- the world need to check
 	self.area.world:addCollisionClass("Collectable", { ignores = { "Player", "Projectile" } })
+	self.area.world:addCollisionClass("Enemy")
+	self.area.world:addCollisionClass("EnemyProjectile", { ignores = { "EnemyProjectile", "Projectile", "Enemy" } })
 
 	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
 	-- when instante this stage
@@ -28,6 +30,18 @@ function Stage:new() -- Create new stage object 📝
 			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
 			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
+
+		self.area:addGameObject(
+			"Rock",
+			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		)
+		self.area:addGameObject(
+			"Shooter",
+			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		)
+		
 	end)
 	GlobalCamera.smoother = Camera.smooth.damped(100)
 end

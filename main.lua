@@ -20,7 +20,6 @@ RoomController = require("utils/RoomController")
 require("libraries/string/utf8")
 require("globals")
 
-
 --Area = require 'gameObject/Area'
 
 function flash(frames)
@@ -32,15 +31,16 @@ function resize(s)
 	sx, sy = s, s
 end
 
-function love.resize(widht, height)
-	resize(3)
+function love.resize(w, h)
+	Push.resize(w, h)
 end
 
 function love.draw()
-	GlobalRoomController:draw()
+	Push:start()
 	DrawGarbageCollector()
-	love.graphics.setColor(G_ammo_color)
+	GlobalRoomController:draw()
 	love.graphics.setColor(G_default_color)
+	Push:finish()
 end
 
 	--[[
@@ -74,14 +74,14 @@ end
 
 local function graphicSetter()
 	love.graphics.setDefaultFilter("nearest", "nearest")
-	love.graphics.setLineStyle("rough")
+	--love.graphics.setLineStyle("rough")
 	Font = love.graphics.newFont("resource/m5x7.ttf")
 	if Font then
 		--[[
 			TODO : fix this font and understand how the resize work
 		]]
 		print("loaded")
-		love.graphics.setNewFont(10)
+		love.graphics.setNewFont(12)
 	end
 end
 
@@ -112,17 +112,10 @@ function love.load()
 	DraftDrawer = Draft()
 	Globalloader = Loader()
 
-	-- G_negative_colors = {
-	-- 	{ 1 - G_default_colors[1][1], 1 - G_default_colors[1][2], 1 - G_default_colors[1][3] },
-	-- 	{ 1 - G_hp_color[2][1], 1 - G_hp_color[2][2], 1 - G_hp_color[2][3] },
-	-- 	{ 1 - G_ammo_color[3][1], 1 - G_ammo_color[3][2], 1 - G_ammo_color[3][3] },
-	-- 	{ 1 - G_boost_color[4][1], 1 - G_boost_color[4][2], 1 - G_boost_color[4][3] },
-	-- 	{ 1 - G_skill_point_color[5][1], 1 - G_skill_point_color[5][2], 1 - G_skill_point_color[5][3] },
-	-- }
-
 	Globalloader:getRequireFiles("gameObject")
 	Globalloader:getRequireFiles("metaGameObject")
 	Globalloader:getRequireFiles("objectsEffect")
+	Globalloader:getRequireFiles("enemies")
 
 	Globalloader:getRequireFiles("objects")
 	Globalloader:getRequireFiles("rooms")
@@ -145,6 +138,8 @@ function love.load()
 	--resize(2)
 	GlobalSlowAmount = 1
 	FlashFrames = 0
+
+	Push:setupScreen(gw, gh, 640, 480, { resizible = true })
 end
 
 function love.run()

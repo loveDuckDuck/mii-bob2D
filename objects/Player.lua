@@ -256,6 +256,7 @@ end
 
 function Player:setAttack(attack)
 	self.attack = attack
+	
 	self.shoot_cooldown = Attacks[attack].cooldown
 end
 

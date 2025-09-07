@@ -2,6 +2,7 @@ Attacks = {
 	["Neutral"] = {
 		name = "Neutral",
 		cooldown = 0.24,
+		damage = 2,
 		ammo = 0,
 		abbreviation = "N",
 		color = { 1.0, 0.9921, 0.8115, 1.0 },
@@ -13,6 +14,7 @@ Attacks = {
 	["Double"] = {
 		name = "Double",
 		cooldown = 0.32,
+		damage = 4,
 		ammo = 2,
 		abbreviation = "2",
 		color = { 0.29, 0.76, 0.85, 1.0 },
@@ -23,7 +25,7 @@ Attacks = {
 	},
 	["Triple"] = {
 		name = "Triple",
-
+		damage = 12,
 		cooldown = 0.40,
 		ammo = 5,
 		abbreviation = "3",
@@ -35,6 +37,7 @@ Attacks = {
 	},
 	["Rapid"] = {
 		name = "Rapid",
+		damage = 1,
 		cooldown = 0.10,
 		ammo = 1,
 		abbreviation = "R",
