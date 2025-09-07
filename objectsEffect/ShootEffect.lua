@@ -22,5 +22,8 @@ function ShootEffect:draw()
     love.graphics.pop()
 
 end
+function ShootEffect:destroy()
+    TickEffect.super.destroy(self)
+end
 
 --return ShootEffect

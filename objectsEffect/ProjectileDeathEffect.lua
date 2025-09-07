@@ -27,3 +27,7 @@ function ProjectileDeathEffect:draw()
     love.graphics.rectangle('fill', self.x - self.w / 2, self.y - self.w / 2, self.w, self.w)
 end
 
+function ProjectileDeathEffect:destroy()
+    ProjectileDeathEffect.super.update(self)
+end
+
