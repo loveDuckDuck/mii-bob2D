@@ -38,4 +38,6 @@ function BoostCoinEffect:draw()
     love.graphics.setColor(G_default_color)
 end
 
-function BoostCoinEffect:die() end
+function BoostCoinEffect:destroy()
+	BoostCoinEffect.super.destroy(self)
+end

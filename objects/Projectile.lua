@@ -5,7 +5,7 @@ function Projectile:new(area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
 	self.velocity = opts.velocity or G_default_player_velocity
-    self.color = Attacks[self.attack].color or G_hp_color
+	self.color = Attacks[self.attack].color or G_hp_color
 	self.damage = Attacks[self.attack].damage or 1
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
@@ -15,7 +15,20 @@ function Projectile:new(area, x, y, opts)
 	-- increase in a linear way my velocity
 	--self.timer:tween(0.5, self, { velocity = 400 }, 'linear')
 	self.bounce = false or self.isBounce
+end
+--- Checks for collision between the projectile and an enemy.
+-- If a collision is detected, adds an "ExplodeParticle" game object at the projectile's position.
+-- The particle inherits the projectile's color and has a width based on the projectile's radius.
 
+function Projectile:checkCollision()
+	if self.collider:enter("Enemy") then
+		self.area:addGameObject(
+			"ExplodeParticle",
+			self.x,
+			self.y,
+			{ color = self.color, w = 3 * self.radiusSpace }
+		)
+	end
 end
 
 function Projectile:update(dt)
@@ -25,6 +38,8 @@ function Projectile:update(dt)
     ]]
 
 	local vx, vy = self.collider:getLinearVelocity()
+
+	self:checkCollision()
 
 	local top_bound = self.parent.y - gh / 2
 	local bottom_bound = self.parent.y + gh / 2
@@ -57,8 +72,7 @@ function Projectile:draw()
 	love.graphics.circle("line", self.x, self.y, self.radiusSpace)
 
 	love.graphics.pop()
-		love.graphics.setColor(G_default_color)
-
+	love.graphics.setColor(G_default_color)
 end
 
 function Projectile:die()

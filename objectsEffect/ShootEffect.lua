@@ -23,4 +23,8 @@ function ShootEffect:draw()
 
 end
 
+function ShootEffect:destroy()
+    ShootEffect.super.destroy(self)
+end
+
 --return ShootEffect

@@ -26,6 +26,9 @@ function EnemyDeathEffect:draw()
         love.graphics.setColor(self.color)
     end
     love.graphics.rectangle('fill', self.x - self.w / 2, self.y - self.w / 2, self.w, self.h)
-    
+end
+
+function EnemyDeathEffect:destroy()
+    EnemyDeathEffect.super.destroy(self)
 end
 
