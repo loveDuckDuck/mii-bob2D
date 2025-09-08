@@ -236,3 +236,28 @@ function CreateIrregularPolygon(size, point_amount)
     end
     return points
 end
+
+
+--- Creates a chance list object that allows random selection of items based on their defined chances.
+-- Each chance definition is a table of the form {item, chance}, where 'item' is any value and 'chance' is a positive integer
+-- representing how many times the item should appear in the internal chance list.
+-- The returned object has a `next` method that randomly selects and removes an item from the chance list,
+-- rebuilding the list from the definitions when it becomes empty.
+-- @param ... Variable number of chance definitions, each as {item, chance}
+-- @return table Chance list object with a `next` method for random selection
+function CreateChanceList(...)
+	return {
+		chance_list = {},
+		chance_definitions = { ... },
+		next = function(self)
+			if #self.chance_list == 0 then
+				for _, chance_definition in ipairs(self.chance_definitions) do
+					for i = 1, chance_definition[2] do
+						table.insert(self.chance_list, chance_definition[1])
+					end
+				end
+			end
+			return table.remove(self.chance_list, math.random(1, #self.chance_list))
+		end,
+	}
+end

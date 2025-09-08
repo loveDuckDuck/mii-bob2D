@@ -15,6 +15,7 @@ function Stage:new() -- Create new stage object 📝
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", GlobalWordlSizeX / 2, GlobalWordlSizeY / 2)
 
+	self.director = Director (self)
 	--[[
 	XXX : remaind to fix
 	]]
@@ -47,6 +48,7 @@ function Stage:new() -- Create new stage object 📝
 end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
+    self.director:update(dt)	
 	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
 	GlobalCamera:lookAt(self.player.x, self.player.y)
 	GlobalCamera:update(dt)
