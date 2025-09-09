@@ -15,7 +15,7 @@ function Stage:new() -- Create new stage object 📝
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", GlobalWordlSizeX / 2, GlobalWordlSizeY / 2)
 
-	self.director = Director (self)
+	self.director = Director (self, self.player) -- Create a director instance 🎬
 	--[[
 	XXX : remaind to fix
 	]]

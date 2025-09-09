@@ -1,11 +1,19 @@
 Director = Object:extend()
 
-function Director:new(stage)
+function Director:new(stage, player)
 	self.stage = stage
+	self.player = player
 	self.difficulty = 1
 	self.round_duration = 22
 	self.round_timer = 0
+	self.timer = Timer()
+	if not self.stage then
+		error("Director needs a stage!")
+	end
 
+	if not self.stage.area then
+		error("Director needs a stage with an area!")
+	end
 	--[[
     Initializes the `difficulty_to_points` table, mapping difficulty levels to point values.
     - Starts with difficulty level 1 assigned 16 points.
@@ -43,10 +51,11 @@ function Director:new(stage)
 		)
 	end
 
-        self:setEnemySpawnsForThisRound()
+	self:setEnemySpawnsForThisRound()
 end
 
 function Director:setEnemySpawnsForThisRound()
+	print("Setting enemy spawns for round with difficulty " .. self.difficulty)
 	local points = self.difficulty_to_points[self.difficulty]
 
 	-- Find enemies
@@ -56,29 +65,38 @@ function Director:setEnemySpawnsForThisRound()
 		points = points - self.enemy_to_points[enemy]
 		table.insert(enemy_list, enemy)
 	end
-
 	-- Find enemies spawn times
 	local enemy_spawn_times = {}
 	for i = 1, #enemy_list do
 		enemy_spawn_times[i] = GlobalRandom(0, self.round_duration)
 	end
+
 	table.sort(enemy_spawn_times, function(a, b)
 		return a < b
 	end)
 
-    -- Set spawn enemy timer
-    for i = 1, #enemy_spawn_times do
-        self.timer:after(enemy_spawn_times[i], function()
-            self.stage.area:addGameObject(enemy_list[i])
-        end)
-    end
-
+	-- Set spawn enemy timer
+	for i = 1, #enemy_spawn_times do
+		self.timer:after(enemy_spawn_times[i], function()
+			self.stage.area:addGameObject(
+				enemy_list[i],
+				GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+				GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			)
+		end)
+	end
 end
+
 function Director:update(dt)
 	self.round_timer = self.round_timer + dt
+	if self.timer then
+		self.timer:update(dt)
+	end -- Update the timer if any
+
 	if self.round_timer > self.round_duration then
 		self.round_timer = 0
 		self.difficulty = self.difficulty + 1
 		self:setEnemySpawnsForThisRound()
+		print("New round! Difficulty: " .. self.difficulty)
 	end
 end

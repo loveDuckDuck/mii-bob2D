@@ -90,7 +90,6 @@ function love.load()
 	Globalloader:getRequireFiles("metaGameObject")
 	Globalloader:getRequireFiles("objectsEffect")
 	Globalloader:getRequireFiles("enemies")
-
 	Globalloader:getRequireFiles("objects")
 	Globalloader:getRequireFiles("rooms")
 

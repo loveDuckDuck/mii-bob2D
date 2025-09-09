@@ -52,9 +52,7 @@ end
 function Area:addGameObject(game_object_type, x, y, opts)
 	local opts = opts or {}
 
-	--print(game_object_type)
 	local game_object = _G[game_object_type](self, x or 0, y or 0, opts)
-	--print(game_object)
 
 	table.insert(self.game_objects, game_object)
 	return game_object

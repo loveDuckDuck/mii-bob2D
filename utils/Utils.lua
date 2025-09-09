@@ -257,7 +257,52 @@ function CreateChanceList(...)
 					end
 				end
 			end
-			return table.remove(self.chance_list, math.random(1, #self.chance_list))
+			return table.remove(self.chance_list, love.math.random(1, #self.chance_list))
 		end,
 	}
+end
+
+
+
+--- A general-purpose linear interpolation function.
+-- It finds a value that is a certain fraction between two other values.
+-- @param a The starting value.
+-- @param b The ending value.
+-- @param t The interpolation amount (a value between 0.0 and 1.0).
+-- @return The interpolated value.
+function Lerp(a, b, t)
+    return a + (b - a) * t
+end
+
+--- Interpolates between two colors.
+-- Both colors should be tables with 'r', 'g', and 'b' components (and optionally 'a').
+-- The components should be numbers, typically between 0.0 and 1.0.
+-- @param color1 The starting color table (e.g., {r=1, g=1, b=0}).
+-- @param color2 The ending color table (e.g., {r=0, g=0, b=1}).
+-- @param amount A number between 0.0 and 1.0 that represents the mix.
+--               0.0 will return color1, 1.0 will return color2,
+--               and 0.5 will return a color exactly halfway between them.
+-- @return A new color table with the interpolated r, g, b, and a values.
+function InterpolateColor(color1, color2, amount)
+    -- Ensure the amount is clamped between 0 and 1 to prevent invalid color values.
+    local t = math.max(0, math.min(1, amount or 0))
+
+    -- Ensure the input tables are valid
+    if not color1 or not color2 or not color1.r or not color2.r then
+        error("Invalid color tables provided for interpolation.")
+        return
+    end
+    
+    local new_color = {
+        r = Lerp(color1.r, color2.r, t),
+        g = Lerp(color1.g, color2.g, t),
+        b = Lerp(color1.b, color2.b, t),
+    }
+
+    -- Also interpolate the alpha channel if it exists in both colors
+    if color1.a and color2.a then
+        new_color.a = Lerp(color1.a, color2.a, t)
+    end
+
+    return new_color
 end
