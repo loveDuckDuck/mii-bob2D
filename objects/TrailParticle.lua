@@ -18,5 +18,5 @@ function TrailParticle:draw()
 	love.graphics.setColor(255, 255, 255)
 end
 function TrailParticle:destroy()
-	TickEffect.super.destroy(self)
+	TrailParticle.super.destroy(self)
 end

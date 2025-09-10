@@ -6,13 +6,13 @@ function Shooter:new(area, x, y, opts)
 	self.target = GlobalRoomController.current_room.player
 
 	-- coinvalues
-    self.collider = self.area.world:newRectangleCollider(self.x, self.y, self.w -3 ,self.h - 3)
+	self.collider = self.area.world:newRectangleCollider(self.x, self.y, self.w - 3, self.h - 3)
 	self.collider:setPosition(self.x, self.y)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Enemy")
 	self.collider:setFixedRotation(true)
 
-    self.offset = 5
+	self.offset = 5
 
 	self.rotation = GlobalRandom(0, 2 * math.pi)
 	self.velocity = GlobalRandom(10, 20)
@@ -20,17 +20,24 @@ function Shooter:new(area, x, y, opts)
 	self.collider:applyAngularImpulse(GlobalRandom(-100, 100))
 	self.w, self.h = 10, 10
 
-	self.timer:every(2, function()
+	self.timer:every(GlobalRandom(1, 3), function()
 		local dy = self.target.y - self.y
 		local dx = self.target.x - self.x
 
 		local angle = GlobalAtan2(dy, dx)
+		self.area:addGameObject(
+			"PreAttackEffect",
+			self.x + 1.4 * self.w * math.cos(self.collider:getAngle()),
+			self.y + 1.4 * self.w * math.sin(self.collider:getAngle()),
+			{ shooter = self, color = G_hp_color, duration = 1.0, rotation = angle }
+		)
+		self.timer:after(0.5, function()
+			self.area:addGameObject("EnemyProjectile", self.x, self.y, {
 
-		self.area:addGameObject("EnemyProjectile", self.x, self.y, {
-
-			rotation = angle,
-			parent = self,
-		})
+				rotation = angle,
+				parent = self,
+			})
+		end)
 	end)
 end
 
@@ -60,8 +67,8 @@ function Shooter:draw()
 
 	DraftDrawer:lozenge(self.x, self.y, self.w, "line")
 	DraftDrawer:rhombus(self.x, self.y, self.w + self.offset, self.h + self.offset, "line")
-	
-    love.graphics.pop()
+
+	love.graphics.pop()
 
 	love.graphics.setColor(G_default_color)
 end

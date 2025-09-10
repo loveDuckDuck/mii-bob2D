@@ -31,14 +31,14 @@ function Player:new(area, x, y, opts)
 
 	self:setAttack("Rapid")
 
-	-- self.timer:every(0.01, function()
-	-- 	self.area:addGameObject(
-	-- 		"TrailParticle",
-	-- 		self.x - self.w * math.cos(self.rotation),
-	-- 		self.y - self.h * math.sin(self.rotation),
-	-- 		{ parent = self, radius = GlobalRandom(2, 4), duration = GlobalRandom(0.15, 0.25), color = self.trailColor }
-	-- 	)
-	-- end)
+	self.timer:every(0.01, function()
+		self.area:addGameObject(
+			"TrailParticle",
+			self.x - self.w * math.cos(self.rotation),
+			self.y - self.h * math.sin(self.rotation),
+			{ parent = self, radius = GlobalRandom(2, 4), duration = GlobalRandom(0.15, 0.25), color = self.trailColor }
+		)
+	end)
 
 	self.friction = 5
 
