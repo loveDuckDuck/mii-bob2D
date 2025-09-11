@@ -13,7 +13,7 @@ function Shooter:new(area, x, y, opts)
 	self.collider:setFixedRotation(true)
 
 	self.offset = 5
-
+	self.rotationLookingPlayer = 0
 	self.rotation = GlobalRandom(0, 2 * math.pi)
 	self.velocity = GlobalRandom(10, 20)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
@@ -21,20 +21,18 @@ function Shooter:new(area, x, y, opts)
 	self.w, self.h = 10, 10
 
 	self.timer:every(GlobalRandom(1, 3), function()
-		local dy = self.target.y - self.y
-		local dx = self.target.x - self.x
-
-		local angle = GlobalAtan2(dy, dx)
+		-- XXX: fix the spawn position of the projectile
+        local target_x, target_y = self.target.x, self.target.y
 		self.area:addGameObject(
 			"PreAttackEffect",
-			self.x + 1.4 * self.w * math.cos(self.collider:getAngle()),
-			self.y + 1.4 * self.w * math.sin(self.collider:getAngle()),
-			{ shooter = self, color = G_hp_color, duration = 1.0, rotation = angle }
+			target_x,
+			target_y,
+			{ shooter = self, color = G_hp_color, duration = 1.0, rotation = self.rotationLookingPlayer }
 		)
 		self.timer:after(0.5, function()
 			self.area:addGameObject("EnemyProjectile", self.x, self.y, {
 
-				rotation = angle,
+				rotation = self.rotationLookingPlayer,
 				parent = self,
 			})
 		end)
@@ -50,6 +48,7 @@ function Shooter:update(dt)
 		local dx = self.target.x - self.x
 
 		local angle = GlobalAtan2(dy, dx)
+		self.rotationLookingPlayer = angle
 		local toTargetHeading = Vector.new(math.cos(angle), math.sin(angle)):normalized()
 		local finalHeading = (projectileHeading + 0.1 * toTargetHeading):normalized()
 		self.collider:setLinearVelocity(self.velocity * finalHeading.x, self.velocity * finalHeading.y)
@@ -63,7 +62,7 @@ end
 
 function Shooter:draw()
 	love.graphics.setColor(G_hp_color)
-	PushRotate(self.x, self.y, self.collider:getAngle())
+	PushRotate(self.x, self.y, self.rotationLookingPlayer)
 
 	DraftDrawer:lozenge(self.x, self.y, self.w, "line")
 	DraftDrawer:rhombus(self.x, self.y, self.w + self.offset, self.h + self.offset, "line")

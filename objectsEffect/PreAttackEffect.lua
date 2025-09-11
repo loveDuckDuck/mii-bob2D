@@ -9,7 +9,7 @@ function PreAttackEffect:new(area, x, y, opts)
 			"TargetParticle",
 			self.x + GlobalRandom(-20, 20),
 			self.y + GlobalRandom(-20, 20),
-			{ target_x = self.x, target_y = self.y, color = self.color }
+			{ target_x = self.x, target_y = self.y, color = self.color, rotation = self.rotation }
 		)
 	end)
 
@@ -28,7 +28,11 @@ function PreAttackEffect:update(dt)
 	end
 end
 
-function PreAttackEffect:draw() end
+function PreAttackEffect:draw()
+	
+
+	
+end
 
 function PreAttackEffect:destroy()
 	PreAttackEffect.super.destroy(self)

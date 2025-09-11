@@ -7,6 +7,7 @@ function Player:new(area, x, y, opts)
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Player")
+	self.collider:setType("static")
 	self.rotation = math.pi / 2 -- look down
 	self.rotationVelocity = 1.66 * math.pi
 	self.xvel = 0

@@ -12,6 +12,7 @@ function EnemyProjectile:new(area, x, y, opts)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("EnemyProjectile")
 end
+
 function EnemyProjectile:checkCollision(dt)
 	if self.collider:enter("Player") then
 		local collision_data = self.collider:getEnterCollisionData("Player")
