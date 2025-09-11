@@ -146,11 +146,7 @@ function RotateTowards(player, targetAngle, dt)
 	end
 end
 
-function Slow(amount, duration)
-	GlobalSlowAmount = amount
-	print("GlobalSlowAmount : " .. GlobalSlowAmount)
-	GlobalTimer:tween("Slow", duration, _G, { GlobalSlowAmount = 1 }, "in-out-cubic")
-end
+
 
 function love.quit()
 	if not readyToQuit then

@@ -41,14 +41,36 @@ function love.draw()
 	Push:finish()
 end
 
+local function zoomIn()
+	print("zoomIn")
+	GlobalCamera.scale = math.min(5, GlobalCamera.scale + 1 * dt) -- Zoom in, max 5x
+end
+local function zoomOut()
+	print("zoomOut")
+	GlobalCamera.scale = math.min(5, GlobalCamera.scale - 1 * dt) -- Zoom in, max 5x
+end
+
+function Slow(amount, duration)
+	slow = amount
+	print("slow : " .. slow)
+	GlobalTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
+end
+
 function love.update(dt)
 	if InputHandler:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
+	if InputHandler:pressed("zoomIn") then
+		zoomIn()
+	end
 
-	GlobalRoomController:update(dt * GlobalSlowAmount)
-	--Timer:update(dt * GlobalSlowAmount)
-	GlobalCamera:update(dt * GlobalSlowAmount)
+	if InputHandler:pressed("zoomOut") then
+		zoomOut()
+	end
+
+	GlobalRoomController:update(dt * slow)
+	GlobalCamera:update(dt * slow)
+	GlobalTimer:update(dt * slow)
 end
 
 local function graphicSetter()
@@ -56,9 +78,6 @@ local function graphicSetter()
 	--love.graphics.setLineStyle("rough")
 	Font = love.graphics.newFont("resource/m5x7.ttf")
 	if Font then
-		--[[
-			TODO : fix this font and understand how the resize work
-		]]
 		print("loaded")
 		love.graphics.setNewFont(12)
 	end
@@ -79,6 +98,8 @@ local function inputBinder()
 	InputHandler:bind("right", "right")
 
 	InputHandler:bind("escape", "DeleteEveryThing")
+	InputHandler:bind("wheelup", "zoomIn")
+	InputHandler:bind("wheeldown", "zoomOut")
 end
 
 function love.load()
@@ -104,11 +125,12 @@ function love.load()
 
 	GlobalTimer = Timer()
 	GlobalCamera = Camera()
+	GlobalCamera.scale = 1
 	GlobalRoomController = RoomController()
 
 	GlobalRoomController:gotoRoom("Stage", UUID())
 	--resize(2)
-	GlobalSlowAmount = 1
+	slow = 1
 	FlashFrames = 0
 
 	Push:setupScreen(gw, gh, 640, 480, { resizible = true })

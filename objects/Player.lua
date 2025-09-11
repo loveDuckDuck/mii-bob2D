@@ -3,6 +3,7 @@ function Player:new(area, x, y, opts)
 	Player.super.new(self, area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
+
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Player")
@@ -28,6 +29,9 @@ function Player:new(area, x, y, opts)
 
 	self.shoot_timer = 0
 	self.shoot_cooldown = 0.24
+
+	self.hp = 100
+	self.max_hp = 100
 
 	self:setAttack("Rapid")
 
@@ -150,12 +154,58 @@ function Player:move(dt)
 	RotateTowards(self, targetAngle, dt)
 end
 
+
+function Player:removeHP(amount)
+    self.hp = self.hp - (amount or 5)
+    if self.hp <= 0 then
+        self.hp = 0
+        self:die()
+    end
+end
+
+function Player:hit(damage)
+	if self.invincible then
+		return
+	end
+	damage = damage or 10
+
+	for i = 1, love.math.random(4, 8) do
+		self.area:addGameObject("ExplodeParticle", self.x, self.y)
+	end
+	self:removeHP(damage)
+
+	if damage >= 30 then
+		self.invincible = true
+		self.timer:after("invincibility", 2, function()
+			self.invincible = false
+		end)
+		for i = 1, 50 do
+			self.timer:after((i - 1) * 0.04, function()
+				self.invisible = not self.invisible
+			end)
+		end
+		self.timer:after(51 * 0.04, function()
+			self.invisible = false
+		end)
+
+		GlobalCamera:shake(6, 60, 0.2)
+		flash(3)
+		Slow(0.25, 0.5)
+	else
+		GlobalCamera:shake(3, 60, 0.1)
+		flash(2)
+		Slow(0.75, 0.25)
+	end
+end
+
 function Player:checkCollision(dt)
 	if self.collider:enter("Collectable") then
 		local collision_data = self.collider:getEnterCollisionData("Collectable")
 		local object = collision_data.collider:getObject()
 		if object:is(Ammo) then
 			self:addAmmo(object.cointValue)
+			self:addScore(object.cointValue * 10)
+
 			object:die()
 		elseif object:is(BoostCoin) then
 			object:die()
@@ -164,6 +214,13 @@ function Player:checkCollision(dt)
 			self:setAttack(self.attack)
 			print("self.attack", self.attack)
 			object:die()
+		end
+	end
+	if self.collider:enter("Enemy") then
+		local collision_data = self.collider:getEnterCollisionData("Enemy")
+		local object = collision_data.collider:getObject()
+		if object:is(Rock) then
+			self:hit(30)
 		end
 	end
 end
@@ -188,6 +245,10 @@ function Player:addAmmo(amount)
 	if self.ammo < 0 then
 		self.ammo = 0
 	end
+end
+
+function Player:addScore(amount)
+	GlobalRoomController.current_room.score = GlobalRoomController:getCurrentRoom().score + amount
 end
 
 function Player:shoot()
@@ -256,7 +317,7 @@ end
 
 function Player:setAttack(attack)
 	self.attack = attack
-	
+
 	self.shoot_cooldown = Attacks[attack].cooldown
 end
 

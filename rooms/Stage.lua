@@ -15,7 +15,9 @@ function Stage:new() -- Create new stage object 📝
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", GlobalWordlSizeX / 2, GlobalWordlSizeY / 2)
 
-	self.director = Director (self, self.player) -- Create a director instance 🎬
+	self.director = Director(self, self.player) -- Create a director instance 🎬
+	self.score = 0
+	self.font = Font
 	--[[
 	XXX : remaind to fix
 	]]
@@ -42,13 +44,12 @@ function Stage:new() -- Create new stage object 📝
 			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
 			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
-		
 	end)
 	GlobalCamera.smoother = Camera.smooth.damped(100)
 end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
-    self.director:update(dt)	
+	self.director:update(dt)
 	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
 	GlobalCamera:lookAt(self.player.x, self.player.y)
 	GlobalCamera:update(dt)
@@ -65,6 +66,27 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	self.area:draw() -- Draw the area now 👀
 
 	GlobalCamera:detach()
+	-- Score
+	love.graphics.setColor(G_default_color)
+	love.graphics.print(
+		self.score,
+		gw - 20,
+		10,
+		0,
+		1,
+		1,
+		math.floor(self.font:getWidth(self.score) / 2),
+		self.font:getHeight() / 2
+	)
+	love.graphics.setColor(255, 255, 255)
+	-- HP
+	local r, g, b = unpack(G_hp_color)
+	local hp, max_hp = self.player.hp, self.player.max_hp
+	love.graphics.setColor(r, g, b)
+	love.graphics.rectangle("fill", gw / 2 - 52, gh - 16, 48 * (hp / max_hp), 4)
+	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
+	love.graphics.rectangle("line", gw / 2 - 52, gh - 16, 48, 4)
+
 	love.graphics.setCanvas() -- Reset the canvas 🔄
 
 	love.graphics.setColor(1, 1, 1, 1) -- New 0-1 range for LÖVE 11.5
@@ -77,6 +99,7 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
 
 	love.graphics.setBlendMode("alpha") -- Reset the blend mode 🔄
+	-- score
 end
 
 function Stage:destroy()

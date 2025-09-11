@@ -5,8 +5,8 @@ function RoomController:new()
 	self.rooms = {}
 	if type(self.rooms) ~= "table" then
 		print("Error: self.rooms is not a table. It might be nil.")
-    else
-        print("i am table")
+	else
+		print("i am table")
 	end
 	self.roomsName = {}
 end
@@ -65,26 +65,8 @@ function RoomController:addRoom(room_type, room_name, ...)
 	return room
 end
 
--- Add a function to print all room names
-function RoomController:printRoomNames()
-	-- Check if self.rooms exists and is a table
-	if type(self.rooms) ~= "table" then
-		print("Error: self.rooms is not a table. It might be nil.")
-		return
-	end
-
-	-- Now it's safe to use `next` to check if it's empty
-	if next(self.rooms) == nil then
-		print("No rooms have been added yet.")
-		return
-	end
-
-	print("--- List of Rooms ---")
-	for room_name, room_object in pairs(self.rooms) do
-		print("- " .. room_name)
-        self.rooms[room_name]:destroy()
-    end
-	print("---------------------")
+function RoomController:getCurrentRoom()
+	return self.current_room
 end
 
 return RoomController
