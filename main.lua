@@ -41,11 +41,11 @@ function love.draw()
 	Push:finish()
 end
 
-local function zoomIn()
+local function zoomIn(dt)
 	print("zoomIn")
 	GlobalCamera.scale = math.min(5, GlobalCamera.scale + 1 * dt) -- Zoom in, max 5x
 end
-local function zoomOut()
+local function zoomOut(dt)
 	print("zoomOut")
 	GlobalCamera.scale = math.min(5, GlobalCamera.scale - 1 * dt) -- Zoom in, max 5x
 end
@@ -61,11 +61,11 @@ function love.update(dt)
 		DeleteEveryThing()
 	end
 	if InputHandler:pressed("zoomIn") then
-		zoomIn()
+		zoomIn(dt)
 	end
 
 	if InputHandler:pressed("zoomOut") then
-		zoomOut()
+		zoomOut(dt)
 	end
 
 	GlobalRoomController:update(dt * slow)
