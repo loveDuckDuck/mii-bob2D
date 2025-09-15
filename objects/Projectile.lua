@@ -22,17 +22,39 @@ end
 
 function Projectile:checkCollision()
 	if self.collider:enter("Enemy") then
-		self.area:addGameObject(
-			"ExplodeParticle",
-			self.x,
-			self.y,
-			{ color = self.color, w = 3 * self.radiusSpace }
-		)
+		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
 	end
 end
 
 function Projectile:update(dt)
 	Projectile.super.update(self, dt)
+
+	-- Homing
+	if self.attack == "Homing" then
+        -- Acquire new target
+        if not self.target then
+			local targets = self.area:getAllGameObjectsThat(function(e)
+				for _, enemy in ipairs(Enemies) do
+					if e:is(_G[enemy]) and (GlobalDistance(e.x, e.y, self.x, self.y) < 400) then
+						return true
+					end
+				end
+			end)
+
+			self.target = table.remove(targets, love.math.random(1, #targets))
+		end
+		if self.target and self.target.dead then
+			self.target = nil
+		end
+		-- Move towards target
+		if self.target then
+			local projectile_heading = Vector(self.collider:getLinearVelocity()):normalized()
+			local angle = GlobalAtan2(self.target.y - self.y, self.target.x - self.x)
+			local to_target_heading = Vector(math.cos(angle), math.sin(angle)):normalized()
+			local final_heading = (projectile_heading + 0.1 * to_target_heading):normalized()
+			self.collider:setLinearVelocity(self.velocity * final_heading.x, self.velocity * final_heading.y)
+		end
+	end
 	--[[
         XXX: PROBLEM with distance projectile
     ]]
@@ -45,7 +67,7 @@ function Projectile:update(dt)
 	local bottom_bound = self.parent.y + gh / 2
 	local left_bound = self.parent.x - gw / 2
 	local right_bound = self.parent.x + gw / 2
-
+	-- NORMAL MOVEMENT WITHOUT BOUNCE
 	if self.x < left_bound or self.x > right_bound then
 		if not self.bounce then
 			self:die()

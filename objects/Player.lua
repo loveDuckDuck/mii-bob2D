@@ -4,37 +4,54 @@ function Player:new(area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
 
+	-- PHYSICS
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Player")
 	self.collider:setType("static")
+
+	-- MOVEMENT
 	self.rotation = math.pi / 2 -- look down
-	self.rotationVelocity = 1.66 * math.pi
 	self.xvel = 0
 	self.yvel = 0
-	self.velocity = 0
-	self.maxVelocity = 100
+
+	self.velocity = 500
 	self.baseMaxVelocity = 100
-
-	self.acceleration = 100
-	self.enabledToShoot = false
-
-	self.speed = 500
-
 	self.maxVelocity = self.baseMaxVelocity
+
 	self.boosting = false
 	self.trailColor = G_skill_point_color
-
-	self.maxAmmo = 100
-	self.ammo = self.maxAmmo
-
-	self.shoot_timer = 0
-	self.shoot_cooldown = 0.24
-
+	self.rotationVelocity = 1.66 * math.pi
+	-- HP
 	self.hp = 100
 	self.max_hp = 100
 
-	self:setAttack("Rapid")
+	-- MULTIPLIER HP
+	self.hp_multiplier = 1
+	-- FLATS HP
+	self.flat_hp = 0
+	-- AMMO
+	self.maxAmmo = 100
+	self.ammo = self.maxAmmo
+	-- MULTIPLIER AMMO
+	self.hp_ammo = 1
+	-- FLATS AMMO
+	self.flat_ammo = 0
+	self.ammo_gain = 0
+
+	-- SHOOTING
+	self.shoot_timer = 0
+	self.shoot_cooldown = 0.24
+	self.enabledToShoot = false
+
+	-- CYCLE
+	self.cycle_timer = 0
+	self.cycle_cooldown = 5
+
+	-- treeToPlayer(self)
+	self:setStats()
+
+	self:setAttack("Homing")
 
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
@@ -58,15 +75,24 @@ function Player:new(area, x, y, opts)
 	end)
 end
 
+function Player:setStats()
+	-- multiply the max hp by the multiplier
+	self.max_hp = (self.max_hp + self.flat_hp) * self.hp_multiplier
+	self.hp = self.max_hp
+	-- multiply the max ammo by the multiplier
+	self.maxAmmo = (self.maxAmmo + self.flat_ammo) * self.hp_ammo
+	self.ammo = self.maxAmmo
+end
+
 function Player:physics(dt)
 	self.xvel = self.xvel * (1 - math.min(dt * self.friction, 1))
 	self.yvel = self.yvel * (1 - math.min(dt * self.friction, 1))
 
 	-- Clamp velocities to max velocity
-	local speed = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
-	if speed > self.maxVelocity then
-		self.xvel = (self.xvel / speed) * self.maxVelocity
-		self.yvel = (self.yvel / speed) * self.maxVelocity
+	local velocity = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
+	if velocity > self.maxVelocity then
+		self.xvel = (self.xvel / velocity) * self.maxVelocity
+		self.yvel = (self.yvel / velocity) * self.maxVelocity
 	end
 
 	self.x = self.x + self.xvel * dt
@@ -76,17 +102,17 @@ function Player:physics(dt)
 end
 
 function Player:move(dt)
-	if InputHandler:down("d") and self.xvel < self.speed then
-		self.xvel = self.xvel + self.speed * dt
+	if InputHandler:down("d") and self.xvel < self.velocity then
+		self.xvel = self.xvel + self.velocity * dt
 	end
-	if InputHandler:down("a") and self.xvel > -self.speed then
-		self.xvel = self.xvel - self.speed * dt
+	if InputHandler:down("a") and self.xvel > -self.velocity then
+		self.xvel = self.xvel - self.velocity * dt
 	end
-	if InputHandler:down("s") and self.yvel < self.speed then
-		self.yvel = self.yvel + self.speed * dt
+	if InputHandler:down("s") and self.yvel < self.velocity then
+		self.yvel = self.yvel + self.velocity * dt
 	end
-	if InputHandler:down("w") and self.yvel > -self.speed then
-		self.yvel = self.yvel - self.speed * dt
+	if InputHandler:down("w") and self.yvel > -self.velocity then
+		self.yvel = self.yvel - self.velocity * dt
 	end
 
 	if InputHandler:down("b") then
@@ -155,13 +181,12 @@ function Player:move(dt)
 	RotateTowards(self, targetAngle, dt)
 end
 
-
 function Player:removeHP(amount)
-    self.hp = self.hp - (amount or 5)
-    if self.hp <= 0 then
-        self.hp = 0
-        self:die()
-    end
+	self.hp = self.hp - (amount or 5)
+	if self.hp <= 0 then
+		self.hp = 0
+		self:die()
+	end
 end
 
 function Player:hit(damage)
@@ -242,7 +267,7 @@ function Player:tick()
 end
 
 function Player:addAmmo(amount)
-	self.ammo = self.ammo + amount
+	self.ammo = self.ammo + amount + self.ammo_gain
 	if self.ammo < 0 then
 		self.ammo = 0
 	end
@@ -270,47 +295,54 @@ function Player:shoot()
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation),
 			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 	elseif self.attack == "Double" then
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 12),
 			self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 12),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 12),
 			self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 12),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 	elseif self.attack == "Triple" then
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 4),
 			self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 4),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation),
 			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 4),
 			self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 4),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 	elseif self.attack == "Rapid" then
 		self.area:addGameObject(
 			"Projectile",
 			self.x + 1.5 * distance * math.cos(self.rotation),
 			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation, isBounce = self.isBounce, parent = self, attack = self.attack }
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
+		)
+	elseif self.attack == "Homing" then
+		self.area:addGameObject(
+			"Projectile",
+			self.x + 1.5 * distance * math.cos(self.rotation),
+			self.y + 1.5 * distance * math.sin(self.rotation),
+			{ rotation = self.rotation,  parent = self, attack = self.attack }
 		)
 	end
 	self:addAmmo(-Attacks[self.attack].ammo)
@@ -318,7 +350,6 @@ end
 
 function Player:setAttack(attack)
 	self.attack = attack
-
 	self.shoot_cooldown = Attacks[attack].cooldown
 end
 

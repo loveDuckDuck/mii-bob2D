@@ -81,3 +81,17 @@ function Area:destroy()
 		self.world = nil
 	end
 end
+
+--- Returns a table containing all game objects that satisfy the given filter function.
+-- @param filter A function that takes a game object as an argument and returns true 
+-- if the object should be included.
+-- @return table A table of game objects that match the filter criteria.
+function Area:getAllGameObjectsThat(filter)
+	local objectFiltered = {}
+	for _, value in ipairs(self.game_objects) do
+		if filter(value) then
+			table.insert(objectFiltered, value)
+		end
+	end
+	return objectFiltered
+end
