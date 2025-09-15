@@ -4,9 +4,7 @@ function Projectile:new(area, x, y, opts)
 	Projectile.super.new(self, area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
-	self.velocity = opts.velocity or G_default_player_velocity
-	self.color = Attacks[self.attack].color or G_hp_color
-	self.damage = Attacks[self.attack].damage or 1
+	
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
@@ -21,9 +19,9 @@ end
 -- The particle inherits the projectile's color and has a width based on the projectile's radius.
 
 function Projectile:checkCollision()
-	if self.collider:enter("Enemy") then
-		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
-	end
+	-- if self.collider:enter("Enemy") then
+	-- 	self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
+	-- end
 end
 
 function Projectile:update(dt)
@@ -31,8 +29,8 @@ function Projectile:update(dt)
 
 	-- Homing
 	if self.attack == "Homing" then
-        -- Acquire new target
-        if not self.target then
+		-- Acquire new target
+		if not self.target then
 			local targets = self.area:getAllGameObjectsThat(function(e)
 				for _, enemy in ipairs(Enemies) do
 					if e:is(_G[enemy]) and (GlobalDistance(e.x, e.y, self.x, self.y) < 400) then
@@ -91,7 +89,7 @@ function Projectile:draw()
 	love.graphics.setColor(self.color)
 
 	PushRotate(self.x, self.y, self.collider:getAngle())
-	love.graphics.circle("line", self.x, self.y, self.radiusSpace)
+	love.graphics.circle("fill", self.x, self.y, self.radiusSpace)
 
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)
@@ -100,4 +98,9 @@ end
 function Projectile:die()
 	self.dead = true
 	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
+end
+
+function Projectile:explode()
+	self.dead = true
+	self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
 end

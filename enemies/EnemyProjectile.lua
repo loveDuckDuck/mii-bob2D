@@ -17,7 +17,10 @@ function EnemyProjectile:checkCollision(dt)
 	if self.collider:enter("Player") then
 		local collision_data = self.collider:getEnterCollisionData("Player")
 		local object = collision_data.collider:getObject()
-		print(object.speed, "object.speed")
+		if object and not object.invincible then
+			object:hit(self.damage)
+		end
+		self:die()
 	end
 end
 

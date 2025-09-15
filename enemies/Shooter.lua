@@ -6,7 +6,7 @@ function Shooter:new(area, x, y, opts)
 	self.target = GlobalRoomController.current_room.player
 
 	-- coinvalues
-	self.collider = self.area.world:newRectangleCollider(self.x, self.y, self.w - 3, self.h - 3)
+	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w )
 	self.collider:setPosition(self.x, self.y)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Enemy")
@@ -21,7 +21,6 @@ function Shooter:new(area, x, y, opts)
 	self.w, self.h = 10, 10
 
 	self.timer:every(GlobalRandom(1, 3), function()
-		-- XXX: fix the spawn position of the projectile
         local target_x, target_y = self.target.x, self.target.y
 		self.area:addGameObject(
 			"PreAttackEffect",

@@ -282,22 +282,22 @@ end
 function InterpolateColor(color1, color2, amount)
     -- Ensure the amount is clamped between 0 and 1 to prevent invalid color values.
     local t = math.max(0, math.min(1, amount or 0))
-
+	
     -- Ensure the input tables are valid
-    if not color1 or not color2 or not color1.r or not color2.r then
+    if not color1 or not color2 or not color1[1] or not color2[1] then
         error("Invalid color tables provided for interpolation.")
         return
     end
     
     local new_color = {
-        r = Lerp(color1.r, color2.r, t),
-        g = Lerp(color1.g, color2.g, t),
-        b = Lerp(color1.b, color2.b, t),
+        math.truncate(Lerp(color1[1], color2[1], t),4),
+        math.truncate(Lerp(color1[2], color2[2], t),4),
+        math.truncate(Lerp(color1[3], color2[3], t),4),
     }
 
     -- Also interpolate the alpha channel if it exists in both colors
-    if color1.a and color2.a then
-        new_color.a = Lerp(color1.a, color2.a, t)
+    if color1[4] and color2[4]then
+        new_color[4] = Lerp(color1[4], color2[4], t)
     end
 
     return new_color
@@ -306,4 +306,9 @@ end
 
 function GlobalDistance(x1, y1, x2, y2)
     return math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2))
+end
+
+function math.truncate(number, decimalPlaces)
+  local multiplier = 10 ^ decimalPlaces
+  return math.floor(number * multiplier) / multiplier
 end

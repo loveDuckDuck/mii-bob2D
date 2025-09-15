@@ -53,7 +53,6 @@ function Stage:update(dt) -- Update stage logic here 🕹️
 	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
 	GlobalCamera:lookAt(self.player.x, self.player.y)
 	GlobalCamera:update(dt)
-	--	print(self.player.x .. " " .. self.player.y)
 	self.area:update(dt) -- Update the area too 👍
 end
 

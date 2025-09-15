@@ -43,13 +43,13 @@ Attacks = {
 			DraftDrawer:kite(x, y, w + 5, h + 5, w, "line")
 		end,
 	},
-		["Homing"] = {
+	["Homing"] = {
 		name = "Homing",
 		damage = 3,
 		cooldown = 0.50,
 		ammo = 1,
 		abbreviation = "Ho",
-		color = { 252/255, 216/255, 205/255, 1.00 }, -- rgb(252, 216, 205)
+		color = { 252 / 255, 216 / 255, 205 / 255, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
 			DraftDrawer:diamond(x, y, w + 5, h + 5, w, "line")
 		end,

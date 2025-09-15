@@ -3,6 +3,7 @@ function Player:new(area, x, y, opts)
 	Player.super.new(self, area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
+	self.ProjectileDirector = ProjectileDirector(self)
 
 	-- PHYSICS
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
@@ -51,7 +52,7 @@ function Player:new(area, x, y, opts)
 	-- treeToPlayer(self)
 	self:setStats()
 
-	self:setAttack("Homing")
+	self:setAttack("Neutral")
 
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
@@ -286,71 +287,14 @@ function Player:shoot()
 		{ player = self, distance = distance, attack = self.attack } -- {self.attack.color[1],self.attack.color[2],self.attack.color[3],self.attack.color[4]}
 	)
 
-	if self.ammo == 0 then
-		self:setAttack("Neutral")
-	end
-
-	if self.attack == "Neutral" then
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation),
-			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-	elseif self.attack == "Double" then
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 12),
-			self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 12),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 12),
-			self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 12),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-	elseif self.attack == "Triple" then
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation + math.pi / 4),
-			self.y + 1.5 * distance * math.sin(self.rotation + math.pi / 4),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation),
-			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation - math.pi / 4),
-			self.y + 1.5 * distance * math.sin(self.rotation - math.pi / 4),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-	elseif self.attack == "Rapid" then
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation),
-			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-	elseif self.attack == "Homing" then
-		self.area:addGameObject(
-			"Projectile",
-			self.x + 1.5 * distance * math.cos(self.rotation),
-			self.y + 1.5 * distance * math.sin(self.rotation),
-			{ rotation = self.rotation,  parent = self, attack = self.attack }
-		)
-	end
+	ProjectileDirector.shoot(self.ProjectileDirector, distance)
 	self:addAmmo(-Attacks[self.attack].ammo)
 end
 
 function Player:setAttack(attack)
 	self.attack = attack
 	self.shoot_cooldown = Attacks[attack].cooldown
+	self.ProjectileDirector:updateAttack(attack)
 end
 
 function Player:die()
