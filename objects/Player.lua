@@ -52,7 +52,7 @@ function Player:new(area, x, y, opts)
 	-- treeToPlayer(self)
 	self:setStats()
 
-	self:setAttack("Neutral")
+	self:setAttack("Homing")
 
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
@@ -239,7 +239,6 @@ function Player:checkCollision(dt)
 		elseif object:is(ResourceCoin) then
 			self.attack = object.power.name
 			self:setAttack(self.attack)
-			print("self.attack", self.attack)
 			object:die()
 		end
 	end
@@ -256,11 +255,17 @@ function Player:update(dt)
 	Player.super.update(self, dt)
 	self:physics(dt)
 	self:checkCollision(dt)
+	self.ProjectileDirector:update(dt)
 	self:move(dt)
 end
 
 function Player:draw()
 	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
+	love.graphics.print("hp : " .. self.hp, self.x + 50, self.y - 70)
+	love.graphics.print("attack : " .. self.attack, self.x + 50, self.y - 90)
+	love.graphics.print("damage :" .. self.ProjectileDirector.damage, self.x + 50, self.y - 110)
+	love.graphics.print("tears :" .. self.ProjectileDirector.tearIterator, self.x + 50, self.y - 130)
+	love.graphics.print("shootAngle : " .. self.ProjectileDirector.shootAngle, self.x + 50, self.y - 150)
 end
 
 function Player:tick()

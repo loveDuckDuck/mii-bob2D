@@ -146,8 +146,6 @@ function RotateTowards(player, targetAngle, dt)
 	end
 end
 
-
-
 function love.quit()
 	if not readyToQuit then
 		print("We are not ready to quit yet!")
@@ -214,25 +212,23 @@ function table.randomResource(t)
 	for key in pairs(t) do
 		table.insert(keys, key)
 	end
-    local randomIndex = math.random(1, #keys)
-    -- Restituisci la risorsa corrispondente alla chiave casuale
-    return t[keys[randomIndex]]
+	local randomIndex = math.random(1, #keys)
+	-- Restituisci la risorsa corrispondente alla chiave casuale
+	return t[keys[randomIndex]]
 end
 
 function CreateIrregularPolygon(size, point_amount)
-    local point_amount = point_amount or 8
-    local points = {}
-    for i = 1, point_amount do
-        local angle_interval = 2*math.pi/point_amount
-        local distance = size + GlobalRandom(-size/4, size/4)
-        local angle = (i-1)*angle_interval + GlobalRandom(-angle_interval/4, angle_interval/4)
-        table.insert(points, distance*math.cos(angle))
-        table.insert(points, distance*math.sin(angle))
-	
-    end
-    return points
+	local point_amount = point_amount or 8
+	local points = {}
+	for i = 1, point_amount do
+		local angle_interval = 2 * math.pi / point_amount
+		local distance = size + GlobalRandom(-size / 4, size / 4)
+		local angle = (i - 1) * angle_interval + GlobalRandom(-angle_interval / 4, angle_interval / 4)
+		table.insert(points, distance * math.cos(angle))
+		table.insert(points, distance * math.sin(angle))
+	end
+	return points
 end
-
 
 --- Creates a chance list object that allows random selection of items based on their defined chances.
 -- Each chance definition is a table of the form {item, chance}, where 'item' is any value and 'chance' is a positive integer
@@ -258,8 +254,6 @@ function CreateChanceList(...)
 	}
 end
 
-
-
 --- A general-purpose linear interpolation function.
 -- It finds a value that is a certain fraction between two other values.
 -- @param a The starting value.
@@ -267,7 +261,7 @@ end
 -- @param t The interpolation amount (a value between 0.0 and 1.0).
 -- @return The interpolated value.
 function Lerp(a, b, t)
-    return a + (b - a) * t
+	return a + (b - a) * t
 end
 
 --- Interpolates between two colors.
@@ -280,35 +274,53 @@ end
 --               and 0.5 will return a color exactly halfway between them.
 -- @return A new color table with the interpolated r, g, b, and a values.
 function InterpolateColor(color1, color2, amount)
-    -- Ensure the amount is clamped between 0 and 1 to prevent invalid color values.
-    local t = math.max(0, math.min(1, amount or 0))
-	
-    -- Ensure the input tables are valid
-    if not color1 or not color2 or not color1[1] or not color2[1] then
-        error("Invalid color tables provided for interpolation.")
-        return
-    end
-    
-    local new_color = {
-        math.truncate(Lerp(color1[1], color2[1], t),4),
-        math.truncate(Lerp(color1[2], color2[2], t),4),
-        math.truncate(Lerp(color1[3], color2[3], t),4),
-    }
+	-- Ensure the amount is clamped between 0 and 1 to prevent invalid color values.
+	local t = math.max(0, math.min(1, amount or 0))
 
-    -- Also interpolate the alpha channel if it exists in both colors
-    if color1[4] and color2[4]then
-        new_color[4] = Lerp(color1[4], color2[4], t)
-    end
+	-- Ensure the input tables are valid
+	if not color1 or not color2 or not color1[1] or not color2[1] then
+		error("Invalid color tables provided for interpolation.")
+		return
+	end
 
-    return new_color
+	local new_color = {
+		math.truncate(Lerp(color1[1], color2[1], t), 4),
+		math.truncate(Lerp(color1[2], color2[2], t), 4),
+		math.truncate(Lerp(color1[3], color2[3], t), 4),
+	}
+
+	-- Also interpolate the alpha channel if it exists in both colors
+	if color1[4] and color2[4] then
+		new_color[4] = Lerp(color1[4], color2[4], t)
+	end
+
+	return new_color
 end
 
-
 function GlobalDistance(x1, y1, x2, y2)
-    return math.sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2))
+	return math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 end
 
 function math.truncate(number, decimalPlaces)
-  local multiplier = 10 ^ decimalPlaces
-  return math.floor(number * multiplier) / multiplier
+	local multiplier = 10 ^ decimalPlaces
+	return math.floor(number * multiplier) / multiplier
+end
+
+function Lenght(table)
+	local count = 0
+	for _ in pairs(table) do
+		count = count + 1
+	end
+	return count
+end
+
+function table.keys(table)
+	local keyset = {}
+	local n = 0
+
+	for k, v in pairs(table) do
+		n = n + 1
+		keyset[n] = k
+	end
+	return keyset
 end

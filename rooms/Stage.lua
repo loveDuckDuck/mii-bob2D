@@ -18,6 +18,7 @@ function Stage:new() -- Create new stage object 📝
 	self.director = Director(self, self.player) -- Create a director instance 🎬
 	self.score = 0
 	self.font = Font
+	self.counterAttack = 0
 	--[[
 	XXX : remaind to fix
 	]]
@@ -45,6 +46,14 @@ function Stage:new() -- Create new stage object 📝
 			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
 	end)
+	InputHandler:bind("z", function()
+		self.counterAttack = self.counterAttack + 1
+		if self.counterAttack > Lenght(Attacks) then
+			self.counterAttack = 1
+		end
+		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
+	end)
+
 	GlobalCamera.smoother = Camera.smooth.damped(100)
 end
 
