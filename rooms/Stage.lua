@@ -23,28 +23,34 @@ function Stage:new() -- Create new stage object 📝
 	XXX : remaind to fix
 	]]
 	InputHandler:bind("p", function()
-		self.area:addGameObject("Ammo", GlobalRandom(0, GlobalWordlSizeX), GlobalRandom(0, GlobalWordlSizeY))
 		self.area:addGameObject(
-			"BoostCoin",
-			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
-		)
-		self.area:addGameObject(
-			"ResourceCoin",
+			"Ammo",
 			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
 			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
 
 		self.area:addGameObject(
-			"Rock",
+			"BoostCoin",
 			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
 			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
-		self.area:addGameObject(
-			"Shooter",
-			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
-		)
+
+		-- self.area:addGameObject(
+		-- 	"ResourceCoin",
+		-- 	GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		-- )
+
+		-- self.area:addGameObject(
+		-- 	"Rock",
+		-- 	GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		-- )
+		-- self.area:addGameObject(
+		-- 	"Shooter",
+		-- 	GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		-- )
 	end)
 	InputHandler:bind("z", function()
 		self.counterAttack = self.counterAttack + 1

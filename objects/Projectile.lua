@@ -4,18 +4,23 @@ function Projectile:new(area, x, y, opts)
 	Projectile.super.new(self, area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
+	self.acceleration = 0
+	self.velocity = opts.velocity or 300
+	self.rotation = opts.rotation or 0
+	self.color = opts.color or G_default_color
+	self.parent = opts.parent or nil
+
+	self.bounce = false or self.isBounce
+	self.damage = opts.damage or 1
 
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("Projectile")
-	self.acceleration = 0
-	self.velocity = opts.velocity or 300
 	-- increase in a linear way my velocity
 	--self.timer:tween(0.5, self, { velocity = 400 }, 'linear')
-	self.bounce = false or self.isBounce
-	self.damage = opts.damage or 1
 end
+
 --- Checks for collision between the projectile and an enemy.
 -- If a collision is detected, adds an "ExplodeParticle" game object at the projectile's position.
 -- The particle inherits the projectile's color and has a width based on the projectile's radius.
@@ -56,7 +61,10 @@ function Projectile:update(dt)
 			self.collider:setLinearVelocity(self.velocity * final_heading.x, self.velocity * final_heading.y)
 		end
 	else
-		self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
+		self.collider:setLinearVelocity(
+			self.velocity * math.cos(self.rotation),
+			self.velocity * math.sin(self.rotation)
+		)
 	end
 
 	--[[
@@ -91,10 +99,15 @@ function Projectile:draw()
 	love.graphics.setColor(self.color)
 
 	PushRotate(self.x, self.y, self.collider:getAngle())
-	--love.graphics.circle("fill", self.x, self.y, self.radiusSpace)
-	for _, value in pairs(self.form) do
-		value(self.x, self.y, self.radiusSpace, self.radiusSpace)
+
+	if self.form then
+		for _, value in pairs(self.form) do
+			value(self.x, self.y, self.radiusSpace, self.radiusSpace)
+		end
+	else
+		love.graphics.circle("fill", self.x, self.y, self.radiusSpace)
 	end
+
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)
 end

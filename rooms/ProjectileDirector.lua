@@ -38,7 +38,6 @@ function ProjectileDirector:update(dt)
 	end
 end
 
-
 function ProjectileDirector:shoot(distance)
 	if self.attack == "Neutral" then
 		self.player.area:addGameObject(
@@ -109,7 +108,7 @@ function ProjectileDirector:shoot(distance)
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation + math.pi / 12),
 			{
 				parent = self.player,
-				rotation = self.player.rotation+ math.pi/12,
+				rotation = self.player.rotation + math.pi / 12,
 				velocity = self.velocity * self.velocityMultilplier,
 				damage = self.damage,
 				color = self.color,
@@ -124,7 +123,7 @@ function ProjectileDirector:shoot(distance)
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation - math.pi / 12),
 			{
 				parent = self.player,
-				rotation = self.player.rotation- math.pi/12,
+				rotation = self.player.rotation - math.pi / 12,
 				velocity = self.velocity * self.velocityMultilplier,
 				damage = self.damage,
 				color = self.color,
@@ -219,7 +218,7 @@ function ProjectileDirector:shoot(distance)
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation - math.pi / 2),
 			{
 				parent = self.player,
-				rotation = self.player.rotation- math.pi/2,
+				rotation = self.player.rotation - math.pi / 2,
 				velocity = self.velocity * self.velocityMultilplier,
 				damage = self.damage,
 				color = self.color,
@@ -234,7 +233,7 @@ function ProjectileDirector:shoot(distance)
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation + math.pi / 2),
 			{
 				parent = self.player,
-				rotation = self.player.rotation+math.pi/2,
+				rotation = self.player.rotation + math.pi / 2,
 				velocity = self.velocity * self.velocityMultilplier,
 				damage = self.damage,
 				color = self.color,
@@ -243,7 +242,7 @@ function ProjectileDirector:shoot(distance)
 				form = self.formTear,
 			}
 		)
-		elseif self.attack == "Homing" then
+	elseif self.attack == "Homing" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),

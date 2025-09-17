@@ -23,6 +23,9 @@ function Player:new(area, x, y, opts)
 	self.boosting = false
 	self.trailColor = G_skill_point_color
 	self.rotationVelocity = 1.66 * math.pi
+	self.friction = 5
+	self.isBounce = false
+
 	-- HP
 	self.hp = 100
 	self.max_hp = 100
@@ -49,8 +52,22 @@ function Player:new(area, x, y, opts)
 	self.cycle_timer = 0
 	self.cycle_cooldown = 5
 
+	-- ASPD
+	self.ASPDMultiplier = 1
+
+	-- HASTE AREA
+	self.insideHasteArea = false
+	self.preHasteASPDMultiplier = nil
+
 	-- treeToPlayer(self)
 	self:setStats()
+	-- CHANCES
+	self.launch_homing_projectile_on_ammo_pickup_chance = 100
+
+	-- GENERATE CHANCES
+	self:generateChances()
+
+
 
 	self:setAttack("Homing")
 
@@ -62,10 +79,6 @@ function Player:new(area, x, y, opts)
 			{ parent = self, radius = GlobalRandom(2, 4), duration = GlobalRandom(0.15, 0.25), color = self.trailColor }
 		)
 	end)
-
-	self.friction = 5
-
-	self.isBounce = false
 
 	InputHandler:bind("f4", function()
 		self:die()
@@ -173,7 +186,7 @@ function Player:move(dt)
 
 	if self.enabledToShoot then
 		self.shoot_timer = self.shoot_timer + dt
-		if self.shoot_timer > self.shoot_cooldown then
+		if self.shoot_timer > self.shoot_cooldown * self.ASPDMultiplier then
 			self.shoot_timer = 0
 			self:shoot()
 		end
@@ -232,7 +245,7 @@ function Player:checkCollision(dt)
 		if object:is(Ammo) then
 			self:addAmmo(object.cointValue)
 			self:addScore(object.cointValue * 10)
-
+			self:onAmmoPickup()
 			object:die()
 		elseif object:is(BoostCoin) then
 			object:die()
@@ -271,7 +284,18 @@ end
 function Player:tick()
 	self.area:addGameObject("TickEffect", self.x, self.y, { parent = self })
 end
-
+function Player:onAmmoPickup()
+	if self.chances.launch_homing_projectile_on_ammo_pickup_chance:next() then
+		local distance = 1.2 * self.w
+		self.area:addGameObject(
+			"Projectile",
+			self.x + distance * math.cos(self.rotation),
+			self.y + distance * math.sin(self.rotation),
+			{ rotation = self.rotation, attack = "Homing" }
+		)
+		self.area:addGameObject("InfoText", self.x, self.y, { text = "Homing Projectile!" })
+	end
+end
 function Player:addAmmo(amount)
 	self.ammo = self.ammo + amount + self.ammo_gain
 	if self.ammo < 0 then
@@ -311,4 +335,25 @@ function Player:die()
 	for i = 1, love.math.random(8, 12) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = G_hp_color })
 	end
+end
+
+function Player:generateChances()
+	self.chances = {}
+	for k, v in pairs(self) do
+		if k:find("_chance") and type(v) == "number" then
+			self.chances[k] = CreateChanceList({ true, math.ceil(v) }, { false, 100 - math.ceil(v) })
+		end
+	end
+end
+
+function Player:enterHasteArea()
+	self.insideHasteArea = true
+	self.preHasteASPDMultiplier = self.ASPDMultiplier
+	self.ASPDMultiplier = self.ASPDMultiplier / 2
+end
+
+function Player:exitHasteArea()
+	self.insideHasteArea = false
+	self.ASPDMultiplier = self.preHasteASPDMultiplier
+	self.preHasteASPDMultiplier = nil
 end
