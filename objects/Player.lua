@@ -62,13 +62,10 @@ function Player:new(area, x, y, opts)
 	-- treeToPlayer(self)
 	self:setStats()
 	-- CHANCES
-	self.launch_homing_projectile_on_ammo_pickup_chance = 100
 
 	-- GENERATE CHANCES
-	self:generateChances()
-
-
-
+	self.chance = PlayerChance(self)
+	self.chance:generateChances()
 	self:setAttack("Homing")
 
 	self.timer:every(0.01, function()
@@ -240,15 +237,16 @@ end
 
 function Player:checkCollision(dt)
 	if self.collider:enter("Collectable") then
-		local collision_data = self.collider:getEnterCollisionData("Collectable")
+		local collision_data = self.lider:getEnterCollisionData("Collectable")
 		local object = collision_data.collider:getObject()
 		if object:is(Ammo) then
 			self:addAmmo(object.cointValue)
 			self:addScore(object.cointValue * 10)
-			self:onAmmoPickup()
+			self.chance:onAmmoPickupChance()
 			object:die()
 		elseif object:is(BoostCoin) then
 			object:die()
+			self.chance:onBoostPickupChange()
 		elseif object:is(ResourceCoin) then
 			self.attack = object.power.name
 			self:setAttack(self.attack)
@@ -284,18 +282,7 @@ end
 function Player:tick()
 	self.area:addGameObject("TickEffect", self.x, self.y, { parent = self })
 end
-function Player:onAmmoPickup()
-	if self.chances.launch_homing_projectile_on_ammo_pickup_chance:next() then
-		local distance = 1.2 * self.w
-		self.area:addGameObject(
-			"Projectile",
-			self.x + distance * math.cos(self.rotation),
-			self.y + distance * math.sin(self.rotation),
-			{ rotation = self.rotation, attack = "Homing" }
-		)
-		self.area:addGameObject("InfoText", self.x, self.y, { text = "Homing Projectile!" })
-	end
-end
+
 function Player:addAmmo(amount)
 	self.ammo = self.ammo + amount + self.ammo_gain
 	if self.ammo < 0 then
@@ -334,15 +321,6 @@ function Player:die()
 	Slow(0.15, 1)
 	for i = 1, love.math.random(8, 12) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = G_hp_color })
-	end
-end
-
-function Player:generateChances()
-	self.chances = {}
-	for k, v in pairs(self) do
-		if k:find("_chance") and type(v) == "number" then
-			self.chances[k] = CreateChanceList({ true, math.ceil(v) }, { false, 100 - math.ceil(v) })
-		end
 	end
 end
 

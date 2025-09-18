@@ -258,5 +258,21 @@ function ProjectileDirector:shoot(distance)
 				form = self.formTear,
 			}
 		)
+	elseif self.attack == "Destroyer" then
+		self.player.area:addGameObject(
+			"Projectile",
+			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
+			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
+			{
+				parent = self.player,
+				rotation = self.player.rotation,
+				velocity = self.velocity * self.velocityMultilplier,
+				damage = self.damage,
+				color = self.color,
+				distance = distance,
+				attack = self.attack,
+				form = self.formTear,
+			}
+		)
 	end
 end

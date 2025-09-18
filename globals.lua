@@ -86,7 +86,7 @@ Attacks = {
 			DraftDrawer:rhombusEquilateral(x, y, w + 5, "line")
 		end,
 	},
-		["Side"] = {
+	["Side"] = {
 		name = "Side",
 		damage = 2,
 		cooldown = 1.2,
@@ -98,7 +98,20 @@ Attacks = {
 			DraftDrawer:diamond(x, y, w + 5, "line")
 		end,
 	},
-	
-	
+	--[[ 
+		XXX: make following???
+	--]]
+	["Destroyer"] = {
+		name = "Destroyer",
+		damage = 100,
+		cooldown = 1.2,
+		ammo = 4,
+		tears = 1,
+		abbreviation = "DKILL",
+		color = { 1.00, 1.00, 1.00, 1.00 }, -- rgb(252, 216, 205)
+		resource = function(x, y, w, h)
+			DraftDrawer:star(x, y, w * 10, w * 5, w * 2, w)
+		end,
+	},
 }
 Enemies = { "Rock", "Shooter" }

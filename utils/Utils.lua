@@ -244,11 +244,14 @@ function CreateChanceList(...)
 		next = function(self)
 			if #self.chance_list == 0 then
 				for _, chance_definition in ipairs(self.chance_definitions) do
+					-- chance_definition[1] = item
+					-- chance_definition[2] = how many times to include it
 					for i = 1, chance_definition[2] do
 						table.insert(self.chance_list, chance_definition[1])
 					end
 				end
 			end
+			-- pick a random item from the list and remove it
 			return table.remove(self.chance_list, love.math.random(1, #self.chance_list))
 		end,
 	}
