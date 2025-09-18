@@ -18,11 +18,15 @@ function Enemy:hit(dt)
 	if self.collider:enter("Projectile") then
 		local collision_data = self.collider:getEnterCollisionData("Projectile")
 		local object = collision_data.collider:getObject()
-		self.hp = self.hp - object.damage
-		if self.hp <= 0 then
-			self:die()
+		if object:is(Projectile) then
+			self.hp = self.hp - object.damage
+			print("Enemy : ", object.damage)
+
+			if self.hp <= 0 then
+				self:die()
+			end
+			object:explode()
 		end
-		object:explode()
 	end
 end
 

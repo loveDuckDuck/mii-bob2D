@@ -38,6 +38,20 @@ function Director:new(stage, player)
 		["Shooter"] = 2,
 	}
 
+	self.resource_to_points = {
+		["ResourceCoin"] = 1,
+		["BoostCoin"] = 2,
+		["Ammo"] = 3,
+	}	
+
+self.resource_spawn_chances = {}
+	for i = 1, 1024 do
+		self.resource_spawn_chances[i] = CreateChanceList(
+			{ "Ammo", love.math.random(2, 8) },
+			{ "BoostCoin", love.math.random(1, 4) }
+		)
+	end
+
 	self.enemy_spawn_chances = {
 		[1] = CreateChanceList({ "Rock", 1 }),
 		[2] = CreateChanceList({ "Rock", 8 }, { "Shooter", 4 }),
@@ -52,6 +66,7 @@ function Director:new(stage, player)
 	end
 
 	self:setEnemySpawnsForThisRound()
+	self:setRecourceSpawnsForThisRound()
 end
 
 function Director:setEnemySpawnsForThisRound()
@@ -97,6 +112,39 @@ function Director:update(dt)
 		self.round_timer = 0
 		self.difficulty = self.difficulty + 1
 		self:setEnemySpawnsForThisRound()
+		self:setRecourceSpawnsForThisRound()
 		print("New round! Difficulty: " .. self.difficulty)
+	end
+end
+
+function Director:setRecourceSpawnsForThisRound()
+	local points = self.difficulty_to_points[self.difficulty]
+
+	-- Find enemies
+	local resource_list = {}
+	while points > 0 do
+		local resource = self.resource_spawn_chances[self.difficulty]:next()
+		points = points - self.resource_to_points[resource]
+		table.insert(resource_list, resource)
+	end
+	-- Find enemies spawn times
+	local resource_spawn_times = {}
+	for i = 1, #resource_list do
+		resource_spawn_times[i] = GlobalRandom(0, self.round_duration)
+	end
+
+	table.sort(resource_spawn_times, function(a, b)
+		return a < b
+	end)
+
+	-- Set spawn resource timer
+	for i = 1, #resource_spawn_times do
+		self.timer:after(resource_spawn_times[i], function()
+			self.stage.area:addGameObject(
+				resource_list[i],
+				GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+				GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			)
+		end)
 	end
 end

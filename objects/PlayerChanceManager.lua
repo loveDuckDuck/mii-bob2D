@@ -2,9 +2,9 @@ PlayerChanceManager = Object:extend()
 
 function PlayerChanceManager:new(player)
 	self.player = player
-    if not self.player then
-        error("PlayerChanceManager needs a player!")
-    end
+	if not self.player then
+		error("PlayerChanceManager needs a player!")
+	end
 	self.launch_homing_projectile_on_ammo_pickup_chance = 50
 	self.spawn_hp_on_cycle_chance = 1
 	self.regain_hp_on_cycle_chance = 100
@@ -17,8 +17,10 @@ function PlayerChanceManager:new(player)
 	self.launch_homing_projectile_on_kill_chance = 100
 	self.regain_boost_on_kill_chance = 100
 	self.spawn_boost_on_kill_chance = 100
-end
 
+	self.spawn_haste_area_on_hp_pickup_chance = 100
+	self.spawn_haste_area_on_sp_pickup_chance = 100
+end
 
 --- Generates chance lists for all numeric fields in the Player object whose keys contain "_chance".
 -- Iterates over the Player's fields, and for each field with a key containing "_chance" and a numeric value,
@@ -46,6 +48,16 @@ function PlayerChanceManager:onAmmoPickupChance()
 		)
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "Homing Projectile!" })
 	end
+
+	if self.chances.spawn_haste_area_on_hp_pickup_chance:next() then
+		self.player.area:addGameObject(
+			"HasteArea",
+			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		)
+				self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "Go to HasteArea !" })
+
+	end
 end
 
 function PlayerChanceManager:onBoostPickupChange()
@@ -59,9 +71,4 @@ function PlayerChanceManager:onBoostPickupChange()
 		)
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "KILLER !" })
 	end
-
-
 end
-
-
-

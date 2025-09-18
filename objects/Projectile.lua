@@ -12,7 +12,8 @@ function Projectile:new(area, x, y, opts)
 	self.parent = opts.parent or nil
 
 	self.bounce = false or self.isBounce
-	self.damage = opts.damage or 1
+	self.damage = opts.damage or Attacks[self.attack].damage or 1
+
 	self.form = opts.form or Attacks[self.attack].resource
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
@@ -38,7 +39,7 @@ function Projectile:update(dt)
 	self:checkCollision()
 
 	-- Homing
-	if self.attack == "Homing" then
+	if self.attack == "Homing" or self.attack == "Destroyer"  then
 		-- Acquire new target
 		if not self.target then
 			local targets = self.area:getAllGameObjectsThat(function(e)

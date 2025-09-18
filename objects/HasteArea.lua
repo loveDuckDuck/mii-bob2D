@@ -16,16 +16,16 @@ function HasteArea:update(dt)
 	if not player then
 		return
 	end
-	local d = GlobalDistance(self.x, self.y, player.x, player.y)
-	if d < self.radius and not player.insideHasteArea then -- Enter event
+	local distance = GlobalDistance(self.x, self.y, player.x, player.y)
+	if distance < self.radius and not player.insideHasteArea then -- Enter event
 		player:enterHasteArea()
-	elseif d >= self.radius and player.insideHasteArea then -- Leave event
+	elseif distance >= self.radius and player.insideHasteArea then -- Leave event
 		player:exitHasteArea()
 	end
 end
 
 function HasteArea:draw()
 	love.graphics.setColor(G_ammo_color)
-	love.graphics.circle("line", self.x, self.y, self.r + GlobalRandom(-2, 2))
+	love.graphics.circle("line", self.x, self.y, self.radius + GlobalRandom(-2, 2))
 	love.graphics.setColor(G_default_color)
 end
