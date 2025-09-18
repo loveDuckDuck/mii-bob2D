@@ -3,7 +3,7 @@ function Player:new(area, x, y, opts)
 	Player.super.new(self, area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
-	self.ProjectileDirector = ProjectileDirector(self)
+	self.ProjectileManager = ProjectileManager(self)
 
 	-- PHYSICS
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
@@ -64,7 +64,7 @@ function Player:new(area, x, y, opts)
 	-- CHANCES
 
 	-- GENERATE CHANCES
-	self.chance = PlayerChance(self)
+	self.chance = PlayerChanceManager(self)
 	self.chance:generateChances()
 	self:setAttack("Homing")
 
@@ -237,7 +237,7 @@ end
 
 function Player:checkCollision(dt)
 	if self.collider:enter("Collectable") then
-		local collision_data = self.lider:getEnterCollisionData("Collectable")
+		local collision_data = self.collider:getEnterCollisionData("Collectable")
 		local object = collision_data.collider:getObject()
 		if object:is(Ammo) then
 			self:addAmmo(object.cointValue)
@@ -266,7 +266,7 @@ function Player:update(dt)
 	Player.super.update(self, dt)
 	self:physics(dt)
 	self:checkCollision(dt)
-	self.ProjectileDirector:update(dt)
+	self.ProjectileManager:update(dt)
 	self:move(dt)
 end
 
@@ -274,9 +274,9 @@ function Player:draw()
 	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
 	love.graphics.print("hp : " .. self.hp, self.x + 50, self.y - 70)
 	love.graphics.print("attack : " .. self.attack, self.x + 50, self.y - 90)
-	love.graphics.print("damage :" .. self.ProjectileDirector.damage, self.x + 50, self.y - 110)
-	love.graphics.print("tears :" .. self.ProjectileDirector.tearIterator, self.x + 50, self.y - 130)
-	love.graphics.print("shootAngle : " .. self.ProjectileDirector.shootAngle, self.x + 50, self.y - 150)
+	love.graphics.print("damage :" .. self.ProjectileManager.damage, self.x + 50, self.y - 110)
+	love.graphics.print("tears :" .. self.ProjectileManager.tearIterator, self.x + 50, self.y - 130)
+	love.graphics.print("shootAngle : " .. self.ProjectileManager.shootAngle, self.x + 50, self.y - 150)
 end
 
 function Player:tick()
@@ -303,14 +303,14 @@ function Player:shoot()
 		{ player = self, distance = distance, attack = self.attack } -- {self.attack.color[1],self.attack.color[2],self.attack.color[3],self.attack.color[4]}
 	)
 
-	ProjectileDirector.shoot(self.ProjectileDirector, distance)
+	ProjectileManager.shoot(self.ProjectileManager, distance)
 	self:addAmmo(-Attacks[self.attack].ammo)
 end
 
 function Player:setAttack(attack)
 	self.attack = attack
 	self.shoot_cooldown = Attacks[attack].cooldown
-	self.ProjectileDirector:updateAttack(attack)
+	self.ProjectileManager:updateAttack(attack)
 end
 
 function Player:die()

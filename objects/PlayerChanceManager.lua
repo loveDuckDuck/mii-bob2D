@@ -1,9 +1,9 @@
-PlayerChance = Object:extend()
+PlayerChanceManager = Object:extend()
 
-function PlayerChance:new(player)
+function PlayerChanceManager:new(player)
 	self.player = player
     if not self.player then
-        error("PlayerChance needs a player!")
+        error("PlayerChanceManager needs a player!")
     end
 	self.launch_homing_projectile_on_ammo_pickup_chance = 50
 	self.spawn_hp_on_cycle_chance = 1
@@ -24,7 +24,7 @@ end
 -- Iterates over the Player's fields, and for each field with a key containing "_chance" and a numeric value,
 -- creates a chance list using `CreateChanceList` with the value as the probability for `true` and the remainder for `false`.
 -- The generated chance lists are stored in the `self.chances` table, keyed by the original field name.
-function PlayerChance:generateChances()
+function PlayerChanceManager:generateChances()
 	self.chances = {}
 	for k, v in pairs(self) do
 		if k:find("_chance") and type(v) == "number" then
@@ -33,9 +33,9 @@ function PlayerChance:generateChances()
 	end
 end
 
-function PlayerChance:getChance() end
+function PlayerChanceManager:getChance() end
 
-function PlayerChance:onAmmoPickupChance()
+function PlayerChanceManager:onAmmoPickupChance()
 	if self.chances.launch_homing_projectile_on_ammo_pickup_chance:next() then
 		local distance = 1.2 * self.player.w
 		self.player.area:addGameObject(
@@ -48,7 +48,7 @@ function PlayerChance:onAmmoPickupChance()
 	end
 end
 
-function PlayerChance:onBoostPickupChange()
+function PlayerChanceManager:onBoostPickupChange()
 	if self.chances.spawn_boost_on_kill_chance:next() then
 		local distance = 1.2 * self.player.w
 		self.player.area:addGameObject(

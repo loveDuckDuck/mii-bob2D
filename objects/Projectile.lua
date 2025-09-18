@@ -4,6 +4,7 @@ function Projectile:new(area, x, y, opts)
 	Projectile.super.new(self, area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
+	self.attack = opts.attack or "Neutral"
 	self.acceleration = 0
 	self.velocity = opts.velocity or 300
 	self.rotation = opts.rotation or 0
@@ -12,11 +13,12 @@ function Projectile:new(area, x, y, opts)
 
 	self.bounce = false or self.isBounce
 	self.damage = opts.damage or 1
-
+	self.form = opts.form or Attacks[self.attack].resource
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("Projectile")
+
 	-- increase in a linear way my velocity
 	--self.timer:tween(0.5, self, { velocity = 400 }, 'linear')
 end
@@ -100,13 +102,15 @@ function Projectile:draw()
 
 	PushRotate(self.x, self.y, self.collider:getAngle())
 
-	if self.form then
-		for _, value in pairs(self.form) do
-			value(self.x, self.y, self.radiusSpace, self.radiusSpace)
-		end
-	else
-		love.graphics.circle("fill", self.x, self.y, self.radiusSpace)
-	end
+	self.form(self.x, self.y, self.radiusSpace, self.radiusSpace)
+
+	-- if self.form then
+	-- 	for _, value in pairs(self.form) do
+	-- 		value(self.x, self.y, self.radiusSpace, self.radiusSpace)
+	-- 	end
+	-- else
+	-- 	love.graphics.circle("fill", self.x, self.y, self.radiusSpace)
+	-- end
 
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)

@@ -1,6 +1,6 @@
-ProjectileDirector = Object:extend()
+ProjectileManager = Object:extend()
 
-function ProjectileDirector:new(player)
+function ProjectileManager:new(player)
 	self.player = player
 	self.attack = "Neutral"
 
@@ -20,25 +20,25 @@ function ProjectileDirector:new(player)
 	self.formTear = {}
 end
 
-function ProjectileDirector:updateAttack(key)
+function ProjectileManager:updateAttack(key)
 	if Attacks[key] then
 		self.attack = key
 		self.damage = Attacks[key].damage
 		self.color = InterpolateColor(Attacks[key].color, self.color, GlobalRandom(0, 1))
 		self.tearIterator = Attacks[key].tears
 		self.shootAngle = Attacks[key].shootAngle or 0
-		self.resource = Attacks[key].resource
-		table.insert(self.formTear, Attacks[key].resource)
+		self.formTear = Attacks[key].resource
+		--table.insert(self.formTear, Attacks[key].resource)
 	end
 end
 
-function ProjectileDirector:update(dt)
+function ProjectileManager:update(dt)
 	if self.player.ammo <= 0 and Attacks[self.attack].ammo > 0 then
 		self.player:setAttack("Neutral")
 	end
 end
 
-function ProjectileDirector:shoot(distance)
+function ProjectileManager:shoot(distance)
 	if self.attack == "Neutral" then
 		self.player.area:addGameObject(
 			"Projectile",
