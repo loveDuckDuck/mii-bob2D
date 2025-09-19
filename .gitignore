@@ -52,3 +52,17 @@ luac.out
 *.aac
 *.flac
 *.ogg
+
+
+# PDf files
+*.pdf
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.svg
+*.ico
