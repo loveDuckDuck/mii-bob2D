@@ -9,13 +9,15 @@ end
 
 function Enemy:update(dt)
 	Enemy.super.update(self, dt)
+	if self.x < 0 - 100 or self.y < 0  - 100 or self.x > gw + 100 or self.y > gh + 100 then
+		self.dead = true
+	end
 end
 
 function Enemy:draw() end
 
 function Enemy:hit(damage)
 	self.hp = self.hp - damage
-	print("Enemy : ", damage)
 	if self.hp <= 0 then
 		self:die()
 	end

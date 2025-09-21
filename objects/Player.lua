@@ -16,19 +16,23 @@ function Player:new(area, x, y, opts)
 	self.xvel = 0
 	self.yvel = 0
 
-	self.velocity = 500
+	self.acceleration = 1000
 	self.baseMaxVelocity = 100
 	self.maxVelocity = self.baseMaxVelocity
+	self.friction = 10
 
 	self.boosting = false
 	self.trailColor = G_skill_point_color
 	self.rotationVelocity = 1.66 * math.pi
-	self.friction = 5
 	self.isBounce = false
 
 	-- HP
 	self.hp = 100
 	self.max_hp = 100
+
+	--BOOST ABILTY
+	self.boost = 1
+	self.maxBoost = 1
 
 	-- MULTIPLIER HP
 	self.hp_multiplier = 1
@@ -47,13 +51,17 @@ function Player:new(area, x, y, opts)
 	self.shoot_timer = 0
 	self.shoot_cooldown = 0.24
 	self.enabledToShoot = false
+	self.freakShot = false
 
 	-- CYCLE
 	self.cycle_timer = 0
 	self.cycle_cooldown = 5
 
 	-- ASPD
-	self.ASPDMultiplier = 1
+	self.baseASPDMultiplier = 1
+	self.ASPDMultiplier = Stat(1)
+	self.ASPDBoosting = 1
+	self.additionalASPDMultiplier = {}
 
 	-- HASTE AREA
 	self.insideHasteArea = false
@@ -66,8 +74,7 @@ function Player:new(area, x, y, opts)
 	-- GENERATE CHANCES
 	self.chance = PlayerChanceManager(self)
 	self.chance:generateChances()
-	self:setAttack("Homing")
-
+	self:setAttack("Neutral")
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
 			"TrailParticle",
@@ -83,6 +90,10 @@ function Player:new(area, x, y, opts)
 
 	self.timer:every(5, function()
 		self:tick()
+	end)
+	self.timer:after(5, function()
+		print("FREAK ASS")
+		self.chance:onFreakProjectileDirection()
 	end)
 end
 
@@ -101,6 +112,7 @@ function Player:physics(dt)
 
 	-- Clamp velocities to max velocity
 	local velocity = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
+
 	if velocity > self.maxVelocity then
 		self.xvel = (self.xvel / velocity) * self.maxVelocity
 		self.yvel = (self.yvel / velocity) * self.maxVelocity
@@ -113,28 +125,34 @@ function Player:physics(dt)
 end
 
 function Player:move(dt)
-	if InputHandler:down("d") and self.xvel < self.velocity then
-		self.xvel = self.xvel + self.velocity * dt
+	if InputHandler:down("d") then
+		self.xvel = self.xvel + self.acceleration * dt
 	end
-	if InputHandler:down("a") and self.xvel > -self.velocity then
-		self.xvel = self.xvel - self.velocity * dt
+	if InputHandler:down("a") then
+		self.xvel = self.xvel - self.acceleration * dt
 	end
-	if InputHandler:down("s") and self.yvel < self.velocity then
-		self.yvel = self.yvel + self.velocity * dt
+	if InputHandler:down("s") then
+		self.yvel = self.yvel + self.acceleration * dt
 	end
-	if InputHandler:down("w") and self.yvel > -self.velocity then
-		self.yvel = self.yvel - self.velocity * dt
+	if InputHandler:down("w") then
+		self.yvel = self.yvel - self.acceleration * dt
 	end
 
 	if InputHandler:down("b") then
 		Slow(0.15, 1)
 	end
 
-	if InputHandler:down("boosting") then
+	if InputHandler:pressed("boosting") then
 		-- turbo nigga
-		self.isBounce = not self.isBounce
-		self.maxVelocity = self.boosting and 1.5 * self.baseMaxVelocity or 0.5 * self.baseMaxVelocity
 		self.boosting = not self.boosting
+
+		self.maxVelocity = self.boosting and 2 * self.baseMaxVelocity or self.baseMaxVelocity
+	end
+
+	if self.boosting then
+		self.chance.luckMultiplier = 2
+	else
+		self.chance.luckMultiplier = 1
 	end
 
 	--[[
@@ -183,7 +201,7 @@ function Player:move(dt)
 
 	if self.enabledToShoot then
 		self.shoot_timer = self.shoot_timer + dt
-		if self.shoot_timer > self.shoot_cooldown * self.ASPDMultiplier then
+		if self.shoot_timer > self.shoot_cooldown / self.ASPDMultiplier.value then
 			self.shoot_timer = 0
 			self:shoot()
 		end
@@ -251,6 +269,9 @@ function Player:checkCollision(dt)
 			self.attack = object.power.name
 			self:setAttack(self.attack)
 			object:die()
+		elseif object:is(HpCoin) then
+			self.chance:onGainSomeHp()
+			object:die()
 		end
 	end
 	if self.collider:enter("Enemy") then
@@ -262,12 +283,24 @@ function Player:checkCollision(dt)
 	end
 end
 
+function Player:updateASPDMultiplier(dt)
+	self.additionalASPDMultiplier = {}
+	if self.insideHasteArea then
+		self.ASPDMultiplier:increase(100)
+	end
+	if self.ASPDBoosting then
+		self.ASPDMultiplier:increase(100)
+	end
+	self.ASPDMultiplier:update(dt)
+end
+
 function Player:update(dt)
 	Player.super.update(self, dt)
 	self:physics(dt)
-	self:checkCollision(dt)
-	self.ProjectileManager:update(dt)
 	self:move(dt)
+	self:checkCollision(dt)
+	self:updateASPDMultiplier(dt)
+	self.ProjectileManager:update(dt)
 end
 
 function Player:draw()
@@ -277,6 +310,9 @@ function Player:draw()
 	love.graphics.print("damage :" .. self.ProjectileManager.damage, self.x + 50, self.y - 110)
 	love.graphics.print("tears :" .. self.ProjectileManager.tearIterator, self.x + 50, self.y - 130)
 	love.graphics.print("shootAngle : " .. self.ProjectileManager.shootAngle, self.x + 50, self.y - 150)
+	local velocity = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
+	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
+	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
 end
 
 function Player:tick()
@@ -322,16 +358,4 @@ function Player:die()
 	for i = 1, love.math.random(8, 12) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = G_hp_color })
 	end
-end
-
-function Player:enterHasteArea()
-	self.insideHasteArea = true
-	self.preHasteASPDMultiplier = self.ASPDMultiplier
-	self.ASPDMultiplier = self.ASPDMultiplier / 2
-end
-
-function Player:exitHasteArea()
-	self.insideHasteArea = false
-	self.ASPDMultiplier = self.preHasteASPDMultiplier
-	self.preHasteASPDMultiplier = nil
 end

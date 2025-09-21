@@ -36,6 +36,3 @@ function CoinObject:update(dt)
 	end
 end
 
-function CoinObject:draw()
-end
-

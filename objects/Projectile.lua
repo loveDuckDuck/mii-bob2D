@@ -19,6 +19,21 @@ function Projectile:new(area, x, y, opts)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("Projectile")
+	if self.parent then
+		if self.parent.freakShot then
+			self.timer:after(0.2, function()
+				self.ninety_degree_direction = table.random({ -1, 1 })
+				self.rotation = self.rotation + self.ninety_degree_direction * math.pi / 2
+				self.timer:every("ninety_degree_first", 0.25, function()
+					self.rotation = self.rotation - self.ninety_degree_direction * math.pi / 2
+					self.timer:after("ninety_degree_second", 0.1, function()
+						self.rotation = self.rotation - self.ninety_degree_direction * math.pi / 2
+						self.ninety_degree_direction = -1 * self.ninety_degree_direction
+					end)
+				end)
+			end)
+		end
+	end
 
 	-- increase in a linear way my velocity
 	--self.timer:tween(0.5, self, { velocity = 400 }, 'linear')
@@ -36,7 +51,7 @@ function Projectile:checkCollision()
 			object:hit(self.damage)
 			self:explode()
 			if object.hp <= 0 then
-				GlobalRoomController.current_room.player:onKill()
+				GlobalRoomController.current_room.player.chance:onKill()
 			end
 		end
 	end
@@ -82,28 +97,9 @@ function Projectile:update(dt)
         XXX: PROBLEM with distance projectile
     ]]
 
-	-- local top_bound = self.parent.y - gh / 2
-	-- local bottom_bound = self.parent.y + gh / 2
-	-- local left_bound = self.parent.x - gw / 2
-	-- local right_bound = self.parent.x + gw / 2
-	-- -- NORMAL MOVEMENT WITHOUT BOUNCE
-	-- if self.x < left_bound or self.x > right_bound then
-	-- 	if not self.bounce then
-	-- 		self:die()
-	-- 	else
-	-- 		-- Reverse the horizontal velocity for a bounce
-	-- 		self.collider:setLinearVelocity(-vx, vy)
-	-- 	end
-	-- end
-
-	-- if self.y < top_bound or self.y > bottom_bound then
-	-- 	if not self.bounce then
-	-- 		self:die()
-	-- 	else
-	-- 		-- Reverse the vertical velocity for a bounce
-	-- 		self.collider:setLinearVelocity(vx, -vy)
-	-- 	end
-	-- end
+	if self.x < 0 or self.x > gw or self.y < 0 or self.y > gh then
+		self:die()
+	end
 end
 
 function Projectile:draw()

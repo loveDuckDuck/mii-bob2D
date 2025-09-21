@@ -16,7 +16,7 @@ function Stage:new() -- Create new stage object 📝
 
 	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
 	-- when instante this stage
-	self.player = self.area:addGameObject("Player", GlobalWordlSizeX / 2, GlobalWordlSizeY / 2)
+	self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
 
 	self.director = Director(self, self.player) -- Create a director instance 🎬
 	self.score = 0
@@ -38,11 +38,11 @@ function Stage:new() -- Create new stage object 📝
 			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
 
-		-- self.area:addGameObject(
-		-- 	"ResourceCoin",
-		-- 	GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
-		-- )
+		self.area:addGameObject(
+			"HpCoin",
+			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+		)
 
 		-- self.area:addGameObject(
 		-- 	"Rock",
@@ -68,8 +68,8 @@ end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
 	self.director:update(dt)
-	--GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
-	GlobalCamera:lookAt(self.player.x, self.player.y)
+	GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
+	--GlobalCamera:lookAt(self.player.x, self.player.y)
 	GlobalCamera:update(dt)
 	self.area:update(dt) -- Update the area too 👍
 end
@@ -103,6 +103,14 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	love.graphics.rectangle("fill", gw / 2 - 52, gh - 16, 48 * (hp / max_hp), 4)
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
 	love.graphics.rectangle("line", gw / 2 - 52, gh - 16, 48, 4)
+
+	-- BOOST
+	local r, g, b = unpack(G_boost_color)
+	local boost, max_boost = self.player.boost, self.player.maxBoost
+	love.graphics.setColor(r, g, b)
+	love.graphics.rectangle("fill", gw / 2 , gh - 16, 48 * (boost / max_boost), 4)
+	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
+	love.graphics.rectangle("line", gw / 2 , gh - 16, 48, 4)
 
 	love.graphics.setCanvas() -- Reset the canvas 🔄
 
