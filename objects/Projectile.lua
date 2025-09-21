@@ -29,9 +29,17 @@ end
 -- The particle inherits the projectile's color and has a width based on the projectile's radius.
 
 function Projectile:checkCollision()
-	-- if self.collider:enter("Enemy") then
-	-- 	self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
-	-- end
+	if self.collider:enter("Enemy") then
+		local collision_data = self.collider:getEnterCollisionData("Enemy")
+		local object = collision_data.collider:getObject()
+		if object then
+			object:hit(self.damage)
+			self:explode()
+			if object.hp <= 0 then
+				GlobalRoomController.current_room.player:onKill()
+			end
+		end
+	end
 end
 
 function Projectile:update(dt)
@@ -39,7 +47,7 @@ function Projectile:update(dt)
 	self:checkCollision()
 
 	-- Homing
-	if self.attack == "Homing" or self.attack == "Destroyer"  then
+	if self.attack == "Homing" or self.attack == "Destroyer" then
 		-- Acquire new target
 		if not self.target then
 			local targets = self.area:getAllGameObjectsThat(function(e)
