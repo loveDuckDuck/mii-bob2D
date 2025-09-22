@@ -132,7 +132,7 @@ function love.load()
 	--resize(2)
 	slow = 1
 	FlashFrames = 0
-
+			
 	Push:setupScreen(gw, gh, 640, 480, { resizible = true })
 end
 

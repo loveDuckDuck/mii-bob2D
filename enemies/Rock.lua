@@ -12,7 +12,6 @@ function Rock:new(area, x, y, opts)
 	self.collider:setCollisionClass("Enemy")
 	self.collider:setFixedRotation(false)
 
-
 	self.velocity = -direction * GlobalRandom(20, 40)
 	self.collider:setLinearVelocity(self.velocity, 0)
 	self.collider:applyAngularImpulse(GlobalRandom(-100, 100))
@@ -45,6 +44,18 @@ end
 
 function Rock:update(dt)
 	Rock.super.update(self, dt)
+
+	local vx, vy = self.collider:getLinearVelocity()
+
+	if self.x < 0 or self.x > gw then
+		-- Reverse the horizontal velocity for a bounce
+		self.collider:setLinearVelocity(-vx, vy)
+	end
+
+	if self.y < 0 or self.y > gh then
+		-- Reverse the vertical velocity for a bounce
+		self.collider:setLinearVelocity(vx, -vy)
+	end
 end
 
 function Rock:draw()
@@ -53,4 +64,3 @@ function Rock:draw()
 	love.graphics.polygon("line", points)
 	love.graphics.setColor(G_default_color)
 end
-

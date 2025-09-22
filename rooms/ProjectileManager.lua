@@ -18,6 +18,16 @@ function ProjectileManager:new(player)
 	self.velocityMultilplier = 1
 	-- TEAR FORM
 	self.formTear = {}
+
+	-- MOVEMENT TEAR
+
+	self.projectile_ninety_degree_change = false
+	self.wavy_projectiles = false
+	self.fast_slow = false
+	self.slow_fast = false
+	self.shield = false
+
+
 end
 
 function ProjectileManager:updateAttack(key)
@@ -39,12 +49,15 @@ function ProjectileManager:update(dt)
 end
 
 function ProjectileManager:shoot(distance)
+		self.mods = {
+		shield = self.shield,
+	}
 	if self.attack == "Neutral" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
+			table.merge({
 				parent = self.player,
 				rotation = self.player.rotation,
 				velocity = self.velocity * self.velocityMultilplier,
@@ -53,7 +66,8 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
-			}
+				projectileManager = self,
+			}, self.mods)
 		)
 	elseif self.attack == "Double" then
 		self.player.area:addGameObject(
@@ -69,6 +83,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 		self.player.area:addGameObject(
@@ -84,6 +99,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Triple" then
@@ -100,6 +116,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 		self.player.area:addGameObject(
@@ -115,6 +132,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 		self.player.area:addGameObject(
@@ -130,6 +148,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Rapid" then
@@ -146,6 +165,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Spread" then
@@ -163,6 +183,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Back" then
@@ -179,6 +200,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 		self.player.area:addGameObject(
@@ -194,6 +216,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Side" then
@@ -210,6 +233,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 		self.player.area:addGameObject(
@@ -225,6 +249,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 		self.player.area:addGameObject(
@@ -240,6 +265,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Homing" then
@@ -256,6 +282,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	elseif self.attack == "Destroyer" then
@@ -272,6 +299,7 @@ function ProjectileManager:shoot(distance)
 				distance = distance,
 				attack = self.attack,
 				form = self.formTear,
+				projectileManager = self,
 			}
 		)
 	end

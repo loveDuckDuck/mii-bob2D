@@ -8,7 +8,7 @@ Attacks = {
 		abbreviation = "N",
 		color = { 1.0, 0.9921, 0.8115, 1.0 },
 		resource = function(x, y, w)
-			DraftDrawer:lozenge(x, y, w + 5, "line")
+			DraftDrawer:circle(x, y, w + 10 , nil,"line")
 		end,
 	},
 	["Double"] = {
@@ -21,8 +21,8 @@ Attacks = {
 
 		abbreviation = "2",
 		color = { 0.29, 0.76, 0.85, 1.0 },
-		resource = function(x, y, w, h)
-			DraftDrawer:diamond(x, y, w + 5, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 5,  nil,"line")
 		end,
 	},
 	["Triple"] = {
@@ -34,8 +34,8 @@ Attacks = {
 		shootAngle = math.pi / 4,
 		abbreviation = "3",
 		color = { 0.98, 0.80, 0.80, 1.00 },
-		resource = function(x, y, w, h)
-			DraftDrawer:rhombusEquilateral(x, y, w + 10, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 10,  nil, "line")
 		end,
 	},
 	["Rapid"] = {
@@ -46,8 +46,8 @@ Attacks = {
 		tears = 1,
 		abbreviation = "R",
 		color = { 1.0, 0.98, 0.80, 1.00 },
-		resource = function(x, y, w, h)
-			DraftDrawer:kite(x, y, w + 5, h + 5, w, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 5,  nil, "line")
 		end,
 	},
 	["Homing"] = {
@@ -58,8 +58,8 @@ Attacks = {
 		tears = 1,
 		abbreviation = "Ho",
 		color = { 0.5632, 0.8722, 0.1111, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			DraftDrawer:rhombusEquilateral(x, y, w + 5, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 5,  nil,"line")
 		end,
 	},
 	["Spread"] = {
@@ -70,8 +70,8 @@ Attacks = {
 		tears = 1,
 		abbreviation = "SP",
 		color = { 0.3711, 0.1210, 0.9678, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			DraftDrawer:diamond(x, y, w + 5, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Back"] = {
@@ -82,8 +82,8 @@ Attacks = {
 		tears = 1,
 		abbreviation = "BK",
 		color = { 0.7755, 0.9211, 0.1633, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			DraftDrawer:rhombusEquilateral(x, y, w + 5, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 5,  nil,"line")
 		end,
 	},
 	["Side"] = {
@@ -94,8 +94,8 @@ Attacks = {
 		tears = 1,
 		abbreviation = "SD",
 		color = { 0.8811, 0.5678, 0.3409, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			DraftDrawer:diamond(x, y, w + 5, "line")
+		resource = function(x, y, w)
+			DraftDrawer:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	--[[ 

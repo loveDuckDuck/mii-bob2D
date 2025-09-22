@@ -5,6 +5,9 @@ function Enemy:new(area, x, y, opts)
 	self.name = opts.name or "Enemy"
 	self.hp = opts.hp or 10
 	self.w, self.h = 8, 8
+
+
+
 end
 
 function Enemy:update(dt)

@@ -327,3 +327,20 @@ function table.keys(table)
 	end
 	return keyset
 end
+
+function table.merge(t1, t2)
+	local new_table = {}
+	for k, v in pairs(t2) do
+		new_table[k] = v
+	end
+	for k, v in pairs(t1) do
+		new_table[k] = v
+	end
+	return new_table
+end
+
+function table.print(t)
+	for key, value in pairs(t) do
+		print(key, value)
+	end
+end

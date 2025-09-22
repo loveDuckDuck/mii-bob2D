@@ -10,7 +10,7 @@ function Stage:new() -- Create new stage object 📝
 	self.area.world:addCollisionClass("Projectile", { ignores = { "Player" } }) -- the world need to check
 
 	self.area.world:addCollisionClass("Collectable", { ignores = { "Player", "Projectile" } })
-	self.area.world:addCollisionClass("Enemy", { ignores = { "Enemy", "Collectable" } })
+	self.area.world:addCollisionClass("Enemy") --{ ignores = { "Enemy", "Collectable" } }
 
 	self.area.world:addCollisionClass("EnemyProjectile", { ignores = { "EnemyProjectile", "Projectile", "Enemy" } })
 
@@ -19,6 +19,7 @@ function Stage:new() -- Create new stage object 📝
 	self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
 
 	self.director = Director(self, self.player) -- Create a director instance 🎬
+	
 	self.score = 0
 	self.font = Font
 	self.counterAttack = 0

@@ -1,9 +1,13 @@
 PlayerChanceManager = Object:extend()
 
-function PlayerChanceManager:new(player)
+function PlayerChanceManager:new(player, projectileManager)
 	self.player = player
 	if not self.player then
 		error("PlayerChanceManager needs a player!")
+	end
+	self.projectileManager = projectileManager
+	if not self.projectileManager then
+		error("PlayerChanceManager needs a projectileManager!")
 	end
 
 	-- LUCK
@@ -32,7 +36,13 @@ function PlayerChanceManager:new(player)
 	self.barrage_on_kill_chance = 100
 	self.launch_homing_projectile_on_ammo_pickup_chance = 50
 
-	self.projectile_ninety_degree_change = 100
+	self.projectile_ninety_degree_change_chance = 50
+	self.wavy_projectiles_chance = 100
+
+	self.shield_projectile_chance = 100
+
+
+
 
 end
 
@@ -176,11 +186,34 @@ function PlayerChanceManager:onGainSomeHp()
 end
 
 function PlayerChanceManager:onFreakProjectileDirection()
-	self.player.freakShot = true
-			self.player.area:addGameObject(
-			"InfoText",
-			self.player.x,
-			self.player.y,
-			{ text = "FREAK ASS SHOT !" }
-		)
+	if self.chances.projectile_ninety_degree_change_chance:next() then
+		self.projectileManager.projectile_ninety_degree_change =
+			not self.projectileManager.projectile_ninety_degree_change
+		print("freakShot : " .. (self.projectileManager.projectile_ninety_degree_change and "YESS" or "NOOOO"))
+
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "FREAK ASS SHOT !" })
+	end
 end
+
+function PlayerChanceManager:onWavyProjectilesChance()
+	if self.chances.wavy_projectiles_chance:next() then
+		self.projectileManager.wavy_projectiles = not self.projectileManager.wavy_projectiles
+		print("WAVYY : " .. (self.projectileManager.wavy_projectiles and "YESS" or "NOOOO"))
+
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "WAVYYYYY !" })
+	end
+end
+
+function PlayerChanceManager:onShieldProjectileChance()
+	if self.chances.shield_projectile_chance:next() then
+			self.projectileManager.shield = not self.projectileManager.shield
+			print("SHIELD : " .. (self.projectileManager.shield and "YESS" or "NO"))
+			self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "PROTECTED !" })
+	end
+end
+
+--[[
+
+	TODO : add the fast_slow_first and slow_fast_first probability
+	to the game_objects
+]]

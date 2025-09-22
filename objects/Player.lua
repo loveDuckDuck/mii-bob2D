@@ -3,7 +3,7 @@ function Player:new(area, x, y, opts)
 	Player.super.new(self, area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
-	self.ProjectileManager = ProjectileManager(self)
+	self.projectileManager = ProjectileManager(self)
 
 	-- PHYSICS
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
@@ -51,7 +51,6 @@ function Player:new(area, x, y, opts)
 	self.shoot_timer = 0
 	self.shoot_cooldown = 0.24
 	self.enabledToShoot = false
-	self.freakShot = false
 
 	-- CYCLE
 	self.cycle_timer = 0
@@ -72,7 +71,7 @@ function Player:new(area, x, y, opts)
 	-- CHANCES
 
 	-- GENERATE CHANCES
-	self.chance = PlayerChanceManager(self)
+	self.chance = PlayerChanceManager(self, self.projectileManager)
 	self.chance:generateChances()
 	self:setAttack("Neutral")
 	self.timer:every(0.01, function()
@@ -91,9 +90,9 @@ function Player:new(area, x, y, opts)
 	self.timer:every(5, function()
 		self:tick()
 	end)
-	self.timer:after(5, function()
-		print("FREAK ASS")
-		self.chance:onFreakProjectileDirection()
+
+	self.timer:after(1, function()
+		self.chance:onShieldProjectileChance()
 	end)
 end
 
@@ -146,13 +145,13 @@ function Player:move(dt)
 		-- turbo nigga
 		self.boosting = not self.boosting
 
-		self.maxVelocity = self.boosting and 2 * self.baseMaxVelocity or self.baseMaxVelocity
-	end
+		if self.boosting then
+			self.chance.luckMultiplier = self.chance.luckMultiplier * 2
+		else
+			self.chance.luckMultiplier = self.chance.luckMultiplier / 2
+		end
 
-	if self.boosting then
-		self.chance.luckMultiplier = 2
-	else
-		self.chance.luckMultiplier = 1
+		self.maxVelocity = self.boosting and 2 * self.baseMaxVelocity or self.baseMaxVelocity
 	end
 
 	--[[
@@ -300,16 +299,16 @@ function Player:update(dt)
 	self:move(dt)
 	self:checkCollision(dt)
 	self:updateASPDMultiplier(dt)
-	self.ProjectileManager:update(dt)
+	self.projectileManager:update(dt)
 end
 
 function Player:draw()
 	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
 	love.graphics.print("hp : " .. self.hp, self.x + 50, self.y - 70)
 	love.graphics.print("attack : " .. self.attack, self.x + 50, self.y - 90)
-	love.graphics.print("damage :" .. self.ProjectileManager.damage, self.x + 50, self.y - 110)
-	love.graphics.print("tears :" .. self.ProjectileManager.tearIterator, self.x + 50, self.y - 130)
-	love.graphics.print("shootAngle : " .. self.ProjectileManager.shootAngle, self.x + 50, self.y - 150)
+	love.graphics.print("damage :" .. self.projectileManager.damage, self.x + 50, self.y - 110)
+	love.graphics.print("tears :" .. self.projectileManager.tearIterator, self.x + 50, self.y - 130)
+	love.graphics.print("shootAngle : " .. self.projectileManager.shootAngle, self.x + 50, self.y - 150)
 	local velocity = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
 	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
 	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
@@ -339,14 +338,14 @@ function Player:shoot()
 		{ player = self, distance = distance, attack = self.attack } -- {self.attack.color[1],self.attack.color[2],self.attack.color[3],self.attack.color[4]}
 	)
 
-	ProjectileManager.shoot(self.ProjectileManager, distance)
+	self.projectileManager:shoot(distance)
 	self:addAmmo(-Attacks[self.attack].ammo)
 end
 
 function Player:setAttack(attack)
 	self.attack = attack
 	self.shoot_cooldown = Attacks[attack].cooldown
-	self.ProjectileManager:updateAttack(attack)
+	self.projectileManager:updateAttack(attack)
 end
 
 function Player:die()

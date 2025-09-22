@@ -10,6 +10,7 @@ function Projectile:new(area, x, y, opts)
 	self.rotation = opts.rotation or 0
 	self.color = opts.color or G_default_color
 	self.parent = opts.parent or nil
+	self.projectileManager = opts.projectileManager or nil
 
 	self.bounce = false or self.isBounce
 	self.damage = opts.damage or Attacks[self.attack].damage or 1
@@ -19,8 +20,8 @@ function Projectile:new(area, x, y, opts)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("Projectile")
-	if self.parent then
-		if self.parent.freakShot then
+	if self.projectileManager then
+		if self.projectileManager.projectile_ninety_degree_change then
 			self.timer:after(0.2, function()
 				self.ninety_degree_direction = table.random({ -1, 1 })
 				self.rotation = self.rotation + self.ninety_degree_direction * math.pi / 2
@@ -33,6 +34,44 @@ function Projectile:new(area, x, y, opts)
 				end)
 			end)
 		end
+		if self.projectileManager.wavy_projectiles then
+			local direction = table.random({ -1, 1 })
+			self.timer:tween(0.25, self, { rotation = self.rotation + direction * math.pi / 8 }, "linear", function()
+				self.timer:tween(0.25, self, { rotation = self.rotation - direction * math.pi / 4 }, "linear")
+			end)
+			self.timer:every(0.75, function()
+				self.timer:tween(
+					0.25,
+					self,
+					{ rotation = self.rotation + direction * math.pi / 4 },
+					"linear",
+					function()
+						self.timer:tween(0.5, self, { rotation = self.rotation - direction * math.pi / 4 }, "linear")
+					end
+				)
+			end)
+		end
+
+		if self.projectileManager.fast_slow then
+			local initial_v = self.velocity
+			self.timer:tween("fast_slow_first", 0.2, self, { velocity = 2 * initial_v }, "in-out-cubic", function()
+				self.timer:tween("fast_slow_second", 0.3, self, { velocity = initial_v / 2 }, "linear")
+			end)
+		end
+
+		if self.projectileManager.slow_fast then
+			local initial_v = self.v
+			self.timer:tween("slow_fast_first", 0.2, self, { velocity = initial_v / 2 }, "in-out-cubic", function()
+				self.timer:tween("slow_fast_second", 0.3, self, { velocity = 2 * initial_v }, "linear")
+			end)
+		end
+	end
+
+	if self.shield then
+		self.orbit_distance = GlobalRandom(32, 64)
+		self.orbit_speed = GlobalRandom(-6, 6)
+		self.orbit_offset = GlobalRandom(0, 2 * math.pi)
+		self.time = 1
 	end
 
 	-- increase in a linear way my velocity
@@ -86,6 +125,18 @@ function Projectile:update(dt)
 			local final_heading = (projectile_heading + to_target_heading):normalized()
 			self.collider:setLinearVelocity(self.velocity * final_heading.x, self.velocity * final_heading.y)
 		end
+	elseif self.shield then
+		self.invisible = true
+		
+		self.timer:after(0.05, function()
+			self.invisible = false
+		end)
+
+		self.time = self.time + dt
+		self.collider:setPosition(
+			self.parent.x + self.orbit_distance * math.cos(self.orbit_speed * self.time + self.orbit_offset),
+			self.parent.y + self.orbit_distance * math.sin(self.orbit_speed * self.time + self.orbit_offset)
+		)
 	else
 		self.collider:setLinearVelocity(
 			self.velocity * math.cos(self.rotation),
@@ -93,31 +144,21 @@ function Projectile:update(dt)
 		)
 	end
 
-	--[[
-        XXX: PROBLEM with distance projectile
-    ]]
-
 	if self.x < 0 or self.x > gw or self.y < 0 or self.y > gh then
 		self:die()
 	end
 end
 
 function Projectile:draw()
+	if self.invisible then
+		return
+	end
 	love.graphics.setColor(self.color)
+	-- PushRotate(self.x, self.y, self.collider:getAngle())
+	local px, py = self.collider:getPosition()
+	self.form(px, py, self.radiusSpace, self.radiusSpace)
 
-	PushRotate(self.x, self.y, self.collider:getAngle())
-
-	self.form(self.x, self.y, self.radiusSpace, self.radiusSpace)
-
-	-- if self.form then
-	-- 	for _, value in pairs(self.form) do
-	-- 		value(self.x, self.y, self.radiusSpace, self.radiusSpace)
-	-- 	end
-	-- else
-	-- 	love.graphics.circle("fill", self.x, self.y, self.radiusSpace)
-	-- end
-
-	love.graphics.pop()
+	-- love.graphics.pop()
 	love.graphics.setColor(G_default_color)
 end
 

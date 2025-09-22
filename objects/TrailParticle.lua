@@ -13,7 +13,7 @@ function TrailParticle:update(dt)
 end
 
 function TrailParticle:draw()
-	love.graphics.setColor(self.parent.boosting and self.color  or G_default_color)
+	love.graphics.setColor(self.parent.boosting and self.color or G_default_color)
 	love.graphics.circle("fill", self.x, self.y, self.radius)
 	love.graphics.setColor(255, 255, 255)
 end
