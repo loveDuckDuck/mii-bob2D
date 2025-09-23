@@ -104,11 +104,11 @@ end
 
 function Director:update(dt)
 	self.round_timer = self.round_timer + dt
-	if self.timer then
+	if self.timer  then
 		self.timer:update(dt)
 	end -- Update the timer if any
 
-	if self.round_timer > self.round_duration then
+	if self.round_timer > self.round_duration /self.stage.player.chance.enemy_spawn_rate_multiplier  then
 		self.round_timer = 0
 		self.difficulty = self.difficulty + 1
 		self:setEnemySpawnsForThisRound()

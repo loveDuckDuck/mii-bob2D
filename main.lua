@@ -66,8 +66,15 @@ function love.update(dt)
 
 	if InputHandler:pressed("zoomOut") then
 		zoomOut(dt)
+		
 	end
 
+	
+if InputHandler:pressed("goToTestingRoom") then
+	GlobalRoomController:gotoRoom("TestingRoom", 1)
+	end
+
+	
 	GlobalRoomController:update(dt * slow)
 	GlobalCamera:update(dt * slow)
 	GlobalTimer:update(dt * slow)
@@ -100,6 +107,9 @@ local function inputBinder()
 	InputHandler:bind("escape", "DeleteEveryThing")
 	InputHandler:bind("wheelup", "zoomIn")
 	InputHandler:bind("wheeldown", "zoomOut")
+
+	InputHandler:bind("t","goToTestingRoom")
+
 end
 
 function love.load()

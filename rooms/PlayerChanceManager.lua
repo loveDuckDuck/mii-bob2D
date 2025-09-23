@@ -37,13 +37,25 @@ function PlayerChanceManager:new(player, projectileManager)
 	self.launch_homing_projectile_on_ammo_pickup_chance = 50
 
 	self.projectile_ninety_degree_change_chance = 50
+
 	self.wavy_projectiles_chance = 100
 
 	self.shield_projectile_chance = 100
 
 
-
-
+	-- TO IMPLEMENTEAD
+	self.enemy_spawn_rate_multiplier = 2
+	self.resource_spawn_rate_multiplier = 1
+	self.attack_spawn_rate_multiplier = 1
+	self.turn_rate_multiplier = 1
+	self.boost_effectiveness_multiplier = 1
+	self.projectile_size_multiplier = 1
+	self.boost_recharge_rate_multiplier = 1
+	self.invulnerability_time_multiplier = 1
+	self.ammo_consumption_multiplier = 1
+	self.size_multiplier = 1
+	self.stat_boost_duration_multiplier = 1
+	self.projectile_duration_multiplier = 1
 end
 
 function PlayerChanceManager:returnRandomOffset()
@@ -128,21 +140,24 @@ function PlayerChanceManager:onKill()
 	local xOffset, yOffset = self:returnRandomOffset()
 
 	if self.chances.barrage_on_kill_chance:next() then
-		for i = 1, 8 do
-			self.player.timer:after((i - 1) * 0.05, function()
-				local random_angle = GlobalRandom(-math.pi / 8, math.pi / 8)
-				local distance = 2.2 * self.player.w
-				self.player.area:addGameObject(
-					"Projectile",
-					self.player.x + distance * math.cos(self.player.rotation + random_angle),
-					self.player.y + distance * math.sin(self.player.rotation + random_angle),
-					{
-						rotation = self.player.rotation + random_angle,
-						attack = self.player.attack,
-						parent = self.player,
-					}
-				)
-			end)
+		 --avoid errors
+		if self.player.timer then
+			for i = 1, 8 do
+				self.player.timer:after((i - 1) * 0.05, function()
+					local random_angle = GlobalRandom(-math.pi / 8, math.pi / 8)
+					local distance = 2.2 * self.player.w
+					self.player.area:addGameObject(
+						"Projectile",
+						self.player.x + distance * math.cos(self.player.rotation + random_angle),
+						self.player.y + distance * math.sin(self.player.rotation + random_angle),
+						{
+							rotation = self.player.rotation + random_angle,
+							attack = self.player.attack,
+							parent = self.player,
+						}
+					)
+				end)
+			end
 		end
 		self.player.area:addGameObject(
 			"InfoText",
@@ -206,9 +221,9 @@ end
 
 function PlayerChanceManager:onShieldProjectileChance()
 	if self.chances.shield_projectile_chance:next() then
-			self.projectileManager.shield = not self.projectileManager.shield
-			print("SHIELD : " .. (self.projectileManager.shield and "YESS" or "NO"))
-			self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "PROTECTED !" })
+		self.projectileManager.shield = not self.projectileManager.shield
+		print("SHIELD : " .. (self.projectileManager.shield and "YESS" or "NO"))
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "PROTECTED !" })
 	end
 end
 

@@ -91,9 +91,12 @@ function Player:new(area, x, y, opts)
 		self:tick()
 	end)
 
-	self.timer:after(1, function()
-		self.chance:onShieldProjectileChance()
-	end)
+	--[[
+		correct this one
+	]]
+	-- self.timer:after(1, function()
+	-- 	self.chance:onShieldProjectileChance()
+	-- end)
 end
 
 function Player:setStats()
@@ -312,6 +315,14 @@ function Player:draw()
 	local velocity = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
 	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
 	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
+
+
+	love.graphics.setColor(Attacks[self.attack].color)
+	DraftDrawer:circle(self.x, self.y, self.w + 5, nil, "fill")
+
+	love.graphics.setColor(G_default_color)
+
+
 end
 
 function Player:tick()

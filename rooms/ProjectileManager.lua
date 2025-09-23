@@ -26,8 +26,10 @@ function ProjectileManager:new(player)
 	self.fast_slow = false
 	self.slow_fast = false
 	self.shield = false
+	self.bounce = 4
 
-
+	self.stats = {}
+	self.mods = {}
 end
 
 function ProjectileManager:updateAttack(key)
@@ -49,124 +51,73 @@ function ProjectileManager:update(dt)
 end
 
 function ProjectileManager:shoot(distance)
-		self.mods = {
+	self.mods = {
 		shield = self.shield,
+		projectile_ninety_degree_change = self.projectile_ninety_degree_change,
+		wavy_projectiles = self.wavy_projectiles,
+		slow_fast = self.slow_fast,
+		fast_slow = self.fast_slow,
+		bounce = self.bounce
+
 	}
+
+	self.stats = {
+		parent = self.player,
+		velocity = self.velocity * self.velocityMultilplier,
+		damage = self.damage,
+		color = self.color,
+		distance = distance,
+		attack = self.attack,
+		form = self.formTear
+	}
+
+	local statsMods = table.merge(self.stats, self.mods)
+
 	if self.attack == "Neutral" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			table.merge({
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}, self.mods)
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 	elseif self.attack == "Double" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation + math.pi / 12),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation + math.pi / 12),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation - math.pi / 12),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation - math.pi / 12),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 	elseif self.attack == "Triple" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation + math.pi / 12),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation + math.pi / 12),
-			{
-				parent = self.player,
-				rotation = self.player.rotation + math.pi / 12,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation - math.pi / 12),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation - math.pi / 12),
-			{
-				parent = self.player,
-				rotation = self.player.rotation - math.pi / 12,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 	elseif self.attack == "Rapid" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 	elseif self.attack == "Spread" then
 		local randomAngle = GlobalRandom(-math.pi / 8, math.pi / 8)
@@ -174,133 +125,114 @@ function ProjectileManager:shoot(distance)
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation + randomAngle),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation + randomAngle),
-			{
-				parent = self.player,
-				rotation = self.player.rotation + randomAngle,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation + randomAngle })
+
 		)
 	elseif self.attack == "Back" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation - math.pi),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation - math.pi),
-			{
-				parent = self.player,
-				rotation = self.player.rotation - math.pi,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation - math.pi })
+
 		)
 	elseif self.attack == "Side" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
+
 		)
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation - math.pi / 2),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation - math.pi / 2),
-			{
-				parent = self.player,
-				rotation = self.player.rotation - math.pi / 2,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation - math.pi / 2 })
+
 		)
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation + math.pi / 2),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation + math.pi / 2),
-			{
-				parent = self.player,
-				rotation = self.player.rotation + math.pi / 2,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation + math.pi / 2 })
 		)
 	elseif self.attack == "Homing" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
+
 		)
 	elseif self.attack == "Destroyer" then
 		self.player.area:addGameObject(
 			"Projectile",
 			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
 			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
-			{
-				parent = self.player,
-				rotation = self.player.rotation,
-				velocity = self.velocity * self.velocityMultilplier,
-				damage = self.damage,
-				color = self.color,
-				distance = distance,
-				attack = self.attack,
-				form = self.formTear,
-				projectileManager = self,
-			}
+			table.merge(statsMods, { rotation = self.player.rotation })
+
+		)
+	elseif self.attack == "Blast" then
+		for i = 1, 12 do
+			local random_angle = GlobalRandom(-math.pi / 6, math.pi / 6)
+			self.player.area:addGameObject('Projectile',
+				self.player.x + 1.5 * distance * math.cos(self.player.rotation + random_angle),
+				self.player.y + 1.5 * distance * math.sin(self.player.rotation + random_angle),
+				table.merge(statsMods,
+					{ rotation = self.player.rotation + random_angle, velocity = GlobalRandom(500, 600) }))
+		end
+		GlobalCamera:shake(4, 60, 0.4)
+		--[[
+	 self.attack == "Spin" or self.attack == "Flame"
+	 or self.attack == "Bounce"
+	 or self.attack == "2Split"
+	 or self.attack ==  "4Split" then
+		]]
+	elseif self.attack == "Lightning" then
+		local x1, y1 = self.player.x + distance * math.cos(self.player.rotation),
+			self.player.y + distance * math.sin(self.player.rotation)
+		local cx, cy = x1 + 24 * math.cos(self.player.rotation), y1 + 24 * math.sin(self.player.rotation)
+
+		local nearby_enemies = self.player.area:getAllGameObjectsThat(function(e)
+			for _, enemy in ipairs(Enemies) do
+				if e:is(_G[enemy]) and (GlobalDistance(e.x, e.y, cx, cy) < 64) then
+					return true
+				end
+			end
+		end)
+		table.sort(nearby_enemies, function(a, b)
+			return GlobalDistance(a.x, a.y, cx, cy) < GlobalDistance(b.x, b.y, cx, cy)
+		end)
+		local closest_enemy = nearby_enemies[1]
+		-- Attack closest enemy
+		if closest_enemy then
+			closest_enemy:hit(self.damage)
+			local x2, y2 = closest_enemy.x, closest_enemy.y
+			self.player.area:addGameObject('LightningLine', 0, 0, { x1 = x1, y1 = y1, x2 = x2, y2 = y2 })
+
+
+			for i = 1, love.math.random(4, 8) do
+				self.player.area:addGameObject('ExplodeParticle', x1, y1,
+					{ color = table.random({ G_default_color, G_boost_color }) })
+			end
+			for i = 1, love.math.random(4, 8) do
+				self.player.area:addGameObject('ExplodeParticle', x2, y2,
+					{ color = table.random({ G_default_color, G_boost_color }) })
+			end
+		end
+	else
+		self.player.area:addGameObject(
+			"Projectile",
+			self.player.x + 1.5 * distance * math.cos(self.player.rotation),
+			self.player.y + 1.5 * distance * math.sin(self.player.rotation),
+			table.merge(statsMods, { rotation = self.player.rotation })
 		)
 	end
 end

@@ -1,3 +1,40 @@
+--[[
+InfoText Class
+
+A subclass of GameObject that displays animated text with per-character color and character changes.
+The text appears at a given position, with each character potentially having its own foreground and background color,
+and may randomly change to another character for a "glitch" effect. The text blinks and disappears after a short duration.
+
+Constructor:
+	InfoText:new(area, x, y, opts)
+		area (object): The game area or context.
+		x (number): X position of the text.
+		y (number): Y position of the text.
+		opts (table): Additional options, including the 'text' to display.
+
+Fields:
+	font (Font): The font used for rendering the text.
+	layer (number): The rendering layer.
+	background_colors (table): Per-character background colors.
+	foreground_colors (table): Per-character foreground colors.
+	characters (table): The current characters being displayed.
+	all_colors (table): List of all possible colors for random selection.
+	visible (boolean): Whether the text is currently visible.
+	dead (boolean): Whether the text should be removed.
+
+Methods:
+	InfoText:draw()
+		Draws the text, applying per-character colors and background rectangles.
+
+	InfoText:destroy()
+		Cleans up the object.
+
+Behavior:
+	- The text blinks after 0.7 seconds, toggling visibility several times.
+	- After 1.1 seconds, the text is marked as dead.
+	- Characters and their colors are randomly changed for a "glitch" effect.
+	- Each character may have a random background and/or foreground color.
+]]
 InfoText = GameObject:extend()
 
 function InfoText:new(area, x, y, opts)
