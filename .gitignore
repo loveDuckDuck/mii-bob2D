@@ -52,3 +52,10 @@ luac.out
 *.aac
 *.flac
 *.ogg
+
+# Image files
+
+*.jpeg
+*.png
+*.pdf
+*.jpg
