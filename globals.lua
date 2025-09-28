@@ -198,6 +198,17 @@ Attacks = {
 		color = { 1.0, 1.0, 1.0, 1.00 }, -- rgb(252, 216, 205)
 
 	},
+	["Explode"] = {
+		name = "Explode",
+		damage = 0.05,
+		cooldown = 0.5,
+		ammo = 0,
+		tears = 1,
+		abbreviation = "BOOOOOYAAA",
+		color = { 1, 0, 0, 1.00 }, -- rgb(252, 216, 205)
+
+	},
+	
 
 
 

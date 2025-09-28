@@ -4,7 +4,7 @@ function ExplodeParticle:new(area, x, y, opts)
 	ExplodeParticle.super.new(self, area, x, y, opts)
 
 	self.color = opts.color or G_default_color
-	self.r = GlobalRandom(0, 2 * math.pi)
+	self.rotation = opts.rotation or GlobalRandom(0, 2 * math.pi)
 	self.s = opts.s or GlobalRandom(2, 3)
 	self.v = opts.v or GlobalRandom(75, 150)
 	self.line_width = 2
@@ -15,12 +15,12 @@ end
 
 function ExplodeParticle:update(dt)
 	ExplodeParticle.super.update(self, dt)
-	self.x = self.x + self.v * math.cos(self.r) * dt
-	self.y = self.y + self.v * math.sin(self.r) * dt
+	self.x = self.x + self.v * math.cos(self.rotation) * dt
+	self.y = self.y + self.v * math.sin(self.rotation) * dt
 end
 
 function ExplodeParticle:draw()
-	PushRotate(self.x, self.y, self.r)
+	PushRotate(self.x, self.y, self.rotation)
 	love.graphics.setLineWidth(self.line_width)
 	love.graphics.setColor(self.color)
 	love.graphics.line(self.x - self.s, self.y, self.x + self.s, self.y)

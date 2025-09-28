@@ -288,6 +288,15 @@ function Projectile:update(dt)
 				self:die()
 			end
 		end
+	elseif self.attack == "Explode" then
+		if self.x < 0 or self.x > gw or self.y < 0 or self.y > gh then
+			self:die()
+
+			self.parent.area:addGameObject("Explosion", self.x, self.y, {
+				color = self.color,
+				rotation = self.parent.rotation
+			})
+		end
 
 
 		-- CHECK MODS IN UPDATE

@@ -1,5 +1,7 @@
 ProjectileManager = Object:extend()
-
+--[[
+    TODO : FINISH THE ProjectileManager
+]]
 function ProjectileManager:new(player)
 	self.player = player
 	self.attack = "Neutral"
@@ -227,6 +229,8 @@ function ProjectileManager:shoot(distance)
 					{ color = table.random({ G_default_color, G_boost_color }) })
 			end
 		end
+	
+	
 	else
 		self.player.area:addGameObject(
 			"Projectile",

@@ -344,3 +344,19 @@ function table.print(t)
 		print(key, value)
 	end
 end
+
+function table.printArray(t)
+	for key, value in pairs(t) do
+		print(key, value)
+	end
+end
+
+-- Returns a random angle between angle1 and angle2 (in radians)
+function math.randomAngle(angle1, angle2)
+    -- normalize order so min < max
+    local minAngle = math.min(angle1, angle2)
+    local maxAngle = math.max(angle1, angle2)
+
+    -- pick a random number in that range
+    return minAngle + (maxAngle - minAngle) * love.math.random()
+end

@@ -73,7 +73,7 @@ function Player:new(area, x, y, opts)
 	-- GENERATE CHANCES
 	self.chance = PlayerChanceManager(self, self.projectileManager)
 	self.chance:generateChances()
-	self:setAttack("Neutral")
+	self:setAttack("Explode")
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
 			"TrailParticle",
