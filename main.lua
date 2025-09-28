@@ -44,6 +44,7 @@ end
 local function zoomIn(dt)
 	print("zoomIn")
 	GlobalCamera.scale = math.min(5, GlobalCamera.scale + 1 * dt) -- Zoom in, max 5x
+
 end
 local function zoomOut(dt)
 	print("zoomOut")
@@ -60,21 +61,23 @@ function love.update(dt)
 	if InputHandler:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
-	if InputHandler:pressed("zoomIn") then
-		zoomIn(dt)
+	-- if InputHandler:pressed("zoomIn") then
+	-- 	zoomIn(dt)
+	-- end
+
+	-- if InputHandler:pressed("zoomOut") then
+	-- 	zoomOut(dt)
+	-- end
+
+
+	if InputHandler:pressed("goToTestingRoom") then
+		GlobalRoomController:gotoRoom("TestingRoom", 1)
 	end
 
-	if InputHandler:pressed("zoomOut") then
-		zoomOut(dt)
-		
+	if InputHandler:pressed("goToSkillTree") then
+		GlobalRoomController:gotoRoom("SkillTree", 2)
 	end
 
-	
-if InputHandler:pressed("goToTestingRoom") then
-	GlobalRoomController:gotoRoom("TestingRoom", 1)
-	end
-
-	
 	GlobalRoomController:update(dt * slow)
 	GlobalCamera:update(dt * slow)
 	GlobalTimer:update(dt * slow)
@@ -108,7 +111,14 @@ local function inputBinder()
 	InputHandler:bind("wheelup", "zoomIn")
 	InputHandler:bind("wheeldown", "zoomOut")
 
-	InputHandler:bind("t","goToTestingRoom")
+	InputHandler:bind("t", "goToTestingRoom")
+	InputHandler:bind("k", "goToSkillTree")
+
+	--InputHandler:bind("mouse2", "left_click")
+	InputHandler:bind("wheelup", "zoomIn")
+	InputHandler:bind("wheeldown", "zoomOut")
+
+
 
 end
 
@@ -135,14 +145,14 @@ function love.load()
 
 	GlobalTimer = Timer()
 	GlobalCamera = Camera()
-	GlobalCamera.scale = 1
+	--GlobalCamera.scale = 1
 	GlobalRoomController = RoomController()
 
 	GlobalRoomController:gotoRoom("Stage", UUID())
 	--resize(2)
 	slow = 1
 	FlashFrames = 0
-			
+
 	Push:setupScreen(gw, gh, 640, 480, { resizible = true })
 end
 

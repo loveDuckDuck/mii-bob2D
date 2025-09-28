@@ -32,24 +32,24 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
     self.score = 0
     self.font = Font
     self.counterAttack = 0
-    InputHandler:bind("mouse1", function()
-        self.counterAttack = self.counterAttack + 1
+    -- InputHandler:bind("mouse1", function()
+    --     self.counterAttack = self.counterAttack + 1
 
-        if self.counterAttack > Lenght(Attacks) then
-            self.counterAttack = 1
-        end
+    --     if self.counterAttack > Lenght(Attacks) then
+    --         self.counterAttack = 1
+    --     end
 
-        self.player:setAttack(table.keys(Attacks)[self.counterAttack])
-    end)
-    InputHandler:bind("mouse2", function()
-        self.counterAttack = self.counterAttack - 1
+    --     self.player:setAttack(table.keys(Attacks)[self.counterAttack])
+    -- end)
+    -- InputHandler:bind("mouse2", function()
+    --     self.counterAttack = self.counterAttack - 1
 
-        if self.counterAttack < 1 then
-            self.counterAttack = Lenght(Attacks)
-        end
+    --     if self.counterAttack < 1 then
+    --         self.counterAttack = Lenght(Attacks)
+    --     end
 
-        self.player:setAttack(table.keys(Attacks)[self.counterAttack])
-    end)
+    --     self.player:setAttack(table.keys(Attacks)[self.counterAttack])
+    -- end)
 
 
     InputHandler:bind("z", function()
