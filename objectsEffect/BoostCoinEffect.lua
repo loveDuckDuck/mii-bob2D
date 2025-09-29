@@ -33,8 +33,8 @@ function BoostCoinEffect:draw()
 	end
 
 	love.graphics.setColor(self.current_color)
-	DraftDrawer:rhombus(self.x, self.y, 1.34 * self.w, 1.34 * self.h, "fill")
-    DraftDrawer:rhombus(self.x, self.y, self.sx*2*self.w, self.sy*2*self.h, 'line')
+	GDraft:rhombus(self.x, self.y, 1.34 * self.w, 1.34 * self.h, "fill")
+    GDraft:rhombus(self.x, self.y, self.sx*2*self.w, self.sy*2*self.h, 'line')
     love.graphics.setColor(G_default_color)
 end
 

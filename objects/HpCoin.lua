@@ -13,7 +13,7 @@ function HpCoin:draw()
 	love.graphics.setColor(G_boost_color)
 	PushRotate(self.x, self.y, self.collider:getAngle())
 	love.graphics.setColor(G_white_cream)
-	DraftDrawer:rhombus(self.x, self.y, 1.5 * self.w, 1.5 * self.h, "line")
+	GDraft:rhombus(self.x, self.y, 1.5 * self.w, 1.5 * self.h, "line")
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)
 end

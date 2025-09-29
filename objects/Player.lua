@@ -83,7 +83,7 @@ function Player:new(area, x, y, opts)
 		)
 	end)
 
-	InputHandler:bind("f4", function()
+	GInput:bind("f4", function()
 		self:die()
 	end)
 
@@ -127,24 +127,24 @@ function Player:physics(dt)
 end
 
 function Player:move(dt)
-	if InputHandler:down("d") then
+	if GInput:down("d") then
 		self.xvel = self.xvel + self.acceleration * dt
 	end
-	if InputHandler:down("a") then
+	if GInput:down("a") then
 		self.xvel = self.xvel - self.acceleration * dt
 	end
-	if InputHandler:down("s") then
+	if GInput:down("s") then
 		self.yvel = self.yvel + self.acceleration * dt
 	end
-	if InputHandler:down("w") then
+	if GInput:down("w") then
 		self.yvel = self.yvel - self.acceleration * dt
 	end
 
-	if InputHandler:down("b") then
+	if GInput:down("b") then
 		Slow(0.15, 1)
 	end
 
-	if InputHandler:pressed("boosting") then
+	if GInput:pressed("boosting") then
 		-- turbo nigga
 		self.boosting = not self.boosting
 
@@ -245,11 +245,11 @@ function Player:hit(damage)
 			self.invisible = false
 		end)
 
-		GlobalCamera:shake(6, 60, 0.2)
+		GCamera:shake(6, 60, 0.2)
 		flash(3)
 		Slow(0.25, 0.5)
 	else
-		GlobalCamera:shake(3, 60, 0.1)
+		GCamera:shake(3, 60, 0.1)
 		flash(2)
 		Slow(0.75, 0.25)
 	end
@@ -318,7 +318,7 @@ function Player:draw()
 
 
 	love.graphics.setColor(Attacks[self.attack].color)
-	DraftDrawer:circle(self.x, self.y, self.w + 5, nil, "fill")
+	GDraft:circle(self.x, self.y, self.w + 5, nil, "fill")
 
 	love.graphics.setColor(G_default_color)
 
@@ -362,7 +362,7 @@ end
 function Player:die()
 	self.dead = true
 	flash(4)
-	GlobalCamera:shake(6, 60, 0.4)
+	GCamera:shake(6, 60, 0.4)
 
 	Slow(0.15, 1)
 	for i = 1, love.math.random(8, 12) do

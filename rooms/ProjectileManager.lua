@@ -190,7 +190,7 @@ function ProjectileManager:shoot(distance)
 				table.merge(statsMods,
 					{ rotation = self.player.rotation + random_angle, velocity = GlobalRandom(500, 600) }))
 		end
-		GlobalCamera:shake(4, 60, 0.4)
+		GCamera:shake(4, 60, 0.4)
 		--[[
 	 self.attack == "Spin" or self.attack == "Flame"
 	 or self.attack == "Bounce"

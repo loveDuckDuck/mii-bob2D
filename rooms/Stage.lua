@@ -26,7 +26,7 @@ function Stage:new() -- Create new stage object 📝
 	--[[
 	XXX : remaind to fix
 	]]
-	InputHandler:bind("p", function()
+	GInput:bind("p", function()
 		self.area:addGameObject(
 			"Ammo",
 			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
@@ -56,7 +56,7 @@ function Stage:new() -- Create new stage object 📝
 		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		-- )
 	end)
-	InputHandler:bind("z", function()
+	GInput:bind("z", function()
 		self.counterAttack = self.counterAttack + 1
 		if self.counterAttack > Lenght(Attacks) then
 			self.counterAttack = 1
@@ -64,14 +64,14 @@ function Stage:new() -- Create new stage object 📝
 		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
 	end)
 
-	GlobalCamera.smoother = Camera.smooth.damped(100)
+	GCamera.smoother = Camera.smooth.damped(100)
 end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
 	self.director:update(dt)
-	GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
-	--GlobalCamera:lookAt(self.player.x, self.player.y)
-	GlobalCamera:update(dt)
+	GCamera:lockPosition(dt, gw / 2, gh / 2)
+	--GCamera:lookAt(self.player.x, self.player.y)
+	GCamera:update(dt)
 	self.area:update(dt) -- Update the area too 👍
 end
 
@@ -79,11 +79,11 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	love.graphics.setCanvas(self.main_canvas) -- Set main canvas target 🎯
 	love.graphics.clear() -- Clear the current frame 🧹
 
-	--GlobalCamera:attach()
-	GlobalCamera:attach(0, 0, gw, gh)
+	--GCamera:attach()
+	GCamera:attach(0, 0, gw, gh)
 	self.area:draw() -- Draw the area now 👀
 
-	GlobalCamera:detach()
+	GCamera:detach()
 	-- Score
 	love.graphics.setColor(G_default_color)
 	love.graphics.print(

@@ -43,44 +43,46 @@ end
 
 local function zoomIn(dt)
 	print("zoomIn")
-	GlobalCamera.scale = math.min(5, GlobalCamera.scale + 1 * dt) -- Zoom in, max 5x
+	GCamera.scale = math.min(5, GCamera.scale + 1 * dt) -- Zoom in, max 5x
 
 end
 local function zoomOut(dt)
 	print("zoomOut")
-	GlobalCamera.scale = math.min(5, GlobalCamera.scale - 1 * dt) -- Zoom in, max 5x
+	GCamera.scale = math.min(5, GCamera.scale - 1 * dt) -- Zoom in, max 5x
 end
 
 function Slow(amount, duration)
 	slow = amount
 	print("slow : " .. slow)
-	GlobalTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
+	GTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
 end
 
 function love.update(dt)
-	if InputHandler:pressed("DeleteEveryThing") then
+	if GInput:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
-	-- if InputHandler:pressed("zoomIn") then
+	-- if GInput:pressed("zoomIn") then
 	-- 	zoomIn(dt)
 	-- end
 
-	-- if InputHandler:pressed("zoomOut") then
+	-- if GInput:pressed("zoomOut") then
 	-- 	zoomOut(dt)
 	-- end
 
 
-	if InputHandler:pressed("goToTestingRoom") then
+	if GInput:pressed("goToTestingRoom") then
 		GlobalRoomController:gotoRoom("TestingRoom", 1)
 	end
 
-	if InputHandler:pressed("goToSkillTree") then
+	if GInput:pressed("goToSkillTree") then
 		GlobalRoomController:gotoRoom("SkillTree", 2)
 	end
 
+
+
 	GlobalRoomController:update(dt * slow)
-	GlobalCamera:update(dt * slow)
-	GlobalTimer:update(dt * slow)
+	GCamera:update(dt * slow)
+	GTimer:update(dt * slow)
 end
 
 local function graphicSetter()
@@ -94,45 +96,46 @@ local function graphicSetter()
 end
 
 local function inputBinder()
-	InputHandler = Input()
-	InputHandler:bind("a", "a")
-	InputHandler:bind("d", "d")
-	InputHandler:bind("w", "w")
-	InputHandler:bind("s", "s")
-	InputHandler:bind("b", "b")
-	InputHandler:bind("space", "boosting")
+	GInput = Input()
+	GInput:bind("a", "a")
+	GInput:bind("d", "d")
+	GInput:bind("w", "w")
+	GInput:bind("s", "s")
+	GInput:bind("b", "b")
+	GInput:bind("space", "boosting")
 
-	InputHandler:bind("down", "down")
-	InputHandler:bind("up", "up")
-	InputHandler:bind("left", "left")
-	InputHandler:bind("right", "right")
+	GInput:bind("down", "down")
+	GInput:bind("up", "up")
+	GInput:bind("left", "left")
+	GInput:bind("right", "right")
 
-	InputHandler:bind("escape", "DeleteEveryThing")
-	InputHandler:bind("wheelup", "zoomIn")
-	InputHandler:bind("wheeldown", "zoomOut")
+	GInput:bind("escape", "DeleteEveryThing")
+	GInput:bind("wheelup", "zoomIn")
+	GInput:bind("wheeldown", "zoomOut")
 
-	InputHandler:bind("t", "goToTestingRoom")
-	InputHandler:bind("k", "goToSkillTree")
+	GInput:bind("t", "goToTestingRoom")
+	GInput:bind("k", "goToSkillTree")
 
-	--InputHandler:bind("mouse2", "left_click")
-	InputHandler:bind("wheelup", "zoomIn")
-	InputHandler:bind("wheeldown", "zoomOut")
+	--GInput:bind("mouse1", "left_click")
+	GInput:bind("wheelup", "zoomIn")
+	GInput:bind("wheeldown", "zoomOut")
 
+	--GInput:bind("mouse1", "down")
 
 
 end
 
 function love.load()
 	graphicSetter()
-	DraftDrawer = Draft()
-	Globalloader = Loader()
+	GDraft = Draft()
+	GLoader = Loader()
 
-	Globalloader:getRequireFiles("gameObject")
-	Globalloader:getRequireFiles("metaGameObject")
-	Globalloader:getRequireFiles("objectsEffect")
-	Globalloader:getRequireFiles("enemies")
-	Globalloader:getRequireFiles("objects")
-	Globalloader:getRequireFiles("rooms")
+	GLoader:getRequireFiles("gameObject")
+	GLoader:getRequireFiles("metaGameObject")
+	GLoader:getRequireFiles("objectsEffect")
+	GLoader:getRequireFiles("enemies")
+	GLoader:getRequireFiles("objects")
+	GLoader:getRequireFiles("rooms")
 
 	inputBinder()
 
@@ -143,9 +146,9 @@ function love.load()
 	-- Sounds.music = love.audio.newSource("sound/output.wav","stream")
 	-- Sounds.music:play()
 
-	GlobalTimer = Timer()
-	GlobalCamera = Camera()
-	--GlobalCamera.scale = 1
+	GTimer = Timer()
+	GCamera = Camera()
+	--GCamera.scale = 1
 	GlobalRoomController = RoomController()
 
 	GlobalRoomController:gotoRoom("Stage", UUID())

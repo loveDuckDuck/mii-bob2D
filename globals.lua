@@ -8,7 +8,7 @@ Attacks = {
 		abbreviation = "N",
 		color = { 1.0, 0.9921, 0.8115, 1.0 },
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 10, nil, "line")
+			GDraft:circle(x, y, w + 10, nil, "line")
 		end,
 	},
 	["Double"] = {
@@ -22,7 +22,7 @@ Attacks = {
 		abbreviation = "2",
 		color = { 0.29, 0.76, 0.85, 1.0 },
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Triple"] = {
@@ -35,7 +35,7 @@ Attacks = {
 		abbreviation = "3",
 		color = { 0.98, 0.80, 0.80, 1.00 },
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 10, nil, "line")
+			GDraft:circle(x, y, w + 10, nil, "line")
 		end,
 	},
 	["Rapid"] = {
@@ -47,7 +47,7 @@ Attacks = {
 		abbreviation = "R",
 		color = { 1.0, 0.98, 0.80, 1.00 },
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Homing"] = {
@@ -59,7 +59,7 @@ Attacks = {
 		abbreviation = "Ho",
 		color = { 0.5632, 0.8722, 0.1111, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Spread"] = {
@@ -71,7 +71,7 @@ Attacks = {
 		abbreviation = "SP",
 		color = { 0.3711, 0.1210, 0.9678, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Back"] = {
@@ -83,7 +83,7 @@ Attacks = {
 		abbreviation = "BK",
 		color = { 0.7755, 0.9211, 0.1633, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Side"] = {
@@ -95,7 +95,7 @@ Attacks = {
 		abbreviation = "SD",
 		color = { 0.8811, 0.5678, 0.3409, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	--[[
@@ -110,7 +110,7 @@ Attacks = {
 		abbreviation = "DKILL",
 		color = { 1.00, 1.00, 1.00, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:star(x, y, w * 10, w * 5, w * 2, w)
+			GDraft:star(x, y, w * 10, w * 5, w * 2, w)
 		end,
 	},
 	["Blast"] = {
@@ -122,7 +122,7 @@ Attacks = {
 		abbreviation = "BIG BOY BLAST",
 		color = { 0.6542, 0.1675, 1.00, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Spin"] = {
@@ -134,7 +134,7 @@ Attacks = {
 		abbreviation = "G.I ROBOT",
 		color = { 0.9222, 0.1675, 0.3287, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 
@@ -147,7 +147,7 @@ Attacks = {
 		abbreviation = "THE BRIDE",
 		color = { 0.1, 1.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 
@@ -160,7 +160,7 @@ Attacks = {
 		abbreviation = "ASS BOUNCE ???",
 		color = { 0.1, 1.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 
@@ -173,7 +173,7 @@ Attacks = {
 		abbreviation = "TWO BITCHIESSSS",
 		color = { 0.1, 1.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["4Split"] = {
@@ -185,7 +185,7 @@ Attacks = {
 		abbreviation = "GANG BANG",
 		color = { 0.31, 0.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
-			DraftDrawer:circle(x, y, w + 5, nil, "line")
+			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
 	["Lightning"] = {

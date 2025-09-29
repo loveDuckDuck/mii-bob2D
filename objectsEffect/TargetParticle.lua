@@ -22,7 +22,7 @@ end
 
 function TargetParticle:draw()
 	love.graphics.setColor(self.color)
-	DraftDrawer:rhombus(self.x, self.y, 2 * self.r, 2 * self.r, "fill")
+	GDraft:rhombus(self.x, self.y, 2 * self.r, 2 * self.r, "fill")
 	love.graphics.setColor(G_default_color)
 end
 

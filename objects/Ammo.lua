@@ -12,7 +12,7 @@ end
 function Ammo:draw()
 	love.graphics.setColor(G_ammo_color)
 	PushRotate(self.x, self.y, self.collider:getAngle())
-	DraftDrawer:rhombus(self.x, self.y, self.w, self.h, "line")
+	GDraft:rhombus(self.x, self.y, self.w, self.h, "line")
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)
 end

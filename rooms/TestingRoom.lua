@@ -32,7 +32,7 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
     self.score = 0
     self.font = Font
     self.counterAttack = 0
-    -- InputHandler:bind("mouse1", function()
+    -- GInput:bind("mouse1", function()
     --     self.counterAttack = self.counterAttack + 1
 
     --     if self.counterAttack > Lenght(Attacks) then
@@ -41,7 +41,7 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
 
     --     self.player:setAttack(table.keys(Attacks)[self.counterAttack])
     -- end)
-    -- InputHandler:bind("mouse2", function()
+    -- GInput:bind("mouse2", function()
     --     self.counterAttack = self.counterAttack - 1
 
     --     if self.counterAttack < 1 then
@@ -52,7 +52,7 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
     -- end)
 
 
-    InputHandler:bind("z", function()
+    GInput:bind("z", function()
         self.counterAttack = self.counterAttack + 1
         if self.counterAttack > Lenght(Attacks) then
             self.counterAttack = 1
@@ -60,13 +60,13 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
         self.player:setAttack(table.keys(Attacks)[self.counterAttack])
     end)
 
-    GlobalCamera.smoother = Camera.smooth.damped(100)
+    GCamera.smoother = Camera.smooth.damped(100)
 end
 
 function TestingRoom:update(dt) -- Update TestingRoom logic here 🕹️
-    GlobalCamera:lockPosition(dt, gw / 2, gh / 2)
-    --GlobalCamera:lookAt(self.player.x, self.player.y)
-    GlobalCamera:update(dt)
+    GCamera:lockPosition(dt, gw / 2, gh / 2)
+    --GCamera:lookAt(self.player.x, self.player.y)
+    GCamera:update(dt)
     self.area:update(dt) -- Update the area too 👍
 end
 
@@ -74,11 +74,11 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     love.graphics.setCanvas(self.main_canvas) -- Set main canvas target 🎯
     love.graphics.clear()                     -- Clear the current frame 🧹
 
-    --GlobalCamera:attach()
-    GlobalCamera:attach(0, 0, gw, gh)
+    --GCamera:attach()
+    GCamera:attach(0, 0, gw, gh)
     self.area:draw() -- Draw the area now 👀
 
-    GlobalCamera:detach()
+    GCamera:detach()
     -- Score
     love.graphics.setColor(G_default_color)
     love.graphics.print(

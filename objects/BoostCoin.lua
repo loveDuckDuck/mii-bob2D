@@ -12,8 +12,8 @@ end
 function BoostCoin:draw()
 	love.graphics.setColor(G_boost_color)
 	PushRotate(self.x, self.y, self.collider:getAngle())
-	DraftDrawer:rhombus(self.x, self.y, 1.5 * self.w, 1.5 * self.h, "line")
-	DraftDrawer:rhombus(self.x, self.y, 0.5 * self.w, 0.5 * self.h, "fill")
+	GDraft:rhombus(self.x, self.y, 1.5 * self.w, 1.5 * self.h, "line")
+	GDraft:rhombus(self.x, self.y, 0.5 * self.w, 0.5 * self.h, "fill")
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)
 end

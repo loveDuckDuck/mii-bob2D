@@ -63,8 +63,8 @@ function Shooter:draw()
 	love.graphics.setColor(G_hp_color)
 	PushRotate(self.x, self.y, self.rotationLookingPlayer)
 
-	DraftDrawer:lozenge(self.x, self.y, self.w, "line")
-	DraftDrawer:rhombus(self.x, self.y, self.w + self.offset, self.h + self.offset, "line")
+	GDraft:lozenge(self.x, self.y, self.w, "line")
+	GDraft:rhombus(self.x, self.y, self.w + self.offset, self.h + self.offset, "line")
 
 	love.graphics.pop()
 
