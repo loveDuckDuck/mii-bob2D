@@ -6,7 +6,7 @@ function Shake:new(amplitude, frequency, duration)
     self.duration = duration
     local sample_count = (self.duration/1000)*frequency
     self.samples = {}
-    for i = 1, sample_count do self.samples[i] = GlobalRandom(-1, 1) end
+    for i = 1, sample_count do self.samples[i] = math.customRandom(-1, 1) end
 
     self.start_time = love.timer.getTime()*1000
     self.t = 0

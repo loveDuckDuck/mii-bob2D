@@ -4,11 +4,11 @@ function ExplodeParticle:new(area, x, y, opts)
 	ExplodeParticle.super.new(self, area, x, y, opts)
 
 	self.color = opts.color or G_default_color
-	self.rotation = opts.rotation or GlobalRandom(0, 2 * math.pi)
-	self.s = opts.s or GlobalRandom(2, 3)
-	self.v = opts.v or GlobalRandom(75, 150)
+	self.rotation = opts.rotation or math.customRandom(0, 2 * math.pi)
+	self.s = opts.s or math.customRandom(2, 3)
+	self.v = opts.v or math.customRandom(75, 150)
 	self.line_width = 2
-	self.timer:tween(opts.d or GlobalRandom(0.3, 0.5), self, { s = 0, v = 0, line_width = 0 }, "linear", function()
+	self.timer:tween(opts.d or math.customRandom(0.3, 0.5), self, { s = 0, v = 0, line_width = 0 }, "linear", function()
 		self.dead = true
 	end)
 end

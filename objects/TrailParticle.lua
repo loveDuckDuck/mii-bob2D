@@ -2,8 +2,8 @@ TrailParticle = GameObject:extend()
 
 function TrailParticle:new(area, x, y, opts)
 	TrailParticle.super.new(self, area, x, y, opts)
-	self.radius = opts.radius or GlobalRandom(4, 6)
-	self.timer:tween(opts.duration or GlobalRandom(0.3, 0.5), self, { radius = 0 }, "linear", function()
+	self.radius = opts.radius or math.customRandom(4, 6)
+	self.timer:tween(opts.duration or math.customRandom(0.3, 0.5), self, { radius = 0 }, "linear", function()
 		self.dead = true
 	end)
 end

@@ -20,6 +20,5 @@ end
 
 function BoostCoin:die()
 	self.dead = true
-
 	self.area:addGameObject("InfoText", self.x, self.y, { text = "+BOOST", color = G_boost_color })
 end

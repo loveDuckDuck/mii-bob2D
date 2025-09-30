@@ -7,7 +7,7 @@ function HasteArea:new(area, x, y, opts)
 	else
 		self.parent = GlobalRoomController.current_room.player
 	end
-	self.radius = GlobalRandom(64, 96)
+	self.radius = math.customRandom(64, 96)
 	self.timer:after(4, function()
 		self.timer:tween(0.25, self, { radius = 0 }, "in-out-cubic", function()
 			self.dead = true
@@ -27,6 +27,6 @@ end
 
 function HasteArea:draw()
 	love.graphics.setColor(G_ammo_color)
-	love.graphics.circle("line", self.x, self.y, self.radius + GlobalRandom(-2, 2))
+	love.graphics.circle("line", self.x, self.y, self.radius + math.customRandom(-2, 2))
 	love.graphics.setColor(G_default_color)
 end

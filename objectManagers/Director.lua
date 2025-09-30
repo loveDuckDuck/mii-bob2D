@@ -83,7 +83,7 @@ function Director:setEnemySpawnsForThisRound()
 	-- Find enemies spawn times
 	local enemy_spawn_times = {}
 	for i = 1, #enemy_list do
-		enemy_spawn_times[i] = GlobalRandom(0, self.round_duration)
+		enemy_spawn_times[i] = math.customRandom(0, self.round_duration)
 	end
 
 	table.sort(enemy_spawn_times, function(a, b)
@@ -95,8 +95,8 @@ function Director:setEnemySpawnsForThisRound()
 		self.timer:after(enemy_spawn_times[i], function()
 			self.stage.area:addGameObject(
 				enemy_list[i],
-				GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-				GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+				math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+				math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 			)
 		end)
 	end
@@ -130,7 +130,7 @@ function Director:setRecourceSpawnsForThisRound()
 	-- Find enemies spawn times
 	local resource_spawn_times = {}
 	for i = 1, #resource_list do
-		resource_spawn_times[i] = GlobalRandom(0, self.round_duration)
+		resource_spawn_times[i] = math.customRandom(0, self.round_duration)
 	end
 
 	table.sort(resource_spawn_times, function(a, b)
@@ -142,8 +142,8 @@ function Director:setRecourceSpawnsForThisRound()
 		self.timer:after(resource_spawn_times[i], function()
 			self.stage.area:addGameObject(
 				resource_list[i],
-				GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-				GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+				math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+				math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 			)
 		end)
 	end

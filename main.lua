@@ -41,16 +41,6 @@ function love.draw()
 	Push:finish()
 end
 
-local function zoomIn(dt)
-	print("zoomIn")
-	GCamera.scale = math.min(5, GCamera.scale + 1 * dt) -- Zoom in, max 5x
-
-end
-local function zoomOut(dt)
-	print("zoomOut")
-	GCamera.scale = math.min(5, GCamera.scale - 1 * dt) -- Zoom in, max 5x
-end
-
 function Slow(amount, duration)
 	slow = amount
 	print("slow : " .. slow)
@@ -61,15 +51,6 @@ function love.update(dt)
 	if GInput:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
-	-- if GInput:pressed("zoomIn") then
-	-- 	zoomIn(dt)
-	-- end
-
-	-- if GInput:pressed("zoomOut") then
-	-- 	zoomOut(dt)
-	-- end
-
-
 	if GInput:pressed("goToTestingRoom") then
 		GlobalRoomController:gotoRoom("TestingRoom", 1)
 	end
@@ -77,8 +58,6 @@ function love.update(dt)
 	if GInput:pressed("goToSkillTree") then
 		GlobalRoomController:gotoRoom("SkillTree", 2)
 	end
-
-
 
 	GlobalRoomController:update(dt * slow)
 	GCamera:update(dt * slow)
@@ -97,6 +76,7 @@ end
 
 local function inputBinder()
 	GInput = Input()
+
 	GInput:bind("a", "a")
 	GInput:bind("d", "d")
 	GInput:bind("w", "w")
@@ -116,13 +96,8 @@ local function inputBinder()
 	GInput:bind("t", "goToTestingRoom")
 	GInput:bind("k", "goToSkillTree")
 
-	--GInput:bind("mouse1", "left_click")
 	GInput:bind("wheelup", "zoomIn")
 	GInput:bind("wheeldown", "zoomOut")
-
-	--GInput:bind("mouse1", "down")
-
-
 end
 
 function love.load()
@@ -135,16 +110,10 @@ function love.load()
 	GLoader:getRequireFiles("objectsEffect")
 	GLoader:getRequireFiles("enemies")
 	GLoader:getRequireFiles("objects")
+	GLoader:getRequireFiles("objectManagers")
 	GLoader:getRequireFiles("rooms")
 
 	inputBinder()
-
-	--[[
-		TODO: do music
-	]]
-	-- Sounds = {}
-	-- Sounds.music = love.audio.newSource("sound/output.wav","stream")
-	-- Sounds.music:play()
 
 	GTimer = Timer()
 	GCamera = Camera()

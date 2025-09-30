@@ -14,13 +14,13 @@ function Shooter:new(area, x, y, opts)
 
 	self.offset = 5
 	self.rotationLookingPlayer = 0
-	self.rotation = GlobalRandom(0, 2 * math.pi)
-	self.velocity = GlobalRandom(10, 20)
+	self.rotation = math.customRandom(0, 2 * math.pi)
+	self.velocity = math.customRandom(10, 20)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
-	self.collider:applyAngularImpulse(GlobalRandom(-100, 100))
+	self.collider:applyAngularImpulse(math.customRandom(-100, 100))
 	self.w, self.h = 10, 10
 
-	self.timer:every(GlobalRandom(1, 3), function()
+	self.timer:every(math.customRandom(1, 3), function()
         local target_x, target_y = self.target.x, self.target.y
 		self.area:addGameObject(
 			"PreAttackEffect",

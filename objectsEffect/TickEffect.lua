@@ -2,11 +2,8 @@ TickEffect = GameObject:extend()
 
 function TickEffect:new(area, x, y, opts)
     TickEffect.super.new(self, area, x, y, opts)
-    --[[
-    TODO: avoid hard coding size of the reactangle evaulate the size of the player
-    ]]
     self.layer = 75
-    self.w, self.h = 48, 32
+    self.w, self.h =  self.parent.w * 4 , self.parent.h *4 
     self.y_offset = 0
     self.timer:tween(0.13, self, { h = 0, y_offset = 32 }, 'in-out-cubic',
         function() self.dead = true end)

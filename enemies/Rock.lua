@@ -5,16 +5,16 @@ function Rock:new(area, x, y, opts)
 	self.name = "Rock"
 	local direction = table.random({ -1, 1 })
 	-- self.x = gw / 2 + direction * (gw / 2 + 48)
-	-- self.y = GlobalRandom(16, gh - 16)
+	-- self.y = math.customRandom(16, gh - 16)
 	self.collider = self.area.world:newPolygonCollider(CreateIrregularPolygon(8))
 	self.collider:setPosition(self.x, self.y)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Enemy")
 	self.collider:setFixedRotation(false)
 
-	self.velocity = -direction * GlobalRandom(20, 40)
+	self.velocity = -direction * math.customRandom(20, 40)
 	self.collider:setLinearVelocity(self.velocity, 0)
-	self.collider:applyAngularImpulse(GlobalRandom(-100, 100))
+	self.collider:applyAngularImpulse(math.customRandom(-100, 100))
 
 	-- Calculate width and height from collider points
 	-- get the points of the polygon shape, insert in a table, like a like

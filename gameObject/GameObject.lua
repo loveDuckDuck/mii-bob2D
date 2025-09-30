@@ -13,13 +13,12 @@ function GameObject:new(area, x, y, opts)                       -- Constructor f
     self.dead = false                                           -- Not dead yet 😇
 end
 
-function GameObject:update(dt)                   -- Update function 🔄
-    if self.timer then self.timer:update(dt) end -- Update the timer if any
+function GameObject:update(dt)                  
+    if self.timer then self.timer:update(dt) end 
     if self.collider then self.x, self.y = self.collider:getPosition() end
 end
 
-function GameObject:draw() -- Draw function 🎨
-
+function GameObject:draw() 
 end
 
 function GameObject:destroy()
@@ -28,4 +27,3 @@ function GameObject:destroy()
     self.collider = nil
 end
 
---return GameObject -- Return the GameObject class

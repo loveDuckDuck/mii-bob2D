@@ -79,7 +79,7 @@ function Player:new(area, x, y, opts)
 			"TrailParticle",
 			self.x - self.w * math.cos(self.rotation),
 			self.y - self.h * math.sin(self.rotation),
-			{ parent = self, radius = GlobalRandom(2, 4), duration = GlobalRandom(0.15, 0.25), color = self.trailColor }
+			{ parent = self, radius = math.customRandom(2, 4), duration = math.customRandom(0.15, 0.25), color = self.trailColor }
 		)
 	end)
 

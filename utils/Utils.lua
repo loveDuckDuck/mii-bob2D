@@ -24,7 +24,7 @@ function UpdateScale()
 	-- sx, sy = scale, scale
 end
 
-function GlobalRandom(min, max)
+function math.customRandom(min, max)
 	local min, max = min or 0, max or 1
 	return (min > max and (love.math.random() * (min - max) + max)) or (love.math.random() * (max - min) + min)
 end
@@ -222,8 +222,8 @@ function CreateIrregularPolygon(size, point_amount)
 	local points = {}
 	for i = 1, point_amount do
 		local angle_interval = 2 * math.pi / point_amount
-		local distance = size + GlobalRandom(-size / 4, size / 4)
-		local angle = (i - 1) * angle_interval + GlobalRandom(-angle_interval / 4, angle_interval / 4)
+		local distance = size + math.customRandom(-size / 4, size / 4)
+		local angle = (i - 1) * angle_interval + math.customRandom(-angle_interval / 4, angle_interval / 4)
 		table.insert(points, distance * math.cos(angle))
 		table.insert(points, distance * math.sin(angle))
 	end

@@ -3,10 +3,10 @@ TargetParticle = GameObject:extend()
 function TargetParticle:new(area, x, y, opts)
 	TargetParticle.super.new(self, area, x, y, opts)
     
-	self.r = opts.r or GlobalRandom(2, 3)
+	self.r = opts.r or math.customRandom(2, 3)
 
 	self.timer:tween(
-		opts.d or GlobalRandom(0.1, 0.3),
+		opts.d or math.customRandom(0.1, 0.3),
 		self,
 		{ r = 0, x = self.target_x, y = self.target_y },
 		"out-cubic",

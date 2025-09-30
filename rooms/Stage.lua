@@ -29,32 +29,21 @@ function Stage:new() -- Create new stage object 📝
 	GInput:bind("p", function()
 		self.area:addGameObject(
 			"Ammo",
-			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
 
 		self.area:addGameObject(
 			"BoostCoin",
-			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
 
 		self.area:addGameObject(
 			"HpCoin",
-			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
 		)
-
-		-- self.area:addGameObject(
-		-- 	"Rock",
-		-- 	GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
-		-- )
-		-- self.area:addGameObject(
-		-- 	"Shooter",
-		-- 	GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-		-- 	GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2)
-		-- )
 	end)
 	GInput:bind("z", function()
 		self.counterAttack = self.counterAttack + 1

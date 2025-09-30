@@ -8,10 +8,10 @@ function StatCoin:new(area, x, y, opts)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Collectable")
 	self.collider:setFixedRotation(false)
-	self.rotation = GlobalRandom(0, 2 * math.pi)
-	self.velocity = -direction * GlobalRandom(20, 40)
+	self.rotation = math.customRandom(0, 2 * math.pi)
+	self.velocity = -direction * math.customRandom(20, 40)
 	self.collider:setLinearVelocity(self.velocity, 0)
-	self.collider:applyAngularImpulse(GlobalRandom(-100, 100))
+	self.collider:applyAngularImpulse(math.customRandom(-100, 100))
 end
 
 function StatCoin:update(dt)

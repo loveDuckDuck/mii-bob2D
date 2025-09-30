@@ -4,7 +4,7 @@ function ProjectileTrail:new(area, x, y, opts)
     ProjectileTrail.super.new(self, area, x, y, opts)
 
     self.alpha = 128
-    self.timer:tween(GlobalRandom(0.1, 0.3), self, { alpha = 0 }, 'in-out-cubic', function()
+    self.timer:tween(math.customRandom(0.1, 0.3), self, { alpha = 0 }, 'in-out-cubic', function()
         self.dead = true
     end)
 end

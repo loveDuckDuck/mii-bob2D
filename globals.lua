@@ -98,9 +98,7 @@ Attacks = {
 			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
-	--[[
-		XXX: make following???
-	--]]
+
 	["Destroyer"] = {
 		name = "Destroyer",
 		damage = 100,

@@ -9,10 +9,10 @@ function CoinObject:new(area, x, y, opts)
 	self.collider:setCollisionClass("Collectable")
 
 	self.collider:setFixedRotation(false)
-	self.rotation = GlobalRandom(0, 2 * math.pi)
-	self.velocity = GlobalRandom(10, 20)
+	self.rotation = math.customRandom(0, 2 * math.pi)
+	self.velocity = math.customRandom(10, 20)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
-	self.collider:applyAngularImpulse(GlobalRandom(-24, 24))
+	self.collider:applyAngularImpulse(math.customRandom(-24, 24))
 	self.cointValue = 5
 end
 

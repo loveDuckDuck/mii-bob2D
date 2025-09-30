@@ -59,8 +59,8 @@ function PlayerChanceManager:new(player, projectileManager)
 end
 
 function PlayerChanceManager:returnRandomOffset()
-	local xOffset = GlobalRandom(-1, 10)
-	local yOffset = GlobalRandom(-10, 10)
+	local xOffset = math.customRandom(-1, 10)
+	local yOffset = math.customRandom(-10, 10)
 	return xOffset, yOffset
 end
 
@@ -103,8 +103,8 @@ function PlayerChanceManager:onAmmoPickupChance()
 	if self.chances.spawn_haste_area_on_hp_pickup_chance:next() then
 		self.player.area:addGameObject(
 			"HasteArea",
-			GlobalRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			GlobalRandom(self.player.y - gh / 2, self.player.y + gh / 2),
+			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
+			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2),
 			{ parent = self.player }
 		)
 		self.player.area:addGameObject(
@@ -144,7 +144,7 @@ function PlayerChanceManager:onKill()
 		if self.player.timer then
 			for i = 1, 8 do
 				self.player.timer:after((i - 1) * 0.05, function()
-					local random_angle = GlobalRandom(-math.pi / 8, math.pi / 8)
+					local random_angle = math.customRandom(-math.pi / 8, math.pi / 8)
 					local distance = 2.2 * self.player.w
 					self.player.area:addGameObject(
 						"Projectile",

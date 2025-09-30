@@ -67,7 +67,7 @@ function LightningLine:generate()
 
             local mid_point = (start_point + end_point) / 2
             mid_point = mid_point +
-            (end_point - start_point):normalized():perpendicular() * GlobalRandom(-offset_amount, offset_amount)
+            (end_point - start_point):normalized():perpendicular() * math.customRandom(-offset_amount, offset_amount)
             table.insert(lines, { x1 = start_point.x, y1 = start_point.y, x2 = mid_point.x, y2 = mid_point.y })
             table.insert(lines, { x1 = mid_point.x, y1 = mid_point.y, x2 = end_point.x, y2 = end_point.y })
         end
