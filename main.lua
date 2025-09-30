@@ -110,13 +110,12 @@ function love.load()
 	GDraft = Draft()
 	GLoader = Loader()
 
-	GLoader:getRequireFiles("gameObject")
+	GLoader:getRequireFiles("abstractGameObject")
 	GLoader:getRequireFiles("metaGameObject")
-	GLoader:getRequireFiles("objectsEffect")
+	GLoader:getRequireFiles("gameObjectsEffect")
 	GLoader:getRequireFiles("enemies")
 	GLoader:getRequireFiles("objectManagers")
-
-	GLoader:getRequireFiles("objects")
+	GLoader:getRequireFiles("gameObjects")
 	GLoader:getRequireFiles("rooms")
 
 
