@@ -127,16 +127,16 @@ function Player:physics(dt)
 end
 
 function Player:move(dt)
-	if GInput:down("d") then
+	if GInput:down("right") then
 		self.xvel = self.xvel + self.acceleration * dt
 	end
-	if GInput:down("a") then
+	if GInput:down("left") then
 		self.xvel = self.xvel - self.acceleration * dt
 	end
-	if GInput:down("s") then
+	if GInput:down("down") then
 		self.yvel = self.yvel + self.acceleration * dt
 	end
-	if GInput:down("w") then
+	if GInput:down("up") then
 		self.yvel = self.yvel - self.acceleration * dt
 	end
 
@@ -168,23 +168,23 @@ function Player:move(dt)
 	local targetAngle = self.rotation
 
 	--Check diagonal movements first (they require two keys)
-	if love.keyboard.isDown("up") and love.keyboard.isDown("right") then
+	if GInput:down("up") and GInput:down("right") then
 		targetAngle = -math.pi / 4 -- 45 degrees up-right
-	elseif love.keyboard.isDown("up") and love.keyboard.isDown("left") then
+	elseif GInput:down("up") and GInput:down("left") then
 		targetAngle = -3 * math.pi / 4 -- 135 degrees up-left
-	elseif love.keyboard.isDown("down") and love.keyboard.isDown("right") then
+	elseif GInput:down("down") and GInput:down("right") then
 		targetAngle = math.pi / 4 -- 45 degrees down-right
-	elseif love.keyboard.isDown("down") and love.keyboard.isDown("left") then
+	elseif GInput:down("down") and GInput:down("left") then
 		targetAngle = 3 * math.pi / 4 -- 135 degrees down-left
 
 		-- Then check single key movements
-	elseif love.keyboard.isDown("right") then
+	elseif GInput:down("shootright") then
 		targetAngle = 0 -- 0 degrees (facing right)
-	elseif love.keyboard.isDown("left") then
+	elseif GInput:down("shootleft") then
 		targetAngle = math.pi -- 180 degrees (facing left)
-	elseif love.keyboard.isDown("down") then
+	elseif GInput:down("shootdown") then
 		targetAngle = math.pi / 2 -- 90 degrees (facing down)
-	elseif love.keyboard.isDown("up") then
+	elseif GInput:down("shootup") then
 		targetAngle = -math.pi / 2 -- -90 degrees (facing up)
 	end
 	--[[

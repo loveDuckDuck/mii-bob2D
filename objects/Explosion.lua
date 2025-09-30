@@ -33,16 +33,12 @@ function Explosion:new(area, x, y, opts)
         for i = 1, love.math.random(8, 20) do
             local rotation = math.randomAngle(math.pi / 2, -math.pi / 2)
             if self.x < 0 then
-                print("x -- 0")
                 rotation = math.randomAngle(-math.pi / 2, math.pi / 2)
             elseif self.x > gw then
-                print("x -- gw")
                 rotation = math.randomAngle(math.pi / 2, 3 * math.pi / 2)
             elseif self.y < 0 then
-                print("y -- 0")
                 rotation = math.randomAngle(0, math.pi)
             elseif self.y > gh then
-                print("y -- gh")
                 rotation = math.randomAngle(math.pi, 2 * math.pi)
             end
 

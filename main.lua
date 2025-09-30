@@ -77,17 +77,20 @@ end
 local function inputBinder()
 	GInput = Input()
 
-	GInput:bind("a", "a")
-	GInput:bind("d", "d")
-	GInput:bind("w", "w")
-	GInput:bind("s", "s")
-	GInput:bind("b", "b")
+	GInput:bind("a", "left")
+	GInput:bind("d", "right")
+	GInput:bind("w", "up")
+
+	GInput:bind("s", "down")
 	GInput:bind("space", "boosting")
 
-	GInput:bind("down", "down")
-	GInput:bind("up", "up")
-	GInput:bind("left", "left")
-	GInput:bind("right", "right")
+	GInput:bind("b", "b")
+
+
+	GInput:bind("down", "shootdown")
+	GInput:bind("up", "shootup")
+	GInput:bind("left", "shootleft")
+	GInput:bind("right", "shootright")
 
 	GInput:bind("escape", "DeleteEveryThing")
 	GInput:bind("wheelup", "zoomIn")
@@ -102,6 +105,8 @@ end
 
 function love.load()
 	graphicSetter()
+	inputBinder()
+
 	GDraft = Draft()
 	GLoader = Loader()
 
@@ -109,11 +114,11 @@ function love.load()
 	GLoader:getRequireFiles("metaGameObject")
 	GLoader:getRequireFiles("objectsEffect")
 	GLoader:getRequireFiles("enemies")
-	GLoader:getRequireFiles("objects")
 	GLoader:getRequireFiles("objectManagers")
+
+	GLoader:getRequireFiles("objects")
 	GLoader:getRequireFiles("rooms")
 
-	inputBinder()
 
 	GTimer = Timer()
 	GCamera = Camera()

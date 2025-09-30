@@ -205,7 +205,6 @@ function Input:down(action, interval, delay)
     elseif action and not interval and not delay then
         for _, key in ipairs(self.binds[action]) do
             if (love.keyboard.isDown(key) or love.mouse.isDown(key_to_button[key] or 0)) then
-                print(key)
                 return true
             end
 
