@@ -3,22 +3,11 @@ SkillTree = Object:extend()
 function SkillTree:new()
     print("SkillTree created")
     self.timer = Timer()
-    tree = {}
-    tree[1] = {
-        x = 0,
-        y = 0,
-        stats = {
-            '4% Increased HP', 'hp_multiplier', 0.04,
-            '4% Increased Ammo', 'ammo_multiplier', 0.04
-        },
-        links = { 2 }
-    }
-    tree[2] = { x = 32, y = 0, stats = { '6% Increased HP', 'hp_multiplier', 0.04 }, links = { 1, 3 } }
-    tree[3] = { x = 32, y = 32, stats = { '4% Increased HP', 'hp_multiplier', 0.04 }, links = { 2 } }
+
     self.nodes = {}
     self.lines = {}
-    for id, node in ipairs(tree) do table.insert(self.nodes, Node(id, node.x, node.y)) end
-    for id, node in ipairs(tree) do
+    for id, node in ipairs(TreeLogic.TreeStats) do table.insert(self.nodes, Node(id, node.x, node.y)) end
+    for id, node in ipairs(TreeLogic.TreeStats) do
         for _, linked_node_id in ipairs(node.links) do
             table.insert(self.lines, Line(id, linked_node_id))
         end
@@ -55,32 +44,50 @@ end
 function SkillTree:draw()
     love.graphics.setCanvas(self.main_canvas)
     love.graphics.clear()
-
+    love.graphics.setColor(G_background_color)
+    love.graphics.rectangle('fill', 0, 0, gw, gh)
     GCamera:attach(0, 0, gw, gh)
-    for _, line in ipairs(self.lines) do
-        line:draw()
-    end
+    love.graphics.setLineWidth(1 / GCamera.scale)
+    for _, line in ipairs(self.lines) do line:draw() end
+    for _, node in ipairs(self.nodes) do node:draw() end
+    love.graphics.setLineWidth(1)
+    GCamera:detach()
+
+
+    -- Stats rectangle and create
+
+    local testmx, testmy = love.mouse.getPosition()
+    love.graphics.setColor(0.5, 0.5, 0.5, 222)
+    love.graphics.circle('fill', testmx, testmy, 16)
+    love.graphics.setFont(Font)
     for _, node in ipairs(self.nodes) do
         if node.hot then
-            local stats = tree[node.id].stats
+            local stats = TreeLogic.TreeStats[node.id].stats
             -- Figure out max_text_width to be able to set the proper rectangle width
             local max_text_width = 0
+            -- here cycle in pas by 3, to check the text of the multiplier
             for i = 1, #stats, 3 do
                 if Font:getWidth(stats[i]) > max_text_width then
                     max_text_width = Font:getWidth(stats[i])
                 end
             end
+            -- Draw rectangle witch contains the text
             local mx, my = love.mouse.getPosition()
             mx, my = mx / sx, my / sy
             love.graphics.setColor(0, 0, 0, 222)
             love.graphics.rectangle('fill', mx, my, 16 + max_text_width,
                 Font:getHeight() + (#stats / 3) * Font:getHeight())
-        else
-            node:draw()
+            -- Draw the text
+            -- here cycle in pas by 3, to check the text of the multiplier
+            -- like we did previusly to check the lenght
+
+            love.graphics.setColor(G_default_color)
+            for i = 1, #stats, 3 do
+                love.graphics.print(stats[i], math.floor(mx + 8),
+                    math.floor(my + Font:getHeight() / 2 + math.floor(i / 3) * Font:getHeight()))
+            end
         end
     end
-
-    GCamera:detach()
 
     love.graphics.setCanvas()
 

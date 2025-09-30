@@ -14,9 +14,11 @@ Moses = require("libraries/moses/moses")
 --utilities
 Util = require("utils/Utils")
 RoomController = require("utils/RoomController")
+TreeLogic = require("utils/TreeStats")
 
 require("libraries/string/utf8")
 require("globals")
+
 
 --Area = require 'gameObject/Area'
 
@@ -104,6 +106,8 @@ local function inputBinder()
 end
 
 function love.load()
+
+	
 	graphicSetter()
 	inputBinder()
 
