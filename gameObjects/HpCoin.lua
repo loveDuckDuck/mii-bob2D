@@ -14,6 +14,9 @@ function HpCoin:draw()
 	PushRotate(self.x, self.y, self.collider:getAngle())
 	love.graphics.setColor(G_white_cream)
 	GDraft:rhombus(self.x, self.y, 1.5 * self.w, 1.5 * self.h, "line")
+	love.graphics.setColor(G_boost_color)
+	GDraft:rhombus(self.x, self.y, 1.5 * self.w, 3 * self.h, "line")
+
 	love.graphics.pop()
 	love.graphics.setColor(G_default_color)
 end

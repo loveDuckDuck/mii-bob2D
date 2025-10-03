@@ -3,7 +3,7 @@ Enemy = GameObject:extend()
 function Enemy:new(area, x, y, opts)
 	Enemy.super.new(self, area, x, y, opts)
 	self.name = opts.name or "Enemy"
-	self.hp = opts.hp or 10
+	self.hp = opts.hp or 5
 	self.w, self.h = 8, 8
 
 

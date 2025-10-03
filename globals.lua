@@ -135,7 +135,18 @@ Attacks = {
 			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
 	},
-
+	["Hearth"] = {
+		name = "Hearth",
+		damage = 100,
+		cooldown = 0.32,
+		ammo = 2,
+		tears = 1,
+		abbreviation = "mi love for you",
+		color = { 1.9 , 0.1675, 0.3287, 1.00 }, -- rgb(252, 216, 205)
+		resource = function(x, y, w, h)
+			GDraft:circle(x, y, w + 5, nil, "line")
+		end,
+	},
 	["Flame"] = {
 		name = "Flame",
 		damage = 100,

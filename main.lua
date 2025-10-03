@@ -58,6 +58,8 @@ function love.update(dt)
 	end
 
 	if GInput:pressed("goToSkillTree") then
+		--CreateSkillTree("resource/input.png")
+
 		GlobalRoomController:gotoRoom("SkillTree", 2)
 	end
 
@@ -106,11 +108,8 @@ local function inputBinder()
 end
 
 function love.load()
-
-	
 	graphicSetter()
 	inputBinder()
-
 	GDraft = Draft()
 	GLoader = Loader()
 

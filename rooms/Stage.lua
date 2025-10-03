@@ -1,6 +1,6 @@
 Stage = Object:extend()
 
-function Stage:new() -- Create new stage object 📝
+function Stage:new()    -- Create new stage object 📝
 	print("stage created") -- Log stage creation ✅
 	self.area = Area(self) -- Create an area instance 🗺️
 
@@ -13,13 +13,14 @@ function Stage:new() -- Create new stage object 📝
 	self.area.world:addCollisionClass("Enemy") --{ ignores = { "Enemy", "Collectable" } }
 
 	self.area.world:addCollisionClass("EnemyProjectile", { ignores = { "EnemyProjectile", "Projectile", "Enemy" } })
+	self.area.world:addCollisionClass("Barrier", { ignores = { "Player", "Projectile", "Collectable" } }) -- the world need to check
 
-	self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
+	self.main_canvas = love.graphics.newCanvas(gw, gh)                                               -- Create main canvas object 🖼️
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
 
 	self.director = Director(self, self.player) -- Create a director instance 🎬
-	
+
 	self.score = 0
 	self.font = Font
 	self.counterAttack = 0
@@ -64,9 +65,9 @@ function Stage:update(dt) -- Update stage logic here 🕹️
 	self.area:update(dt) -- Update the area too 👍
 end
 
-function Stage:draw() -- Drawing stage visuals here 🎨
+function Stage:draw()                      -- Drawing stage visuals here 🎨
 	love.graphics.setCanvas(self.main_canvas) -- Set main canvas target 🎯
-	love.graphics.clear() -- Clear the current frame 🧹
+	love.graphics.clear()                  -- Clear the current frame 🧹
 
 	--GCamera:attach()
 	GCamera:attach(0, 0, gw, gh)
@@ -98,13 +99,13 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	local r, g, b = unpack(G_boost_color)
 	local boost, max_boost = self.player.boost, self.player.maxBoost
 	love.graphics.setColor(r, g, b)
-	love.graphics.rectangle("fill", gw / 2 , gh - 16, 48 * (boost / max_boost), 4)
+	love.graphics.rectangle("fill", gw / 2, gh - 16, 48 * (boost / max_boost), 4)
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
-	love.graphics.rectangle("line", gw / 2 , gh - 16, 48, 4)
+	love.graphics.rectangle("line", gw / 2, gh - 16, 48, 4)
 
-	love.graphics.setCanvas() -- Reset the canvas 🔄
+	love.graphics.setCanvas()                         -- Reset the canvas 🔄
 
-	love.graphics.setColor(1, 1, 1, 1) -- New 0-1 range for LÖVE 11.5
+	love.graphics.setColor(1, 1, 1, 1)                -- New 0-1 range for LÖVE 11.5
 	love.graphics.setBlendMode("alpha", "premultiplied") -- Set blend mode here ⚙️
 	--[[
         XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND

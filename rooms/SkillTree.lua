@@ -7,11 +7,13 @@ function SkillTree:new()
     self.nodes = {}
     self.lines = {}
     for id, node in ipairs(TreeLogic.TreeStats) do table.insert(self.nodes, Node(id, node.x, node.y)) end
+    
     for id, node in ipairs(TreeLogic.TreeStats) do
         for _, linked_node_id in ipairs(node.links) do
             table.insert(self.lines, Line(id, linked_node_id))
         end
     end
+    
     self.previous_mx, self.previous_my = 0, 0
     self.main_canvas = love.graphics.newCanvas(gw, gh)
 end

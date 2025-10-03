@@ -16,6 +16,8 @@ function Player:new(area, x, y, opts)
 	self.xvel = 0
 	self.yvel = 0
 
+
+	self.shoot_cooldown_timer = 0
 	self.acceleration = 1000
 	self.baseMaxVelocity = 100
 	self.maxVelocity = self.baseMaxVelocity
@@ -34,8 +36,6 @@ function Player:new(area, x, y, opts)
 	self.boost = 1
 	self.maxBoost = 1
 
-	-- MULTIPLIER HP
-	self.hp_multiplier = 1
 	-- FLATS HP
 	self.flat_hp = 0
 	-- AMMO
@@ -72,14 +72,24 @@ function Player:new(area, x, y, opts)
 
 	-- GENERATE CHANCES
 	self.chance = PlayerChanceManager(self, self.projectileManager)
+	self.multiplierManager = MultiplierManager(self)
+
 	self.chance:generateChances()
-	self:setAttack("Explode")
+	self.multiplierManager:generateChanceMultiplier()
+
+	self:setAttack("Hearth")
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
 			"TrailParticle",
 			self.x - self.w * math.cos(self.rotation),
 			self.y - self.h * math.sin(self.rotation),
-			{ parent = self, radius = math.customRandom(2, 4), duration = math.customRandom(0.15, 0.25), color = self.trailColor }
+			{
+				parent = self,
+				radius = math.customRandom(2, 4),
+				duration = math.customRandom(0.15, 0.25),
+				color = self
+					.trailColor
+			}
 		)
 	end)
 
@@ -101,7 +111,7 @@ end
 
 function Player:setStats()
 	-- multiply the max hp by the multiplier
-	self.max_hp = (self.max_hp + self.flat_hp) * self.hp_multiplier
+	self.max_hp = self.max_hp + self.flat_hp
 	self.hp = self.max_hp
 	-- multiply the max ammo by the multiplier
 	self.maxAmmo = (self.maxAmmo + self.flat_ammo) * self.hp_ammo
@@ -167,19 +177,23 @@ function Player:move(dt)
 
 	local targetAngle = self.rotation
 
+	--[[
+	TODO : fix this issues with the rotation
+	]]
+
 	--Check diagonal movements first (they require two keys)
-	if GInput:down("up") and GInput:down("right") then
+	if GInput:down("shootup") and GInput:down("shootright") then
 		targetAngle = -math.pi / 4 -- 45 degrees up-right
-	elseif GInput:down("up") and GInput:down("left") then
+	elseif GInput:down("shootup") and GInput:down("shootleft") then
 		targetAngle = -3 * math.pi / 4 -- 135 degrees up-left
-	elseif GInput:down("down") and GInput:down("right") then
+	elseif GInput:down("shootdown") and GInput:down("shootright") then
 		targetAngle = math.pi / 4 -- 45 degrees down-right
-	elseif GInput:down("down") and GInput:down("left") then
+	elseif GInput:down("shootdown") and GInput:down("shootleft") then
 		targetAngle = 3 * math.pi / 4 -- 135 degrees down-left
 
 		-- Then check single key movements
 	elseif GInput:down("shootright") then
-		targetAngle = 0 -- 0 degrees (facing right)
+		targetAngle = 0      -- 0 degrees (facing right)
 	elseif GInput:down("shootleft") then
 		targetAngle = math.pi -- 180 degrees (facing left)
 	elseif GInput:down("shootdown") then
@@ -263,6 +277,7 @@ function Player:checkCollision(dt)
 			self:addAmmo(object.cointValue)
 			self:addScore(object.cointValue * 10)
 			self.chance:onAmmoPickupChance()
+			self.multiplierManager:onAmmoPickupChance()
 			object:die()
 		elseif object:is(BoostCoin) then
 			object:die()
@@ -316,13 +331,14 @@ function Player:draw()
 	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
 	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
 
+	love.graphics.print("static velocity : " .. self.baseMaxVelocity, self.x + 50, self.y - 210)
+		love.graphics.print("static friction : " .. self.friction, self.x + 50, self.y - 230)
+
 
 	love.graphics.setColor(Attacks[self.attack].color)
 	GDraft:circle(self.x, self.y, self.w + 5, nil, "fill")
 
 	love.graphics.setColor(G_default_color)
-
-
 end
 
 function Player:tick()
@@ -355,7 +371,7 @@ end
 
 function Player:setAttack(attack)
 	self.attack = attack
-	self.shoot_cooldown = Attacks[attack].cooldown
+	self.shoot_cooldown = Attacks[attack].cooldown - self.shoot_cooldown * self.shoot_cooldown_timer
 	self.projectileManager:updateAttack(attack)
 end
 

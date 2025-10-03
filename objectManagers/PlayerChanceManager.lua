@@ -13,7 +13,6 @@ function PlayerChanceManager:new(player, projectileManager)
 	-- LUCK
 	self.luckMultiplier = 1
 
-	self.spawn_hp_on_cycle_chance = 100
 	self.regain_hp_on_cycle_chance = 100
 	self.regain_full_ammo_on_cycle_chance = 1
 	self.change_attack_on_cycle_chance = 10
@@ -23,39 +22,35 @@ function PlayerChanceManager:new(player, projectileManager)
 	self.regain_ammo_on_kill_chance = 100
 	self.launch_homing_projectile_on_kill_chance = 100
 	self.regain_boost_on_kill_chance = 100
-
 	self.spawn_haste_area_on_sp_pickup_chance = 100
 
-	-- IMPLEMENTEAD
-	self.spawn_haste_area_on_hp_pickup_chance = 100
-
-	self.aspd_boost_on_kill_chance = 100
-	self.gain_some_hp_chance = 100
-	self.gain_full_hp_chance = 100
-	self.spawn_boost_on_kill_chance = 100
-	self.barrage_on_kill_chance = 100
+	-- IMPLEMENTEAD WHEN I PICK UP A AMMO
+	-- SO THIS IMPLEMENTATION DOESNT AFFECT MY PLAYER
+	-- JUST ONLY SPAWN SOMETHING
+	self.spawn_haste_area_on_hp_pickup_chance = 50
+	self.aspd_boost_on_kill_chance = 50
+	self.gain_some_hp_chance = 50
+	self.gain_full_hp_chance = 50
+	self.spawn_boost_on_kill_chance = 50
+	self.barrage_on_kill_chance = 50
 	self.launch_homing_projectile_on_ammo_pickup_chance = 50
-
 	self.projectile_ninety_degree_change_chance = 50
 
-	self.wavy_projectiles_chance = 100
+	-- SPAWNER ELEMENT
+	self.spawn_hp_coin_chance = 100
+	self.spawn_barrier_chance = 100
 
+
+
+
+	-- MODIFIER
+	self.wavy_projectiles_chance = 100
 	self.shield_projectile_chance = 100
 
 
-	-- TO IMPLEMENTEAD
-	self.enemy_spawn_rate_multiplier = 2
-	self.resource_spawn_rate_multiplier = 1
-	self.attack_spawn_rate_multiplier = 1
-	self.turn_rate_multiplier = 1
-	self.boost_effectiveness_multiplier = 1
-	self.projectile_size_multiplier = 1
-	self.boost_recharge_rate_multiplier = 1
-	self.invulnerability_time_multiplier = 1
-	self.ammo_consumption_multiplier = 1
-	self.size_multiplier = 1
-	self.stat_boost_duration_multiplier = 1
-	self.projectile_duration_multiplier = 1
+
+
+
 end
 
 function PlayerChanceManager:returnRandomOffset()
@@ -84,7 +79,9 @@ function PlayerChanceManager:getChance() end
 
 function PlayerChanceManager:onAmmoPickupChance()
 	local xOffset, yOffset = self:returnRandomOffset()
-	if self.chances.launch_homing_projectile_on_ammo_pickup_chance:next() then
+	if self.chances.launch_homing_projectile_on_ammo_pickup_chance:next()
+
+	then
 		local distance = 1.2 * self.player.w
 		self.player.area:addGameObject(
 			"Projectile",
@@ -114,6 +111,24 @@ function PlayerChanceManager:onAmmoPickupChance()
 			{ text = "GO TO HASTE-AREA !" }
 		)
 	end
+
+
+	if self.chances.spawn_barrier_chance:next() then
+		self.player.area:addGameObject(
+			"BarrierArea",
+			self.player.x ,
+			self.player.y,
+			{ parent = self.player }
+		)
+		self.player.area:addGameObject(
+			"InfoText",
+			self.player.x + xOffset,
+			self.player.y + yOffset,
+			{ text = "PROTECTED" }
+		)
+	end
+
+	self:onBoostPickupChange()
 end
 
 function PlayerChanceManager:onBoostPickupChange()
@@ -140,7 +155,7 @@ function PlayerChanceManager:onKill()
 	local xOffset, yOffset = self:returnRandomOffset()
 
 	if self.chances.barrage_on_kill_chance:next() then
-		 --avoid errors
+		--avoid errors
 		if self.player.timer then
 			for i = 1, 8 do
 				self.player.timer:after((i - 1) * 0.05, function()
@@ -167,14 +182,18 @@ function PlayerChanceManager:onKill()
 		)
 	end
 
-	-- if self.chances.aspd_boost_on_kill_chance:next() then
-	--     self.pre_boost_aspd_multiplier = self.aspd_multiplier
-	-- 	self.aspd_multiplier = self.aspd_multiplier/2
-	-- 	self.timer:after(4, function()
-	--   	    self.aspd_multiplier = self.pre_boost_aspd_multiplier
-	--         self.pre_boost_aspd_multiplier = nil
-	--   	end)
-	-- end
+	if self.chances.spawn_hp_coin_chance:next() then
+		self.player.area:addGameObject(
+			"HpCoin",
+			self.player.x + xOffset * math.cos(self.player.rotation),
+			self.player.y + yOffset * math.sin(self.player.rotation))
+		self.player.area:addGameObject(
+			"InfoText",
+			self.player.x + xOffset,
+			self.player.y + yOffset,
+			{ text = "SOME GOOD LIFE !!!" }
+		)
+	end
 end
 
 function PlayerChanceManager:onGainSomeHp()

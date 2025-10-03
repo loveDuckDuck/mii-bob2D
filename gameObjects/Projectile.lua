@@ -9,7 +9,9 @@ local QUARTER_PI = math.pi / 4
 
 function Projectile:new(area, x, y, opts)
 	Projectile.super.new(self, area, x, y, opts)
-
+	self.t = 0
+	self.speed = opts.speed or 1
+	self.scale = opts.scale or 5
 	-- Core properties
 	self.radiusSpace = opts.s or 2.5
 	self.attack = opts.attack or "Neutral"
@@ -248,6 +250,7 @@ end
 
 function Projectile:update(dt)
 	Projectile.super.update(self, dt)
+	self.t = self.t + dt * self.speed -- parameter progression
 	self:checkCollision()
 
 	-- Attack-specific behavior
