@@ -29,7 +29,7 @@ function RoomController:draw()
 	end
 	if FlashFrames then
 		love.graphics.setColor(G_background_color)
-		love.graphics.rectangle("fill", 0, 0, sx * gw, sy * gh)
+		love.graphics.rectangle("fill", 0, 0, sx * GW, sy * GH)
 		love.graphics.setColor(255, 255, 255)
 	end
 end

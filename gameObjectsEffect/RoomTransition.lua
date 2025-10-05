@@ -6,7 +6,7 @@ function RoomTransition:new(area, x, y, opts)
     TODO: avoid hard coding size of the reactangle evaulate the size of the player
     ]]
     self.layer = 100
-    self.w, self.h = gw, gh
+    self.w, self.h = GW, GH
     self.y_offset = 0
     self.timer:tween(0.13, self, { h = 0, y_offset = 32 }, 'in-out-cubic',
         function() self.dead = true end)

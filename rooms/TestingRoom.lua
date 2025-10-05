@@ -15,16 +15,16 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
     self.area.world:addCollisionClass("EnemyProjectile", { ignores = { "EnemyProjectile", "Projectile", "Enemy" } })
     self.area.world:addCollisionClass("Wall")
 
-    self.main_canvas = love.graphics.newCanvas(gw, gh) -- Create main canvas object 🖼️
+    self.main_canvas = love.graphics.newCanvas(GW, GH) -- Create main canvas object 🖼️
     -- when instante this TestingRoom
-    self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
+    self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
 
     -- self.wall =
     -- {
-    --     self.area:addGameObject("Wall", 0, 0, { width = 1, height = gh }), --left
-    --     self.area:addGameObject("Wall", gw, 0, { width = 1, height = gh }), -- rigth
-    --     self.area:addGameObject("Wall", 0, 0, { width = gw, height = 1 }), -- up
-    --     self.area:addGameObject("Wall", 0, gh, { width = gw, height = 1 }), -- down
+    --     self.area:addGameObject("Wall", 0, 0, { width = 1, height = GH }), --left
+    --     self.area:addGameObject("Wall", GW, 0, { width = 1, height = GH }), -- rigth
+    --     self.area:addGameObject("Wall", 0, 0, { width = GW, height = 1 }), -- up
+    --     self.area:addGameObject("Wall", 0, GH, { width = GW, height = 1 }), -- down
 
     -- }
 
@@ -64,7 +64,7 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
 end
 
 function TestingRoom:update(dt) -- Update TestingRoom logic here 🕹️
-    GCamera:lockPosition(dt, gw / 2, gh / 2)
+    GCamera:lockPosition(dt, GW / 2, GH / 2)
     --GCamera:lookAt(self.player.x, self.player.y)
     GCamera:update(dt)
     self.area:update(dt) -- Update the area too 👍
@@ -75,7 +75,7 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     love.graphics.clear()                     -- Clear the current frame 🧹
 
     --GCamera:attach()
-    GCamera:attach(0, 0, gw, gh)
+    GCamera:attach(0, 0, GW, GH)
     self.area:draw() -- Draw the area now 👀
 
     GCamera:detach()
@@ -83,7 +83,7 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     love.graphics.setColor(G_default_color)
     love.graphics.print(
         self.score,
-        gw - 20,
+        GW - 20,
         10,
         0,
         1,
@@ -96,17 +96,17 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     local r, g, b = unpack(G_hp_color)
     local hp, max_hp = self.player.hp, self.player.max_hp
     love.graphics.setColor(r, g, b)
-    love.graphics.rectangle("fill", gw / 2 - 52, gh - 16, 48 * (hp / max_hp), 4)
+    love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 48 * (hp / max_hp), 4)
     love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
-    love.graphics.rectangle("line", gw / 2 - 52, gh - 16, 48, 4)
+    love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 48, 4)
 
     -- BOOST
     local r, g, b = unpack(G_boost_color)
     local boost, max_boost = self.player.boost, self.player.maxBoost
     love.graphics.setColor(r, g, b)
-    love.graphics.rectangle("fill", gw / 2, gh - 16, 48 * (boost / max_boost), 4)
+    love.graphics.rectangle("fill", GW / 2, GH - 16, 48 * (boost / max_boost), 4)
     love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
-    love.graphics.rectangle("line", gw / 2, gh - 16, 48, 4)
+    love.graphics.rectangle("line", GW / 2, GH - 16, 48, 4)
 
     love.graphics.setCanvas()                            -- Reset the canvas 🔄
 
@@ -115,8 +115,8 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     --[[
         XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND
     ]]
-    local x = (love.graphics.getWidth() - gw * sx) / 2
-    local y = (love.graphics.getHeight() - gh * sy) / 2
+    local x = (love.graphics.getWidth() - GW * sx) / 2
+    local y = (love.graphics.getHeight() - GH * sy) / 2
     love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
 
     love.graphics.setBlendMode("alpha") -- Reset the blend mode 🔄

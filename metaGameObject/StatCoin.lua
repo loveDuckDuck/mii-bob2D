@@ -16,7 +16,7 @@ end
 
 function StatCoin:update(dt)
 	StatCoin.super.update(self, dt)
-	if self.x < 0 or self.y < 0 or self.x > gw or self.y > gh then
+	if self.x < 0 or self.y < 0 or self.x > GW or self.y > GH then
 		self:die()
 	end
 end

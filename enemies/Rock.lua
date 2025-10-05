@@ -4,8 +4,8 @@ function Rock:new(area, x, y, opts)
 	Rock.super.new(self, area, x, y, opts)
 	self.name = "Rock"
 	local direction = table.random({ -1, 1 })
-	-- self.x = gw / 2 + direction * (gw / 2 + 48)
-	-- self.y = math.customRandom(16, gh - 16)
+	-- self.x = GW / 2 + direction * (GW / 2 + 48)
+	-- self.y = math.customRandom(16, GH - 16)
 	self.collider = self.area.world:newPolygonCollider(CreateIrregularPolygon(8))
 	self.collider:setPosition(self.x, self.y)
 	self.collider:setObject(self)
@@ -47,12 +47,12 @@ function Rock:update(dt)
 
 	local vx, vy = self.collider:getLinearVelocity()
 
-	if self.x < 0 or self.x > gw then
+	if self.x < 0 or self.x > GW then
 		-- Reverse the horizontal velocity for a bounce
 		self.collider:setLinearVelocity(-vx, vy)
 	end
 
-	if self.y < 0 or self.y > gh then
+	if self.y < 0 or self.y > GH then
 		-- Reverse the vertical velocity for a bounce
 		self.collider:setLinearVelocity(vx, -vy)
 	end

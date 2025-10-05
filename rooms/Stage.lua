@@ -15,9 +15,9 @@ function Stage:new()    -- Create new stage object 📝
 	self.area.world:addCollisionClass("EnemyProjectile", { ignores = { "EnemyProjectile", "Projectile", "Enemy" } })
 	self.area.world:addCollisionClass("Barrier", { ignores = { "Player", "Projectile", "Collectable" } }) -- the world need to check
 
-	self.main_canvas = love.graphics.newCanvas(gw, gh)                                               -- Create main canvas object 🖼️
+	self.main_canvas = love.graphics.newCanvas(GW, GH)                                                 -- Create main canvas object 🖼️
 	-- when instante this stage
-	self.player = self.area:addGameObject("Player", gw / 2, gh / 2)
+	self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
 
 	self.director = Director(self, self.player) -- Create a director instance 🎬
 
@@ -30,20 +30,20 @@ function Stage:new()    -- Create new stage object 📝
 	GInput:bind("p", function()
 		self.area:addGameObject(
 			"Ammo",
-			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
+			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
 		)
 
 		self.area:addGameObject(
 			"BoostCoin",
-			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
+			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
 		)
 
 		self.area:addGameObject(
 			"HpCoin",
-			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
+			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
 		)
 	end)
 	GInput:bind("z", function()
@@ -59,26 +59,22 @@ end
 
 function Stage:update(dt) -- Update stage logic here 🕹️
 	self.director:update(dt)
-	GCamera:lockPosition(dt, gw / 2, gh / 2)
+	GCamera:lockPosition(dt, GW / 2, GH / 2)
 	--GCamera:lookAt(self.player.x, self.player.y)
 	GCamera:update(dt)
 	self.area:update(dt) -- Update the area too 👍
 end
 
-function Stage:draw()                      -- Drawing stage visuals here 🎨
-	love.graphics.setCanvas(self.main_canvas) -- Set main canvas target 🎯
-	love.graphics.clear()                  -- Clear the current frame 🧹
-
-	--GCamera:attach()
-	GCamera:attach(0, 0, gw, gh)
-	self.area:draw() -- Draw the area now 👀
-
+function Stage:draw() -- Drawing stage visuals here 🎨
+	GCamera:attach(0, 0, GW, GH)
+	self.area:draw()  -- Draw the area now 👀
 	GCamera:detach()
+
 	-- Score
 	love.graphics.setColor(G_default_color)
 	love.graphics.print(
 		self.score,
-		gw - 20,
+		GW - 20,
 		10,
 		0,
 		1,
@@ -86,33 +82,14 @@ function Stage:draw()                      -- Drawing stage visuals here 🎨
 		math.floor(self.font:getWidth(self.score) / 2),
 		self.font:getHeight() / 2
 	)
-	love.graphics.setColor(255, 255, 255)
+	love.graphics.setColor(1, 1, 1)
 	-- HP
 	local r, g, b = unpack(G_hp_color)
 	local hp, max_hp = self.player.hp, self.player.max_hp
 	love.graphics.setColor(r, g, b)
-	love.graphics.rectangle("fill", gw / 2 - 52, gh - 16, 48 * (hp / max_hp), 4)
+	love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 156 * (hp / max_hp), 7)
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
-	love.graphics.rectangle("line", gw / 2 - 52, gh - 16, 48, 4)
-
-	-- BOOST
-	local r, g, b = unpack(G_boost_color)
-	local boost, max_boost = self.player.boost, self.player.maxBoost
-	love.graphics.setColor(r, g, b)
-	love.graphics.rectangle("fill", gw / 2, gh - 16, 48 * (boost / max_boost), 4)
-	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
-	love.graphics.rectangle("line", gw / 2, gh - 16, 48, 4)
-
-	love.graphics.setCanvas()                         -- Reset the canvas 🔄
-
-	love.graphics.setColor(1, 1, 1, 1)                -- New 0-1 range for LÖVE 11.5
-	love.graphics.setBlendMode("alpha", "premultiplied") -- Set blend mode here ⚙️
-	--[[
-        XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND
-    ]]
-	local x = (love.graphics.getWidth() - gw * sx) / 2
-	local y = (love.graphics.getHeight() - gh * sy) / 2
-	love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
+	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
 
 	love.graphics.setBlendMode("alpha") -- Reset the blend mode 🔄
 	-- score

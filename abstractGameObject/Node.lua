@@ -13,7 +13,7 @@ function Node:new(id, x, y)
 end
 
 function Node:update(dt)
-    local mx, my = GCamera:getMousePosition(sx * GCamera.scale, sy * GCamera.scale, 0, 0, sx * gw, sy * gh)
+    local mx, my = GCamera:getMousePosition(sx * GCamera.scale, sy * GCamera.scale, 0, 0, sx * GW, sy * GH)
     if mx >= self.x - self.w / 2 and mx <= self.x + self.w / 2 and
         my >= self.y - self.h / 2 and my <= self.y + self.h / 2 then
         self.hot = true

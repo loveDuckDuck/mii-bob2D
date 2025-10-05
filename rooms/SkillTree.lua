@@ -15,7 +15,7 @@ function SkillTree:new()
     end
     
     self.previous_mx, self.previous_my = 0, 0
-    self.main_canvas = love.graphics.newCanvas(gw, gh)
+    self.main_canvas = love.graphics.newCanvas(GW, GH)
 end
 
 function SkillTree:update(dt)
@@ -32,12 +32,12 @@ function SkillTree:update(dt)
     TODO : update input file
     ]]
     if love.mouse.isDown(1) then
-        local mx, my = GCamera:getMousePosition(sx, sy, 0, 0, sx * gw, sy * gh)
+        local mx, my = GCamera:getMousePosition(sx, sy, 0, 0, sx * GW, sy * GH)
         local dx, dy = mx - self.previous_mx, my - self.previous_my
 
         GCamera:move(-dx, -dy)
     end
-    self.previous_mx, self.previous_my = GCamera:getMousePosition(sx, sy, 0, 0, sx * gw, sy * gh)
+    self.previous_mx, self.previous_my = GCamera:getMousePosition(sx, sy, 0, 0, sx * GW, sy * GH)
 
     for _, node in ipairs(self.nodes) do node:update(dt) end
     for _, line in ipairs(self.lines) do line:update(dt) end
@@ -47,8 +47,8 @@ function SkillTree:draw()
     love.graphics.setCanvas(self.main_canvas)
     love.graphics.clear()
     love.graphics.setColor(G_background_color)
-    love.graphics.rectangle('fill', 0, 0, gw, gh)
-    GCamera:attach(0, 0, gw, gh)
+    love.graphics.rectangle('fill', 0, 0, GW, GH)
+    GCamera:attach(0, 0, GW, GH)
     love.graphics.setLineWidth(1 / GCamera.scale)
     for _, line in ipairs(self.lines) do line:draw() end
     for _, node in ipairs(self.nodes) do node:draw() end
@@ -95,8 +95,8 @@ function SkillTree:draw()
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setBlendMode("alpha", "premultiplied")
-    local x = (love.graphics.getWidth() - gw * sx) / 2
-    local y = (love.graphics.getHeight() - gh * sy) / 2
+    local x = (love.graphics.getWidth() - GW * sx) / 2
+    local y = (love.graphics.getHeight() - GH * sy) / 2
     love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
 
     love.graphics.setBlendMode("alpha")

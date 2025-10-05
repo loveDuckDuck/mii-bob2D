@@ -26,13 +26,8 @@ function flash(frames)
 	FlashFrames = frames
 end
 
-function resize(s)
-	love.window.setMode(s * gw, s * gh)
-	sx, sy = s, s
-end
-
 function love.resize(w, h)
-	Push.resize(w, h)
+	Push:resize(w, h)
 end
 
 function love.draw()
@@ -43,11 +38,6 @@ function love.draw()
 	Push:finish()
 end
 
-function Slow(amount, duration)
-	slow = amount
-	print("slow : " .. slow)
-	GTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
-end
 
 function love.update(dt)
 	if GInput:pressed("DeleteEveryThing") then
@@ -69,7 +59,6 @@ function love.update(dt)
 end
 
 local function graphicSetter()
-	love.graphics.setDefaultFilter("nearest", "nearest")
 	--love.graphics.setLineStyle("rough")
 	Font = love.graphics.newFont("resource/m5x7.ttf")
 	if Font then
@@ -108,6 +97,15 @@ local function inputBinder()
 end
 
 function love.load()
+	love.graphics.setDefaultFilter("nearest", "nearest")
+
+	local windowWidth, windowHeight = love.window.getDesktopDimensions()
+	windowWidth, windowHeight = windowWidth * .7, windowHeight *
+		.7 --make the window a bit smaller than the screen itself
+
+	Push:setupScreen(GW, GH, windowWidth, windowHeight,
+		{ resizable = true, fullscreen = false, vsync = true, canvas = true })
+
 	graphicSetter()
 	inputBinder()
 	GDraft = Draft()
@@ -128,11 +126,8 @@ function love.load()
 	GlobalRoomController = RoomController()
 
 	GlobalRoomController:gotoRoom("Stage", UUID())
-	--resize(2)
 	slow = 1
 	FlashFrames = 0
-
-	Push:setupScreen(gw, gh, 640, 480, { resizible = true })
 end
 
 function love.run()

@@ -29,10 +29,10 @@ function EnemyProjectile:update(dt)
 	--[[
         XXX: PROBLEM with distance projectile
     ]]
-	local top_bound = self.parent.y - gh / 2
-	local bottom_bound = self.parent.y + gh / 2
-	local left_bound = self.parent.x - gw / 2
-	local right_bound = self.parent.x + gw / 2
+	local top_bound = self.parent.y - GH / 2
+	local bottom_bound = self.parent.y + GH / 2
+	local left_bound = self.parent.x - GW / 2
+	local right_bound = self.parent.x + GW / 2
 	if self.x < left_bound or self.x > right_bound then
 		self:die()
 	end

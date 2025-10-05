@@ -26,5 +26,5 @@ function HpCoin:die()
 	for i = 1, love.math.random(4, 8) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { s = 3, color = G_ammo_color })
 	end
-	self.area:addGameObject("InfoText", self.x, self.y, { text = "+HP ?!!!", color = G_boost_color })
+	self.area:addGameObject("InfoText", self.x, self.y, { text = "+HP ?!!!", color =  math.threeRamdon() })
 end

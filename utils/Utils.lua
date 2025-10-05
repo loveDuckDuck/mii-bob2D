@@ -12,11 +12,11 @@ function UpdateScale()
 	local window_height = love.graphics.getHeight()
 
 	-- Calculate scale to fit the game area in the window
-	sx = gw / window_width -- If window is 960px and gw=480px, sx = 0.5 (half size)
-	sy = gh / window_height -- If window is 540px and gh=270px, sy = 0.5 (half size)
+	sx = GW / window_width -- If window is 960px and GW=480px, sx = 0.5 (half size)
+	sy = GH / window_height -- If window is 540px and GH=270px, sy = 0.5 (half size)
 
-	gw = window_width * sx
-	gh = window_height * sy
+	GW = window_width * sx
+	GH = window_height * sy
 
 	print("Scale updated: sx =", sx, "sy =", sy)
 	-- Optional: Use uniform scaling (same scale for both axes)
@@ -89,7 +89,7 @@ function DrawGarbageCollector()
 		y_offset = y_offset + 20 -- Increment the y-coordinate for the next line
 	end
 
-	love.graphics.print(gw .. " : " .. gh, 0, y_offset)
+	love.graphics.print(GW .. " : " .. GH, 0, y_offset)
 	y_offset = y_offset + 20
 
 	love.graphics.setColor(1, 1, 1, 1)
@@ -353,10 +353,23 @@ end
 
 -- Returns a random angle between angle1 and angle2 (in radians)
 function math.randomAngle(angle1, angle2)
-    -- normalize order so min < max
-    local minAngle = math.min(angle1, angle2)
-    local maxAngle = math.max(angle1, angle2)
+	-- normalize order so min < max
+	local minAngle = math.min(angle1, angle2)
+	local maxAngle = math.max(angle1, angle2)
 
-    -- pick a random number in that range
-    return minAngle + (maxAngle - minAngle) * love.math.random()
+	-- pick a random number in that range
+	return minAngle + (maxAngle - minAngle) * love.math.random()
+end
+
+function Slow(amount, duration)
+	slow = amount
+	print("slow : " .. slow)
+	GTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
+end
+
+
+function  math.threeRamdon()
+    local r = {math.random(0.0,1.0),math.random(0.0,1.0),math.random(0.0,1.0)}
+	return r
+	
 end

@@ -95,8 +95,8 @@ function Director:setEnemySpawnsForThisRound()
 		self.timer:after(enemy_spawn_times[i], function()
 			self.stage.area:addGameObject(
 				enemy_list[i],
-				math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-				math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+				math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
+				math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
 			)
 		end)
 	end
@@ -142,8 +142,8 @@ function Director:setRecourceSpawnsForThisRound()
 		self.timer:after(resource_spawn_times[i], function()
 			self.stage.area:addGameObject(
 				resource_list[i],
-				math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-				math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2)
+				math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
+				math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
 			)
 		end)
 	end

@@ -12,7 +12,7 @@ end
 
 function Enemy:update(dt)
 	Enemy.super.update(self, dt)
-	if self.x < 0 - 100 or self.y < 0  - 100 or self.x > gw + 100 or self.y > gh + 100 then
+	if self.x < 0 - 100 or self.y < 0  - 100 or self.x > GW + 100 or self.y > GH + 100 then
 		self.dead = true
 	end
 end

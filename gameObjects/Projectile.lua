@@ -21,7 +21,6 @@ function Projectile:new(area, x, y, opts)
 	self.parent = opts.parent
 	self.invisible = false
 
-	print((self.shield and "yes shiled" or "no shield"))
 	-- Damage calculation
 	local attackData = Attacks[self.attack]
 	self.damage = opts.damage or (attackData and attackData.damage) or 1
@@ -172,7 +171,7 @@ end
 
 function Projectile:handleBounce(isSplit)
 	if not self.bounce or self.bounce <= 1 then
-		if self.x < 0 or self.x > gw or self.y < 0 or self.y > gh then
+		if self.x < 0 or self.x > GW or self.y < 0 or self.y > GH then
 			self:die()
 		end
 		return
@@ -181,11 +180,11 @@ function Projectile:handleBounce(isSplit)
 	local randomOffset = math.rad(math.customRandom(-15, 15))
 	local didBounce = false
 
-	if self.x < 0 or self.x > gw then
+	if self.x < 0 or self.x > GW then
 		self.rotation = math.pi - self.rotation + randomOffset
 		self.bounce = self.bounce - 1
 		didBounce = true
-	elseif self.y < 0 or self.y > gh then
+	elseif self.y < 0 or self.y > GH then
 		self.rotation = TWO_PI - self.rotation + randomOffset
 		self.bounce = self.bounce - 1
 		didBounce = true
@@ -267,7 +266,7 @@ function Projectile:update(dt)
 	elseif self.attack == "2Split" or self.attack == "4Split" then
 		self:handleBounce(true)
 	elseif self.attack == "Explode" then
-		if self.x < 0 or self.x > gw or self.y < 0 or self.y > gh then
+		if self.x < 0 or self.x > GW or self.y < 0 or self.y > GH then
 			self:die()
 			self.parent.area:addGameObject("Explosion", self.x, self.y, {
 				color = self.color,
@@ -291,7 +290,7 @@ function Projectile:update(dt)
 
 	-- Boundary check for most projectiles
 	if self.attack ~= "Bounce" and self.attack ~= "2Split" and self.attack ~= "4Split" then
-		if self.x < 0 or self.x > gw or self.y < 0 or self.y > gh then
+		if self.x < 0 or self.x > GW or self.y < 0 or self.y > GH then
 			self:die()
 		end
 	end

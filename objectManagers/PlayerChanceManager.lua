@@ -46,11 +46,6 @@ function PlayerChanceManager:new(player, projectileManager)
 	-- MODIFIER
 	self.wavy_projectiles_chance = 100
 	self.shield_projectile_chance = 100
-
-
-
-
-
 end
 
 function PlayerChanceManager:returnRandomOffset()
@@ -87,28 +82,28 @@ function PlayerChanceManager:onAmmoPickupChance()
 			"Projectile",
 			self.player.x + distance * math.cos(self.player.rotation),
 			self.player.y + distance * math.sin(self.player.rotation),
-			{ rotation = self.player.rotation, attack = "Homing" }
+			{ rotation = self.player.rotation, attack = "Homing", color = math.threeRamdon() }
 		)
 		self.player.area:addGameObject(
 			"InfoText",
 			self.player.x + xOffset,
 			self.player.y + yOffset,
-			{ text = "Homing Projectile!" }
+			{ text = "Homing Projectile!", color = math.threeRamdon() }
 		)
 	end
 
 	if self.chances.spawn_haste_area_on_hp_pickup_chance:next() then
 		self.player.area:addGameObject(
 			"HasteArea",
-			math.customRandom(self.player.x - gw / 2, self.player.x + gw / 2),
-			math.customRandom(self.player.y - gh / 2, self.player.y + gh / 2),
+			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
+			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2),
 			{ parent = self.player }
 		)
 		self.player.area:addGameObject(
 			"InfoText",
 			self.player.x + xOffset,
 			self.player.y + yOffset,
-			{ text = "GO TO HASTE-AREA !" }
+			{ text = "GO TO HASTE-AREA !", color = math.threeRamdon() }
 		)
 	end
 
@@ -116,7 +111,7 @@ function PlayerChanceManager:onAmmoPickupChance()
 	if self.chances.spawn_barrier_chance:next() then
 		self.player.area:addGameObject(
 			"BarrierArea",
-			self.player.x ,
+			self.player.x,
 			self.player.y,
 			{ parent = self.player }
 		)
@@ -124,7 +119,7 @@ function PlayerChanceManager:onAmmoPickupChance()
 			"InfoText",
 			self.player.x + xOffset,
 			self.player.y + yOffset,
-			{ text = "PROTECTED" }
+			{ text = "PROTECTED", color = math.threeRamdon() }
 		)
 	end
 
@@ -140,13 +135,13 @@ function PlayerChanceManager:onBoostPickupChange()
 			"Projectile",
 			self.player.x + distance * math.cos(self.player.rotation),
 			self.player.y + distance * math.sin(self.player.rotation),
-			{ rotation = self.player.rotation, attack = "Destroyer" }
+			{ rotation = self.player.rotation, attack = "Destroyer", color = math.threeRamdon() }
 		)
 		self.player.area:addGameObject(
 			"InfoText",
 			self.player.x + xOffset,
 			self.player.y + yOffset,
-			{ text = "KILLER !" }
+			{ text = "KILLER !", color = math.threeRamdon() }
 		)
 	end
 end
@@ -225,7 +220,7 @@ function PlayerChanceManager:onFreakProjectileDirection()
 			not self.projectileManager.projectile_ninety_degree_change
 		print("freakShot : " .. (self.projectileManager.projectile_ninety_degree_change and "YESS" or "NOOOO"))
 
-		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "FREAK ASS SHOT !" })
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "FREAK ASS SHOT !" , color =  math.threeRamdon()})
 	end
 end
 
@@ -234,7 +229,7 @@ function PlayerChanceManager:onWavyProjectilesChance()
 		self.projectileManager.wavy_projectiles = not self.projectileManager.wavy_projectiles
 		print("WAVYY : " .. (self.projectileManager.wavy_projectiles and "YESS" or "NOOOO"))
 
-		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "WAVYYYYY !" })
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "WAVYYYYY !", color =  math.threeRamdon() })
 	end
 end
 
@@ -242,7 +237,7 @@ function PlayerChanceManager:onShieldProjectileChance()
 	if self.chances.shield_projectile_chance:next() then
 		self.projectileManager.shield = not self.projectileManager.shield
 		print("SHIELD : " .. (self.projectileManager.shield and "YESS" or "NO"))
-		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "PROTECTED !" })
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y, { text = "PROTECTED !", color =  math.threeRamdon() })
 	end
 end
 

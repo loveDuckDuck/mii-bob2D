@@ -34,11 +34,11 @@ function Explosion:new(area, x, y, opts)
             local rotation = math.randomAngle(math.pi / 2, -math.pi / 2)
             if self.x < 0 then
                 rotation = math.randomAngle(-math.pi / 2, math.pi / 2)
-            elseif self.x > gw then
+            elseif self.x > GW then
                 rotation = math.randomAngle(math.pi / 2, 3 * math.pi / 2)
             elseif self.y < 0 then
                 rotation = math.randomAngle(0, math.pi)
-            elseif self.y > gh then
+            elseif self.y > GH then
                 rotation = math.randomAngle(math.pi, 2 * math.pi)
             end
 

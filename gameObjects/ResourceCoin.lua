@@ -7,7 +7,7 @@ function ResourceCoin:new(area, x, y, opts)
 end
 function ResourceCoin:updata(dt)
 	ResourceCoin.super.updata(self, dt)
-	if self.x < 0 or self.y < 0   or self.x > gw  or self.y > gh  then
+	if self.x < 0 or self.y < 0   or self.x > GW  or self.y > GH  then
 		self:die()
 	end
 

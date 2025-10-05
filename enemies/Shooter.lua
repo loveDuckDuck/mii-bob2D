@@ -73,7 +73,7 @@ end
 
 function Shooter:die()
 	self.dead = true
-	self.area:addGameObject("InfoText", self.x, self.y, { text = self.name, color = G_hp_color })
+	self.area:addGameObject("InfoText", self.x, self.y, { text = self.name, color =  math.threeRamdon() })
 	self.area:addGameObject("EnemyDeathEffect", self.x, self.y, { color = G_hp_color, w = self.w, h = self.h })
 	self.area:addGameObject("Ammo", self.x, self.y)
 end
