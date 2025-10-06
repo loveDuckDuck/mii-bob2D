@@ -15,7 +15,6 @@ function SkillTree:new()
     end
     
     self.previous_mx, self.previous_my = 0, 0
-    self.main_canvas = love.graphics.newCanvas(GW, GH)
 end
 
 function SkillTree:update(dt)
@@ -44,8 +43,6 @@ function SkillTree:update(dt)
 end
 
 function SkillTree:draw()
-    love.graphics.setCanvas(self.main_canvas)
-    love.graphics.clear()
     love.graphics.setColor(G_background_color)
     love.graphics.rectangle('fill', 0, 0, GW, GH)
     GCamera:attach(0, 0, GW, GH)
@@ -54,7 +51,6 @@ function SkillTree:draw()
     for _, node in ipairs(self.nodes) do node:draw() end
     love.graphics.setLineWidth(1)
     GCamera:detach()
-
 
     -- Stats rectangle and create
 
@@ -91,15 +87,9 @@ function SkillTree:draw()
         end
     end
 
-    love.graphics.setCanvas()
 
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setBlendMode("alpha", "premultiplied")
-    local x = (love.graphics.getWidth() - GW * sx) / 2
-    local y = (love.graphics.getHeight() - GH * sy) / 2
-    love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
-
-    love.graphics.setBlendMode("alpha")
 end
 
 function SkillTree:destroy()

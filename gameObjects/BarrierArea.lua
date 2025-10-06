@@ -5,7 +5,7 @@ function BarrierArea:new(area, x, y, opts)
 	if opts.parent then
 		self.parent = opts.parent
 	else
-		self.parent = GlobalRoomController.current_room.player
+		self.parent = GRoom.current_room.player
 	end
 	self.radius = math.customRandom(80, 122)
 	self.color = table.random(G_negative_colors)

@@ -18,7 +18,7 @@ end
 
 function CoinObject:update(dt)
 	CoinObject.super.update(self, dt)
-	local target = GlobalRoomController.current_room.player
+	local target = GRoom.current_room.player
 	if target then
 		local projectileHeading = Vector.new(self.collider:getLinearVelocity()):normalized()
 		local dy = target.y - self.y

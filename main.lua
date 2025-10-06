@@ -32,38 +32,47 @@ end
 
 function love.draw()
 	Push:start()
-	DrawGarbageCollector()
-	GlobalRoomController:draw()
+	love.graphics.setFont(Font)
+	---DrawGarbageCollector()
+	GRoom:draw()
 	love.graphics.setColor(G_default_color)
 	Push:finish()
 end
 
+-- in main.lua
+function love.textinput(t)
+	if GRoom.current_room.textinput then GRoom.current_room:textinput(t) end
+end
 
 function love.update(dt)
 	if GInput:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
 	if GInput:pressed("goToTestingRoom") then
-		GlobalRoomController:gotoRoom("TestingRoom", 1)
+		GRoom:gotoRoom("TestingRoom", 1)
 	end
+	if GInput:pressed("goToConsole") then
+		GRoom:gotoRoom("Console", 3)
+	end
+
 
 	if GInput:pressed("goToSkillTree") then
 		--CreateSkillTree("resource/input.png")
 
-		GlobalRoomController:gotoRoom("SkillTree", 2)
+		GRoom:gotoRoom("SkillTree", 2)
 	end
 
-	GlobalRoomController:update(dt * slow)
+	GRoom:update(dt * slow)
 	GCamera:update(dt * slow)
 	GTimer:update(dt * slow)
 end
 
 local function graphicSetter()
 	--love.graphics.setLineStyle("rough")
-	Font = love.graphics.newFont("resource/m5x7.ttf")
+	Font = love.graphics.newFont("resource/ka1.ttf")
 	if Font then
-		print("loaded")
-		love.graphics.setNewFont(12)
+		Font:setFilter("linear", "nearest")
+		Font:setLineHeight( 20 )
 	end
 end
 
@@ -90,10 +99,14 @@ local function inputBinder()
 	GInput:bind("wheeldown", "zoomOut")
 
 	GInput:bind("t", "goToTestingRoom")
-	GInput:bind("k", "goToSkillTree")
+	GInput:bind("f1", "goToSkillTree")
+	GInput:bind("f2", "goToConsole")
+
 
 	GInput:bind("wheelup", "zoomIn")
 	GInput:bind("wheeldown", "zoomOut")
+	GInput:bind("retun", "enter")
+	GInput:bind("backspace", "space")
 end
 
 function love.load()
@@ -123,9 +136,9 @@ function love.load()
 	GTimer = Timer()
 	GCamera = Camera()
 	--GCamera.scale = 1
-	GlobalRoomController = RoomController()
+	GRoom = RoomController()
 
-	GlobalRoomController:gotoRoom("Stage", UUID())
+	GRoom:gotoRoom("Stage", UUID())
 	slow = 1
 	FlashFrames = 0
 end

@@ -132,7 +132,7 @@ function Projectile:checkCollision()
 			self:explode()
 
 			if object.hp <= 0 then
-				GlobalRoomController.current_room.player.chance:onKill()
+				GRoom.current_room.player.chance:onKill()
 			end
 		end
 	end

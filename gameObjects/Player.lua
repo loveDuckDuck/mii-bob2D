@@ -353,7 +353,7 @@ function Player:addAmmo(amount)
 end
 
 function Player:addScore(amount)
-	GlobalRoomController.current_room.score = GlobalRoomController:getCurrentRoom().score + amount
+	GRoom.current_room.score = GRoom:getCurrentRoom().score + amount
 end
 
 function Player:shoot()

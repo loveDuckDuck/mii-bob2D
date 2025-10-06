@@ -48,7 +48,7 @@ function love.conf(t)
 	t.modules.window = true -- Enable the window module (boolean)
 	t.modules.thread = true -- Enable the thread module (boolean)
 
-	G_default_color = { 0.31, 1, 0.81, 1.0 }
+	G_default_color = { 0.87, 1, 0.81, 1.0 }
 	G_background_color = { 0.06, 0.06, 0.06, 1.0 }
 	G_ammo_color =  { 0.48, 0.78, 0.64, 1.0 }
 	G_boost_color = { 0.29, 0.76, 0.85, 1.0 }
