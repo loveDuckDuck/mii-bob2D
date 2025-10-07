@@ -30,13 +30,18 @@ function love.resize(w, h)
 	Push:resize(w, h)
 end
 
+function resize(s)
+	love.window.setMode(s * GW, s * GH)
+	sx, sy = s, s
+end
+
 function love.draw()
-	Push:start()
-	love.graphics.setFont(Font)
-	---DrawGarbageCollector()
+	-- Push:start()
+	-- ---DrawGarbageCollector()
+	-- GRoom:draw()
+	-- love.graphics.setColor(G_default_color)
+	-- Push:finish()
 	GRoom:draw()
-	love.graphics.setColor(G_default_color)
-	Push:finish()
 end
 
 -- in main.lua
@@ -68,11 +73,12 @@ function love.update(dt)
 end
 
 local function graphicSetter()
-	--love.graphics.setLineStyle("rough")
-	Font = love.graphics.newFont("resource/ka1.ttf")
+	love.graphics.setLineStyle("rough")
+	Font = love.graphics.newFont("resource/m5x7.ttf")
+
 	if Font then
-		Font:setFilter("linear", "nearest")
-		Font:setLineHeight(20)
+		Font:setFilter("nearest", "nearest")
+		love.graphics.setFont(Font)
 	end
 end
 
@@ -112,12 +118,12 @@ end
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
-	local windowWidth, windowHeight = love.window.getDesktopDimensions()
-	windowWidth, windowHeight = windowWidth * .7, windowHeight *
-		.7 --make the window a bit smaller than the screen itself
+	-- local windowWidth, windowHeight = love.window.getDesktopDimensions()
+	-- windowWidth, windowHeight = windowWidth * .7, windowHeight *
+	-- 	.7 --make the window a bit smaller than the screen itself
 
-	Push:setupScreen(GW, GH, windowWidth, windowHeight,
-		{ resizable = true, fullscreen = false, vsync = true, canvas = true })
+	-- Push:setupScreen(GW, GH, windowWidth, windowHeight,
+	-- 	{ resizable = true, fullscreen = false, vsync = true, canvas = true })
 
 	graphicSetter()
 	inputBinder()

@@ -2,14 +2,14 @@ Console = Object:extend()
 
 function Console:new()
     self.timer = Timer()
+    self.main_canvas = love.graphics.newCanvas(GW, GH)
     self.lines = {}
+
     self.modules = {}
     self.line_y = 8
     self.font = Font
     self.base_input_text = { '[', G_skill_point_color, 'root', G_default_color, ']arch~ :  ' }
-    GCamera:lookAt(GW / 2, GH / 2)
-    self:addLine(0.5, { "test", G_boost_color, "test" })
-    self:addInputLine(1)
+    self:addInputLine(0.25)
     self.input_text = {}
     self.timer_delete_counter = 0
 
@@ -27,16 +27,19 @@ function Console:update(dt) -- Update stage logic here 🕹️
     if self.inputting then
         if GInput:pressed("enter") then
             print("return")
-            self.line_y = self.line_y + 12
             local input_text = ''
             for _, character in ipairs(self.input_text) do
                 input_text = input_text .. character
             end
+            self.line_y = self.line_y + 12
+
             self.input_text = {}
             if input_text == 'resolution' then
                 print("resolution")
                 table.insert(self.modules, ResolutionModule(self, self.line_y))
                 self.inputting = false
+            else
+                self:addInputLine(0.05)
             end
         end
         if GInput:down("delete") then
@@ -52,6 +55,10 @@ function Console:update(dt) -- Update stage logic here 🕹️
 end
 
 function Console:draw()
+    love.graphics.setCanvas(self.main_canvas)
+    love.graphics.clear()
+    GCamera:attach(0, 0, GW, GH)
+
     for _, line in ipairs(self.lines) do
         love.graphics.draw(line.text, line.x, line.y)
     end
@@ -60,12 +67,21 @@ function Console:draw()
         love.graphics.setColor(r, g, b, 96)
         local input_text = ''
         for _, character in ipairs(self.input_text) do input_text = input_text .. character end
-        local x = 8 + self.font:getWidth('[root]arch~ ' .. input_text)
+        local x = 8 + self.font:getWidth('[root]arch~ :  ' .. input_text)
         love.graphics.rectangle('fill', x, self.lines[#self.lines].y,
             self.font:getWidth('w'), self.font:getHeight())
         love.graphics.setColor(r, g, b, 255)
     end
     for _, module in ipairs(self.modules) do module:draw() end
+    GCamera:detach()
+    love.graphics.setCanvas()
+    
+    love.graphics.setColor(1, 1, 1, 1)
+    love.graphics.setBlendMode('alpha', 'premultiplied')
+    
+
+    love.graphics.draw(self.main_canvas, 0, 0, 0, sx, sy)
+    love.graphics.setBlendMode('alpha')
 end
 
 function Console:addLine(delay, text)
@@ -89,6 +105,8 @@ function Console:addInputLine(delay)
         self.line_y = self.line_y + 12
         self.inputting = true
     end)
+
+    print(#self.lines)
 end
 
 function Console:textinput(t)

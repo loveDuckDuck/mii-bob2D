@@ -1,8 +1,7 @@
 Stage = Object:extend()
 
-function Stage:new()    -- Create new stage object 📝
-	print("stage created") -- Log stage creation ✅
-	self.area = Area(self) -- Create an area instance 🗺️
+function Stage:new()
+	self.area = Area(self)
 
 	self.area:addPhysicsWorld()
 	self.area.world:addCollisionClass("Player")
@@ -19,7 +18,7 @@ function Stage:new()    -- Create new stage object 📝
 	-- when instante this stage
 	self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
 
-	self.director = Director(self, self.player) -- Create a director instance 🎬
+	self.director = Director(self, self.player)
 
 	self.score = 0
 	self.font = Font
@@ -57,18 +56,20 @@ function Stage:new()    -- Create new stage object 📝
 	GCamera.smoother = Camera.smooth.damped(100)
 end
 
-function Stage:update(dt) -- Update stage logic here 🕹️
+function Stage:update(dt)
 	self.director:update(dt)
 	GCamera:lockPosition(dt, GW / 2, GH / 2)
-	--GCamera:lookAt(self.player.x, self.player.y)
 	GCamera:update(dt)
-	self.area:update(dt) -- Update the area too 👍
+	self.area:update(dt)
 end
 
-function Stage:draw() -- Drawing stage visuals here 🎨
+function Stage:draw()
+	love.graphics.setCanvas(self.main_canvas)
+	love.graphics.clear()
 	GCamera:attach(0, 0, GW, GH)
-	self.area:draw()  -- Draw the area now 👀
+	self.area:draw()
 	GCamera:detach()
+	love.graphics.setCanvas()
 
 	-- Score
 	love.graphics.setColor(G_default_color)
@@ -83,6 +84,7 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 		self.font:getHeight() / 2
 	)
 	love.graphics.setColor(1, 1, 1)
+
 	-- HP
 	local r, g, b = unpack(G_hp_color)
 	local hp, max_hp = self.player.hp, self.player.max_hp
@@ -91,8 +93,12 @@ function Stage:draw() -- Drawing stage visuals here 🎨
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
 	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
 
-	love.graphics.setBlendMode("alpha") -- Reset the blend mode 🔄
-	-- score
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.setBlendMode('alpha', 'premultiplied')
+	local x = (love.graphics.getWidth() - GW * sx) / 2
+	local y = (love.graphics.getHeight() - GH * sy) / 2
+	love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
+	love.graphics.setBlendMode('alpha')
 end
 
 function Stage:destroy()

@@ -11,7 +11,10 @@ function ResolutionModule:new(console, y)
     self.console:addLine(0.08, '    1440x810')
     self.console:addLine(0.10, '    1920x1080')
 
-    self.selection_index = sx
+    self.y = y
+    self.h = 6 * self.console.font:getHeight()
+
+    self.selection_index = 1
     self.selection_widths = {
         self.console.font:getWidth('480x270'),
         self.console.font:getWidth('960x540'),
@@ -26,6 +29,8 @@ end
 function ResolutionModule:update(dt)
     if not self.active then return end
     if GInput:pressed("shootup") then
+        print(self.selection_index)
+
         self.selection_index = self.selection_index - 1
         if self.selection_index < 1 then self.selection_index = #self.selection_widths end
     end
@@ -44,11 +49,12 @@ end
 
 function ResolutionModule:draw()
     if not self.active then return end
+
     local width = self.selection_widths[self.selection_index]
     local r, g, b = unpack(G_default_color)
     love.graphics.setColor(r, g, b, 96)
     local x_offset = self.console.font:getWidth('    ')
-    love.graphics.rectangle('fill', 8 + x_offset - 2, self.y + self.selection_index * 12,
-        width + 4, self.console.font:getHeight())
-    love.graphics.setColor(r, g, b, 255)
+    love.graphics.rectangle('fill', 8 + x_offset - 2, self.y + self.selection_index * 12, width + 4,
+        self.console.font:getHeight())
+    love.graphics.setColor(r, g, b, 1)
 end
