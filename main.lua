@@ -72,7 +72,7 @@ local function graphicSetter()
 	Font = love.graphics.newFont("resource/ka1.ttf")
 	if Font then
 		Font:setFilter("linear", "nearest")
-		Font:setLineHeight( 20 )
+		Font:setLineHeight(20)
 	end
 end
 
@@ -98,15 +98,15 @@ local function inputBinder()
 	GInput:bind("wheelup", "zoomIn")
 	GInput:bind("wheeldown", "zoomOut")
 
-	GInput:bind("t", "goToTestingRoom")
 	GInput:bind("f1", "goToSkillTree")
 	GInput:bind("f2", "goToConsole")
+	GInput:bind("f3", "goToTestingRoom")
 
 
 	GInput:bind("wheelup", "zoomIn")
 	GInput:bind("wheeldown", "zoomOut")
-	GInput:bind("retun", "enter")
-	GInput:bind("backspace", "space")
+	GInput:bind("return", "enter")
+	GInput:bind("backspace", "delete")
 end
 
 function love.load()
@@ -130,6 +130,8 @@ function love.load()
 	GLoader:getRequireFiles("enemies")
 	GLoader:getRequireFiles("objectManagers")
 	GLoader:getRequireFiles("gameObjects")
+	GLoader:getRequireFiles("modules")
+
 	GLoader:getRequireFiles("rooms")
 
 

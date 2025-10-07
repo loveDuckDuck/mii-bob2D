@@ -3,12 +3,13 @@ Console = Object:extend()
 function Console:new()
     self.timer = Timer()
     self.lines = {}
+    self.modules = {}
     self.line_y = 8
     self.font = Font
-    self.base_input_text = { '[', G_skill_point_color, 'root', G_default_color, ']arch~ : ' }
+    self.base_input_text = { '[', G_skill_point_color, 'root', G_default_color, ']arch~ :  ' }
     GCamera:lookAt(GW / 2, GH / 2)
-    self:addLine(1, { "test", G_boost_color, "test" })
-    self:addInputLine(2)
+    self:addLine(0.5, { "test", G_boost_color, "test" })
+    self:addInputLine(1)
     self.input_text = {}
     self.timer_delete_counter = 0
 
@@ -16,19 +17,29 @@ function Console:new()
     self.timer:every('cursor', 0.5, function()
         self.cursor_visible = not self.cursor_visible
     end)
+    GCamera:lookAt(GW / 2, GH / 2)
 end
 
 function Console:update(dt) -- Update stage logic here 🕹️
-    GCamera:lockPosition(dt, GW / 2, GH / 2)
     GCamera:update(dt)
     self.timer:update(dt)
+    for _, module in ipairs(self.modules) do module:update(dt) end
     if self.inputting then
         if GInput:pressed("enter") then
-            self.inputting = false
-            -- Run command based on the contents of input_text here
+            print("return")
+            self.line_y = self.line_y + 12
+            local input_text = ''
+            for _, character in ipairs(self.input_text) do
+                input_text = input_text .. character
+            end
             self.input_text = {}
+            if input_text == 'resolution' then
+                print("resolution")
+                table.insert(self.modules, ResolutionModule(self, self.line_y))
+                self.inputting = false
+            end
         end
-        if GInput:down("space") then
+        if GInput:down("delete") then
             self.timer_delete_counter = self.timer_delete_counter + dt
 
             if self.timer_delete_counter > 0.2 then
@@ -54,6 +65,7 @@ function Console:draw()
             self.font:getWidth('w'), self.font:getHeight())
         love.graphics.setColor(r, g, b, 255)
     end
+    for _, module in ipairs(self.modules) do module:draw() end
 end
 
 function Console:addLine(delay, text)
