@@ -67,9 +67,8 @@ function Stage:draw()
 	love.graphics.setCanvas(self.main_canvas)
 	love.graphics.clear()
 	GCamera:attach(0, 0, GW, GH)
-	self.area:draw()
+		self.area:draw()
 	GCamera:detach()
-	love.graphics.setCanvas()
 
 	-- Score
 	love.graphics.setColor(G_default_color)
@@ -92,6 +91,9 @@ function Stage:draw()
 	love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 156 * (hp / max_hp), 7)
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
 	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
+
+	love.graphics.setCanvas()
+
 
 	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.setBlendMode('alpha', 'premultiplied')

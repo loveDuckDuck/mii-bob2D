@@ -321,6 +321,7 @@ function Player:update(dt)
 end
 
 function Player:draw()
+	
 	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
 	love.graphics.print("hp : " .. self.hp, self.x + 50, self.y - 70)
 	love.graphics.print("attack : " .. self.attack, self.x + 50, self.y - 90)

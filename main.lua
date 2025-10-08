@@ -26,9 +26,7 @@ function flash(frames)
 	FlashFrames = frames
 end
 
-function love.resize(w, h)
-	Push:resize(w, h)
-end
+
 
 function resize(s)
 	love.window.setMode(s * GW, s * GH)
@@ -73,7 +71,11 @@ function love.update(dt)
 end
 
 local function graphicSetter()
-	love.graphics.setLineStyle("rough")
+
+    love.graphics.setDefaultFilter('nearest', 'nearest')
+    love.graphics.setLineStyle('rough')
+    love.graphics.setBackgroundColor(G_background_color)
+
 	Font = love.graphics.newFont("resource/m5x7.ttf")
 
 	if Font then
@@ -149,6 +151,7 @@ function love.load()
 	GRoom:gotoRoom("Stage", UUID())
 	slow = 1
 	FlashFrames = 0
+	resize(2)
 end
 
 function love.run()

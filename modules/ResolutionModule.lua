@@ -29,8 +29,6 @@ end
 function ResolutionModule:update(dt)
     if not self.active then return end
     if GInput:pressed("shootup") then
-        print(self.selection_index)
-
         self.selection_index = self.selection_index - 1
         if self.selection_index < 1 then self.selection_index = #self.selection_widths end
     end
@@ -41,7 +39,8 @@ function ResolutionModule:update(dt)
     end
     if GInput:pressed("enter") then
         self.active = false
-        --resize(self.selection_index)
+        print('Selected resolution: ' .. self.selection_index)
+        resize(self.selection_index)
         self.console:addLine(0.02, '')
         self.console:addInputLine(0.04)
     end
