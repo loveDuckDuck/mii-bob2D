@@ -26,7 +26,11 @@ function flash(frames)
 	FlashFrames = frames
 end
 
-
+function resizeWidthHeight(w, h)
+	love.window.setMode(w, h)
+	sx, sy = love.graphics.getWidth() / GW, love.graphics.getHeight() / GH
+	print("Resized to: " .. w .. "x" .. h .. "  sx: " .. sx .. " sy: " .. sy)
+end
 
 function resize(s)
 	love.window.setMode(s * GW, s * GH)
@@ -58,10 +62,7 @@ function love.update(dt)
 		GRoom:gotoRoom("Console", 3)
 	end
 
-
 	if GInput:pressed("goToSkillTree") then
-		--CreateSkillTree("resource/input.png")
-
 		GRoom:gotoRoom("SkillTree", 2)
 	end
 
@@ -71,10 +72,9 @@ function love.update(dt)
 end
 
 local function graphicSetter()
-
-    love.graphics.setDefaultFilter('nearest', 'nearest')
-    love.graphics.setLineStyle('rough')
-    love.graphics.setBackgroundColor(G_background_color)
+	love.graphics.setDefaultFilter('nearest', 'nearest')
+	love.graphics.setLineStyle('rough')
+	love.graphics.setBackgroundColor(G_background_color)
 
 	Font = love.graphics.newFont("resource/m5x7.ttf")
 
@@ -151,7 +151,7 @@ function love.load()
 	GRoom:gotoRoom("Stage", UUID())
 	slow = 1
 	FlashFrames = 0
-	resize(2)
+	resizeWidthHeight(640, 360)
 end
 
 function love.run()
