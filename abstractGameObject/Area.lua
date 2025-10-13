@@ -24,8 +24,6 @@ function Area:update(dt)
 		local game_object = self.game_objects[i]
 		game_object:update(dt)
 		if game_object.dead then
-			print("Rremoved : " ..
-				self.gameObjectType[i] .. " | Total GameObjects: " .. #self.game_objects)
 			game_object:destroy()
 			table.remove(self.game_objects, i)
 		end
@@ -59,7 +57,6 @@ function Area:addGameObject(game_object_type, x, y, opts)
 
 	table.insert(self.game_objects, game_object)
 	table.insert(self.gameObjectType, game_object_type)
-	print("Added GameObject of type: " .. game_object_type .. " | Total GameObjects: " .. #self.game_objects)
 	return game_object
 end
 

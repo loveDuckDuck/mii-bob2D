@@ -78,20 +78,20 @@ function Player:new(area, x, y, opts)
 	self.multiplierManager:generateChanceMultiplier()
 
 	self:setAttack("Hearth")
-	-- self.timer:every(0.01, function()
-	-- 	self.area:addGameObject(
-	-- 		"TrailParticle",
-	-- 		self.x - self.w * math.cos(self.rotation),
-	-- 		self.y - self.h * math.sin(self.rotation),
-	-- 		{
-	-- 			parent = self,
-	-- 			radius = math.customRandom(2, 4),
-	-- 			duration = math.customRandom(0.15, 0.25),
-	-- 			color = self
-	-- 				.trailColor
-	-- 		}
-	-- 	)
-	-- end)
+	self.timer:every(0.01, function()
+		self.area:addGameObject(
+			"TrailParticle",
+			self.x - self.w * math.cos(self.rotation),
+			self.y - self.h * math.sin(self.rotation),
+			{
+				parent = self,
+				radius = math.customRandom(2, 4),
+				duration = math.customRandom(0.15, 0.25),
+				color = self
+					.trailColor
+			}
+		)
+	end)
 
 
 	self.timer:every(5, function()
@@ -146,11 +146,6 @@ function Player:move(dt)
 	if GInput:down("up") then
 		self.yvel = self.yvel - self.acceleration * dt
 	end
-
-	if GInput:down("b") then
-		Slow(0.15, 1)
-	end
-
 	if GInput:pressed("boosting") then
 		-- turbo nigga
 		self.boosting = not self.boosting

@@ -46,7 +46,7 @@ function MultiplierManager:generateChanceMultiplier()
 end
 
 function MultiplierManager:onAmmoPickupChance()
-	self.random = math.random(0.01, 0.1)
+	self.random = math.random(0.005, 0.01)
 	local color = { math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0) }
 	if self.chances.hp_multiplier:next() then
 		self.player.max_hp = self.player.max_hp + self.player.max_hp * self.random
@@ -59,7 +59,7 @@ function MultiplierManager:onAmmoPickupChance()
 		self.player.acceleration = self.player.acceleration + self.player.acceleration * self.random
 		self.player.baseMaxVelocity = self.player.baseMaxVelocity + self.player.baseMaxVelocity * self.random
 		self.player.maxVelocity = self.player.maxVelocity + self.player.maxVelocity * self.random
-		self.player.friction = self.player.friction - self.player.friction * self.random
+		self.player.friction = self.player.friction - self.player.friction * self.random 
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
 			{ text = "FASTER!@R", color = color })
 	end
@@ -67,7 +67,7 @@ function MultiplierManager:onAmmoPickupChance()
 		self.player.acceleration = self.player.acceleration - self.player.acceleration * self.random
 		self.player.baseMaxVelocity = self.player.baseMaxVelocity - self.player.baseMaxVelocity * self.random
 		self.player.maxVelocity = self.player.maxVelocity - self.player.maxVelocity * self.random
-		self.player.friction = self.player.friction + self.player.friction * self.random
+		self.player.friction = self.player.friction + self.player.friction * self.random 
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
 			{ text = "SLOWWER BORTHA!", color = color })
 	end

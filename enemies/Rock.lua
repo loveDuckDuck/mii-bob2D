@@ -40,12 +40,6 @@ function Rock:new(area, x, y, opts)
 	end
 	-- Now, 'maxX' and 'maxY' hold the maximum x and y values
 	self.w, self.h = maxX * 2, maxY * 2
-
-
-
-	self.timer:after(2, function()
-		self:die()
-	end)
 end
 
 function Rock:update(dt)

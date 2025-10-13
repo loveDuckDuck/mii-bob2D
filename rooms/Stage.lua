@@ -23,9 +23,7 @@ function Stage:new()
 	self.score = 0
 	self.font = Font
 	self.counterAttack = 0
-	--[[
-	XXX : remaind to fix
-	]]
+
 	GInput:bind("p", function()
 		self.player.dead = true
 	end)
@@ -89,5 +87,4 @@ function Stage:destroy()
 	self.area = nil
 	GRoom:removeRoom("Stage")
 	GRoom:gotoRoom("Stage", UUID())
-	
 end

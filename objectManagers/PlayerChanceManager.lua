@@ -135,13 +135,13 @@ function PlayerChanceManager:onBoostPickupChange()
 			"Projectile",
 			self.player.x + distance * math.cos(self.player.rotation),
 			self.player.y + distance * math.sin(self.player.rotation),
-			{ rotation = self.player.rotation, attack = "Destroyer", color = math.threeRamdon() }
+			{ rotation = self.player.rotation, attack = "Destroyer", color = Attacks["Destroyer"].color }
 		)
 		self.player.area:addGameObject(
 			"InfoText",
 			self.player.x + xOffset,
 			self.player.y + yOffset,
-			{ text = "KILLER !", color = math.threeRamdon() }
+			{ text = "KILLER !",  color = Attacks["Destroyer"].color }
 		)
 	end
 end

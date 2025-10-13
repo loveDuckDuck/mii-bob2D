@@ -291,7 +291,6 @@ function Projectile:update(dt)
 	-- Boundary check for most projectiles
 	if self.attack ~= "Bounce" and self.attack ~= "2Split" and self.attack ~= "4Split" then
 		if self.x < 0 or self.x > GW or self.y < 0 or self.y > GH then
-			print("projectile gonna die")
 			self:die()
 		end
 	end
