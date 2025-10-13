@@ -142,7 +142,7 @@ Attacks = {
 		ammo = 2,
 		tears = 1,
 		abbreviation = "mi love for you",
-		color = { 1.9 , 0.1675, 0.3287, 1.00 }, -- rgb(252, 216, 205)
+		color = { 1.9, 0.1675, 0.3287, 1.00 }, -- rgb(252, 216, 205)
 		resource = function(x, y, w, h)
 			GDraft:circle(x, y, w + 5, nil, "line")
 		end,
@@ -217,9 +217,20 @@ Attacks = {
 		color = { 1, 0, 0, 1.00 }, -- rgb(252, 216, 205)
 
 	},
-	
+
 
 
 
 }
 Enemies = { "Rock", "Shooter" }
+
+
+Achievements = {
+	['10K Fighter'] = {
+		name = "10K Fighter",
+		description = "Reach 10,000 score in a single run.",
+		color = { 1.0, 0.84, 0.0, 1.0 },
+		unlocked = false,
+
+	}
+}

@@ -17,12 +17,27 @@ TreeLogic = require("utils/TreeStats")
 
 require("libraries/string/utf8")
 require("globals")
-
+Bitser = require 'bitser'
 
 --Area = require 'gameObject/Area'
 
 function flash(frames)
 	FlashFrames = frames
+end
+
+function love.save()
+	local save_data = {}
+	-- Set all save data here
+	Bitser.dumpLoveFile('save', save_data)
+end
+
+function load()
+	if love.filesystem.exists('save') then
+		local save_data = bitser.loadLoveFile('save')
+		-- Load all saved data here
+	else
+		FirstRunEver = true
+	end
 end
 
 function resizeWidthHeight(w, h)
@@ -71,7 +86,7 @@ local function graphicSetter()
 	love.graphics.setLineStyle('rough')
 	love.graphics.setBackgroundColor(G_background_color)
 
-	Font = love.graphics.newFont("resource/m5x7.ttf",16)
+	Font = love.graphics.newFont("resource/font/m5x7.ttf", 16)
 
 	if Font then
 		Font:setFilter("nearest", "nearest")

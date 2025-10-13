@@ -480,7 +480,6 @@ end
 
 function Slow(amount, duration)
 	slow = amount
-	print("slow : " .. slow)
 	GTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
 end
 
