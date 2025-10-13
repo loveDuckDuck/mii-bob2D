@@ -71,6 +71,90 @@ function type_name(o)
 	return global_type_table[getmetatable(o) or 0] or "Unknown"
 end
 
+
+
+-- Original functions remain the same
+global_type_table = nil
+function type_name(o)
+    if global_type_table == nil then
+        global_type_table = {}
+        for k, v in pairs(_G) do
+            -- Map the value (the object) to its global name (the key)
+            global_type_table[v] = k
+        end
+        -- Special case for tables without a metatable
+        global_type_table[0] = "table"
+    end
+    -- getmetatable(o) returns nil if no metatable, so use 'or 0' to hit the special case
+    return global_type_table[getmetatable(o) or 0] or "Unknown"
+end
+
+function count_all(f)
+    local seen = {}
+    local count_table
+    count_table = function(t)
+        if seen[t] then
+            return
+        end
+        f(t) -- Call function f on the table itself
+        seen[t] = true
+        for k, v in pairs(t) do
+            if type(v) == "table" then
+                count_table(v)
+            elseif type(v) == "userdata" then
+                f(v) -- Call function f on the userdata object
+            -- Note: 'f' is *not* called on other types (string, number, function) that are values 'v' in the table.
+            -- This function only counts the objects that can contain other objects (tables) or are C-defined (userdata).
+            end
+        end
+    end
+    count_table(_G)
+end
+
+function type_count_and_print_unknowns()
+    local counts = {}
+    -- Table to specifically store objects classified as "Unknown"
+    local unknown_objects = {}
+
+    local enumerate = function(o)
+        local t = type_name(o)
+
+        -- 1. Increment the count
+        counts[t] = (counts[t] or 0) + 1
+
+        -- 2. Store the unknown object
+        if t == "Unknown" then
+            table.insert(unknown_objects, o)
+        end
+    end
+
+    count_all(enumerate)
+
+    -- Print the unknown objects after traversal is complete
+    print("\n--- Unknown Objects Found ---")
+    for i, obj in ipairs(unknown_objects) do
+        local obj_type = type(obj)
+        local obj_id = tostring(obj) -- Unique identifier/address (good for debugging)
+        
+        -- Attempt to print a useful representation
+        if obj_type == "table" then
+            -- Note: Printing a table directly shows its address, not its contents.
+            print(string.format("Unknown #%d: Type: %s, Address: %s, Keys: %d",
+                                i, obj_type, obj_id, select(2, next(obj)) ~= nil and #obj > 0 and #obj or 0))
+        elseif obj_type == "userdata" then
+            print(string.format("Unknown #%d: Type: %s, Address: %s",
+                                i, obj_type, obj_id))
+        else
+            -- Should not happen with current count_all logic, but safe to include
+            print(string.format("Unknown #%d: Type: %s, Value: %s",
+                                i, obj_type, tostring(obj)))
+        end
+    end
+    print("-------------------------------\n")
+
+    return counts
+end
+
 function table.pairsByKeys(t, f)
 	local a = {}
 	for n in pairs(t) do table.insert(a, n) end

@@ -241,8 +241,3 @@ function PlayerChanceManager:onShieldProjectileChance()
 	end
 end
 
---[[
-
-	TODO : add the fast_slow_first and slow_fast_first probability
-	to the game_objects
-]]
