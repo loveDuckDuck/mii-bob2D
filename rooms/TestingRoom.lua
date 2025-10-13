@@ -115,9 +115,9 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     --[[
         XXX: PROBLEM WITH RESOLUZIO AND SCALE NEED TO UNDERSTAND
     ]]
-    local x = (love.graphics.getWidth() - GW * sx) / 2
-    local y = (love.graphics.getHeight() - GH * sy) / 2
-    love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
+    local x = (love.graphics.getWidth() - GW * SX) / 2
+    local y = (love.graphics.getHeight() - GH * SY) / 2
+    love.graphics.draw(self.main_canvas, x, y, 0, SX, SY)
 
     love.graphics.setBlendMode("alpha") -- Reset the blend mode 🔄
     -- score

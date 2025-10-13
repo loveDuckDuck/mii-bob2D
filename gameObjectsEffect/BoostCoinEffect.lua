@@ -19,8 +19,8 @@ function BoostCoinEffect:new(area, x, y, opts)
 		end)
 	end)
 
-	self.sx, self.sy = 1, 1
-	self.timer:tween(0.35, self, { sx = 2, sy = 2 }, "in-out-cubic")
+	self.SX, self.SY = 1, 1
+	self.timer:tween(0.35, self, { SX = 2, SY = 2 }, "in-out-cubic")
 end
 
 function BoostCoinEffect:update(dt)
@@ -34,7 +34,7 @@ function BoostCoinEffect:draw()
 
 	love.graphics.setColor(self.current_color)
 	GDraft:rhombus(self.x, self.y, 1.34 * self.w, 1.34 * self.h, "fill")
-    GDraft:rhombus(self.x, self.y, self.sx*2*self.w, self.sy*2*self.h, 'line')
+    GDraft:rhombus(self.x, self.y, self.SX*2*self.w, self.SY*2*self.h, 'line')
     love.graphics.setColor(G_default_color)
 end
 

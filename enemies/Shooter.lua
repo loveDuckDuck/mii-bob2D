@@ -6,7 +6,7 @@ function Shooter:new(area, x, y, opts)
 	self.target = GRoom.current_room.player
 
 	-- coinvalues
-	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w )
+	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
 	self.collider:setPosition(self.x, self.y)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Enemy")
@@ -21,7 +21,8 @@ function Shooter:new(area, x, y, opts)
 	self.w, self.h = 10, 10
 
 	self.timer:every(math.customRandom(1, 3), function()
-        local target_x, target_y = self.target.x, self.target.y
+		if (not self.target or self.target.dead) then return end
+		local target_x, target_y = self.target.x, self.target.y
 		self.area:addGameObject(
 			"PreAttackEffect",
 			target_x,
@@ -73,7 +74,7 @@ end
 
 function Shooter:die()
 	self.dead = true
-	self.area:addGameObject("InfoText", self.x, self.y, { text = self.name, color =  math.threeRamdon() })
+	self.area:addGameObject("InfoText", self.x, self.y, { text = self.name, color = math.threeRamdon() })
 	self.area:addGameObject("EnemyDeathEffect", self.x, self.y, { color = G_hp_color, w = self.w, h = self.h })
 	self.area:addGameObject("Ammo", self.x, self.y)
 end

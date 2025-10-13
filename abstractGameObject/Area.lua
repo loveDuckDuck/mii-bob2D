@@ -3,6 +3,7 @@ Area = Object:extend()
 function Area:new(room)
 	self.room = room
 	self.game_objects = {}
+	self.gameObjectType = {}
 end
 
 --[[
@@ -23,6 +24,8 @@ function Area:update(dt)
 		local game_object = self.game_objects[i]
 		game_object:update(dt)
 		if game_object.dead then
+			print("Rremoved : " ..
+				self.gameObjectType[i] .. " | Total GameObjects: " .. #self.game_objects)
 			game_object:destroy()
 			table.remove(self.game_objects, i)
 		end
@@ -55,6 +58,8 @@ function Area:addGameObject(game_object_type, x, y, opts)
 	local game_object = _G[game_object_type](self, x or 0, y or 0, opts)
 
 	table.insert(self.game_objects, game_object)
+	table.insert(self.gameObjectType, game_object_type)
+	print("Added GameObject of type: " .. game_object_type .. " | Total GameObjects: " .. #self.game_objects)
 	return game_object
 end
 
@@ -71,6 +76,7 @@ if I got a world physic add to it set it to null and destroy
 function Area:destroy()
 	for i = #self.game_objects, 1, -1 do
 		local game_object = self.game_objects[i]
+		print("Destroy : " .. self.gameObjectType[i])
 		game_object:destroy()
 		table.remove(self.game_objects, i)
 	end
@@ -83,7 +89,7 @@ function Area:destroy()
 end
 
 --- Returns a table containing all game objects that satisfy the given filter function.
--- @param filter A function that takes a game object as an argument and returns true 
+-- @param filter A function that takes a game object as an argument and returns true
 -- if the object should be included.
 -- @return table A table of game objects that match the filter criteria.
 function Area:getAllGameObjectsThat(filter)

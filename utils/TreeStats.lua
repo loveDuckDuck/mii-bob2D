@@ -52,15 +52,15 @@ function CreateSkillTree(path)
     -- Apply Sobel
     for y = 2, height - 2 do
         for x = 2, width - 2 do
-            local sx, sy = 0, 0
+            local SX, SY = 0, 0
             for ky = -1, 1 do
                 for kx = -1, 1 do
                     local px = gray[y + ky][x + kx]
-                    sx = sx + gx[ky + 2][kx + 2] * px
-                    sy = sy + gy[ky + 2][kx + 2] * px
+                    SX = SX + gx[ky + 2][kx + 2] * px
+                    SY = SY + gy[ky + 2][kx + 2] * px
                 end
             end
-            local mag = math.sqrt(sx * sx + sy * sy)
+            local mag = math.sqrt(SX * SX + SY * SY)
             if mag > 0.25 then
                 -- Map (x,y) into [-500,500]
                 local mappedX = (x / width) * 1000 - 500

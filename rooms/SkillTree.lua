@@ -31,12 +31,12 @@ function SkillTree:update(dt)
     TODO : update input file
     ]]
     if love.mouse.isDown(1) then
-        local mx, my = GCamera:getMousePosition(sx, sy, 0, 0, sx * GW, sy * GH)
+        local mx, my = GCamera:getMousePosition(SX, SY, 0, 0, SX * GW, SY * GH)
         local dx, dy = mx - self.previous_mx, my - self.previous_my
 
         GCamera:move(-dx, -dy)
     end
-    self.previous_mx, self.previous_my = GCamera:getMousePosition(sx, sy, 0, 0, sx * GW, sy * GH)
+    self.previous_mx, self.previous_my = GCamera:getMousePosition(SX, SY, 0, 0, SX * GW, SY * GH)
 
     for _, node in ipairs(self.nodes) do node:update(dt) end
     for _, line in ipairs(self.lines) do line:update(dt) end
@@ -71,7 +71,7 @@ function SkillTree:draw()
             end
             -- Draw rectangle witch contains the text
             local mx, my = love.mouse.getPosition()
-            mx, my = mx / sx, my / sy
+            mx, my = mx / SX, my / SY
             love.graphics.setColor(0, 0, 0, 222)
             love.graphics.rectangle('fill', mx, my, 16 + max_text_width,
                 Font:getHeight() + (#stats / 3) * Font:getHeight())

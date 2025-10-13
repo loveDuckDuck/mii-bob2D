@@ -6,7 +6,6 @@ Loader = require("Loader")
 Input = require("libraries/input/Input")
 Timer = require("libraries/enhanced_timer/EnhancedTimer")
 Camera = require("libraries/hump/camera")
-Push = require("libraries/push/push")
 Draft = require("libraries/draft/draft")
 Vector = require("libraries/hump/vector")
 Physics = require("libraries/windfield")
@@ -28,21 +27,17 @@ end
 
 function resizeWidthHeight(w, h)
 	love.window.setMode(w, h)
-	sx, sy = love.graphics.getWidth() / GW, love.graphics.getHeight() / GH
-	print("Resized to: " .. w .. "x" .. h .. "  sx: " .. sx .. " sy: " .. sy)
+	SX, SY = love.graphics.getWidth() / GW, love.graphics.getHeight() / GH
+	print("Resized to: " .. w .. "x" .. h .. "  SX: " .. SX .. " SY: " .. SY)
 end
 
 function resize(s)
 	love.window.setMode(s * GW, s * GH)
-	sx, sy = s, s
+	SX, SY = s, s
 end
 
 function love.draw()
-	-- Push:start()
-	-- ---DrawGarbageCollector()
-	-- GRoom:draw()
-	-- love.graphics.setColor(G_default_color)
-	-- Push:finish()
+	DrawGarbageCollector()
 	GRoom:draw()
 end
 
@@ -76,7 +71,7 @@ local function graphicSetter()
 	love.graphics.setLineStyle('rough')
 	love.graphics.setBackgroundColor(G_background_color)
 
-	Font = love.graphics.newFont("resource/m5x7.ttf")
+	Font = love.graphics.newFont("resource/m5x7.ttf",16)
 
 	if Font then
 		Font:setFilter("nearest", "nearest")
@@ -120,13 +115,6 @@ end
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 
-	-- local windowWidth, windowHeight = love.window.getDesktopDimensions()
-	-- windowWidth, windowHeight = windowWidth * .7, windowHeight *
-	-- 	.7 --make the window a bit smaller than the screen itself
-
-	-- Push:setupScreen(GW, GH, windowWidth, windowHeight,
-	-- 	{ resizable = true, fullscreen = false, vsync = true, canvas = true })
-
 	graphicSetter()
 	inputBinder()
 	GDraft = Draft()
@@ -151,7 +139,7 @@ function love.load()
 	GRoom:gotoRoom("Stage", UUID())
 	slow = 1
 	FlashFrames = 0
-	resizeWidthHeight(640, 360)
+	resizeWidthHeight(1280, 720)
 end
 
 function love.run()

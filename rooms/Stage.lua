@@ -27,30 +27,7 @@ function Stage:new()
 	XXX : remaind to fix
 	]]
 	GInput:bind("p", function()
-		self.area:addGameObject(
-			"Ammo",
-			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
-			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
-		)
-
-		self.area:addGameObject(
-			"BoostCoin",
-			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
-			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
-		)
-
-		self.area:addGameObject(
-			"HpCoin",
-			math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
-			math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
-		)
-	end)
-	GInput:bind("z", function()
-		self.counterAttack = self.counterAttack + 1
-		if self.counterAttack > Lenght(Attacks) then
-			self.counterAttack = 1
-		end
-		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
+		self.player.dead = true
 	end)
 
 	GCamera.smoother = Camera.smooth.damped(100)
@@ -61,13 +38,16 @@ function Stage:update(dt)
 	GCamera:lockPosition(dt, GW / 2, GH / 2)
 	GCamera:update(dt)
 	self.area:update(dt)
+	if (self.player.dead) then
+		self:destroy()
+	end
 end
 
 function Stage:draw()
 	love.graphics.setCanvas(self.main_canvas)
 	love.graphics.clear()
 	GCamera:attach(0, 0, GW, GH)
-		self.area:draw()
+	self.area:draw()
 	GCamera:detach()
 
 	-- Score
@@ -97,13 +77,17 @@ function Stage:draw()
 
 	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.setBlendMode('alpha', 'premultiplied')
-	local x = (love.graphics.getWidth() - GW * sx) / 2
-	local y = (love.graphics.getHeight() - GH * sy) / 2
-	love.graphics.draw(self.main_canvas, x, y, 0, sx, sy)
+	local x = (love.graphics.getWidth() - GW * SX) / 2
+	local y = (love.graphics.getHeight() - GH * SY) / 2
+	love.graphics.draw(self.main_canvas, x, y, 0, SX, SY)
 	love.graphics.setBlendMode('alpha')
 end
 
 function Stage:destroy()
 	self.area:destroy()
+	self.director = nil
 	self.area = nil
+	GRoom:removeRoom("Stage")
+	GRoom:gotoRoom("Stage", UUID())
+	
 end

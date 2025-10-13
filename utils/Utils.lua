@@ -12,16 +12,16 @@ function UpdateScale()
 	local window_height = love.graphics.getHeight()
 
 	-- Calculate scale to fit the game area in the window
-	sx = GW / window_width -- If window is 960px and GW=480px, sx = 0.5 (half size)
-	sy = GH / window_height -- If window is 540px and GH=270px, sy = 0.5 (half size)
+	SX = GW / window_width -- If window is 960px and GW=480px, SX = 0.5 (half size)
+	SY = GH / window_height -- If window is 540px and GH=270px, SY = 0.5 (half size)
 
-	GW = window_width * sx
-	GH = window_height * sy
+	GW = window_width * SX
+	GH = window_height * SY
 
-	print("Scale updated: sx =", sx, "sy =", sy)
+	print("Scale updated: SX =", SX, "SY =", SY)
 	-- Optional: Use uniform scaling (same scale for both axes)
-	-- local scale = math.min(sx, sy)
-	-- sx, sy = scale, scale
+	-- local scale = math.min(SX, SY)
+	-- SX, SY = scale, scale
 end
 
 function math.customRandom(min, max)
@@ -71,6 +71,39 @@ function type_name(o)
 	return global_type_table[getmetatable(o) or 0] or "Unknown"
 end
 
+function table.pairsByKeys(t, f)
+	local a = {}
+	for n in pairs(t) do table.insert(a, n) end
+	table.sort(a)
+
+	local i = 0                -- iterator variable
+	
+	local iter = function()    -- iterator function
+		i = i + 1
+		if a[i] == nil then
+			return nil
+		else
+			return a[i], t[a[i]]
+		end
+	end
+
+	return iter
+end
+
+
+
+function table.counterSort(t)
+	
+	local a = {}
+	for k, v in pairs(t) do
+		table.insert(a, { key = k, value = v })
+	end
+
+	table.sort(a, function(x, y) return x.value > y.value end)
+	return a
+
+end
+
 function DrawGarbageCollector()
 	love.graphics.setColor(0, 1, 0, 1)
 	love.graphics.print("Before collection: " .. collectgarbage("count") / 1024, 0, 0)
@@ -82,10 +115,10 @@ function DrawGarbageCollector()
 
 	local counts = type_count()
 	local y_offset = 60
-
 	-- Loop through the counts and print each on a new line
-	for k, v in pairs(counts) do
-		love.graphics.print(k .. ": " .. v, 0, y_offset)
+	counts = table.counterSort(counts)
+	for x = 1, #counts do
+		love.graphics.print(counts[x].key .. ": " .. counts[x].value, 0, y_offset)
 		y_offset = y_offset + 20 -- Increment the y-coordinate for the next line
 	end
 
@@ -99,15 +132,15 @@ function PushRotate(x, y, r)
 	love.graphics.push()
 	love.graphics.translate(x, y)
 	love.graphics.rotate(r or 0)
-	love.graphics.scale(sx or 1, sy or sx or 1)
+	love.graphics.scale(SX or 1, SY or SX or 1)
 	love.graphics.translate(-x, -y)
 end
 
-function PushRotateScale(x, y, r, sx, sy)
+function PushRotateScale(x, y, r, SX, SY)
 	love.graphics.push()
 	love.graphics.translate(x, y)
 	love.graphics.rotate(r or 0)
-	love.graphics.scale(sx or 1, sy or sx or 1)
+	love.graphics.scale(SX or 1, SY or SX or 1)
 	love.graphics.translate(-x, -y)
 end
 
@@ -367,17 +400,15 @@ function Slow(amount, duration)
 	GTimer:tween("Slow", duration, _G, { slow = 1 }, "in-out-cubic")
 end
 
-
-function  math.threeRamdon()
-    local r = {math.random(0.0,1.0),math.random(0.0,1.0),math.random(0.0,1.0)}
+function math.threeRamdon()
+	local r = { math.random(0.0, 1.0), math.random(0.0, 1.0), math.random(0.0, 1.0) }
 	return r
-	
 end
 
 function table.shallow_copy(t)
-  local t2 = {}
-  for k,v in pairs(t) do
-    t2[k] = v
-  end
-  return t2
+	local t2 = {}
+	for k, v in pairs(t) do
+		t2[k] = v
+	end
+	return t2
 end

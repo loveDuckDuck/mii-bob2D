@@ -78,24 +78,21 @@ function Player:new(area, x, y, opts)
 	self.multiplierManager:generateChanceMultiplier()
 
 	self:setAttack("Hearth")
-	self.timer:every(0.01, function()
-		self.area:addGameObject(
-			"TrailParticle",
-			self.x - self.w * math.cos(self.rotation),
-			self.y - self.h * math.sin(self.rotation),
-			{
-				parent = self,
-				radius = math.customRandom(2, 4),
-				duration = math.customRandom(0.15, 0.25),
-				color = self
-					.trailColor
-			}
-		)
-	end)
+	-- self.timer:every(0.01, function()
+	-- 	self.area:addGameObject(
+	-- 		"TrailParticle",
+	-- 		self.x - self.w * math.cos(self.rotation),
+	-- 		self.y - self.h * math.sin(self.rotation),
+	-- 		{
+	-- 			parent = self,
+	-- 			radius = math.customRandom(2, 4),
+	-- 			duration = math.customRandom(0.15, 0.25),
+	-- 			color = self
+	-- 				.trailColor
+	-- 		}
+	-- 	)
+	-- end)
 
-	GInput:bind("f4", function()
-		self:die()
-	end)
 
 	self.timer:every(5, function()
 		self:tick()
@@ -166,14 +163,6 @@ function Player:move(dt)
 
 		self.maxVelocity = self.boosting and 2 * self.baseMaxVelocity or self.baseMaxVelocity
 	end
-
-	--[[
-        love2D reference
-        up 270 / -90
-        right == 0
-        180 left
-        down 90
-    ]]
 
 	local targetAngle = self.rotation
 
@@ -321,7 +310,6 @@ function Player:update(dt)
 end
 
 function Player:draw()
-	
 	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
 	love.graphics.print("hp : " .. self.hp, self.x + 50, self.y - 70)
 	love.graphics.print("attack : " .. self.attack, self.x + 50, self.y - 90)
@@ -333,7 +321,7 @@ function Player:draw()
 	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
 
 	love.graphics.print("static velocity : " .. self.baseMaxVelocity, self.x + 50, self.y - 210)
-		love.graphics.print("static friction : " .. self.friction, self.x + 50, self.y - 230)
+	love.graphics.print("static friction : " .. self.friction, self.x + 50, self.y - 230)
 
 
 	love.graphics.setColor(Attacks[self.attack].color)
@@ -354,7 +342,7 @@ function Player:addAmmo(amount)
 end
 
 function Player:addScore(amount)
-	GRoom.current_room.score = GRoom:getCurrentRoom().score + amount
+	GRoom.current_room.score = GRoom.current_room.score + amount
 end
 
 function Player:shoot()
@@ -380,6 +368,12 @@ function Player:die()
 	self.dead = true
 	flash(4)
 	GCamera:shake(6, 60, 0.4)
+
+
+	self.projectileManager = nil
+	self.chance = nil
+	self.multiplierManager = nil
+	self.ASPDMultiplier = nil
 
 	Slow(0.15, 1)
 	for i = 1, love.math.random(8, 12) do
