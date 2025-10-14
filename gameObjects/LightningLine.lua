@@ -77,12 +77,12 @@ end
 
 function LightningLine:draw()
     for i, line in ipairs(self.lines) do
-        local r, g, b = unpack(G_boost_color)
+        local r, g, b = unpack(GBoostColor)
         love.graphics.setColor(r, g, b, self.alpha)
         love.graphics.setLineWidth(2.5)
         love.graphics.line(line.x1, line.y1, line.x2, line.y2)
 
-        local r, g, b = unpack(G_default_color)
+        local r, g, b = unpack(GDefaultColor)
         love.graphics.setColor(r, g, b, self.alpha)
         love.graphics.setLineWidth(1.5)
         love.graphics.line(line.x1, line.y1, line.x2, line.y2)

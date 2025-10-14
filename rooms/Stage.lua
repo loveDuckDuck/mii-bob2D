@@ -58,7 +58,7 @@ function Stage:draw()
 	GCamera:detach()
 
 	-- Score
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 	love.graphics.print(
 		self.score,
 		GW - 20,
@@ -72,7 +72,7 @@ function Stage:draw()
 	love.graphics.setColor(1, 1, 1)
 
 	-- HP
-	local r, g, b = unpack(G_hp_color)
+	local r, g, b = unpack(GHPColor)
 	local hp, max_hp = self.player.hp, self.player.max_hp
 	love.graphics.setColor(r, g, b)
 	love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 156 * (hp / max_hp), 7)

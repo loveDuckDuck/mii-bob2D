@@ -20,7 +20,7 @@ end
 
 function AmmoEffect:draw()
 	if self.first then
-		love.graphics.setColor(G_default_color)
+		love.graphics.setColor(GDefaultColor)
 	elseif self.second then
 		love.graphics.setColor(self.color)
 	end

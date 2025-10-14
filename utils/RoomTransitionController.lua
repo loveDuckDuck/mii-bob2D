@@ -35,7 +35,7 @@ function RoomTransitionController:draw()
 		end
 	end
 	if FlashFrames then
-		love.graphics.setColor(G_background_color)
+		love.graphics.setColor(GBackgroundColor)
 		love.graphics.rectangle("fill", 0, 0, SX * GW, SY * GH)
 		love.graphics.setColor(255, 255, 255)
 	end

@@ -7,7 +7,7 @@ function Node:new(id, x, y)
     self.bought = false
     self.w, self.h = self.r, self.r
     self.color = {}
-    for index, value in ipairs(G_default_color) do
+    for index, value in ipairs(GDefaultColor) do
         self.color[index] = value
     end
 end
@@ -32,7 +32,7 @@ function Node:update(dt)
 end
 
 function Node:draw()
-    love.graphics.setColor(G_background_color)
+    love.graphics.setColor(GBackgroundColor)
     love.graphics.circle('fill', self.x, self.y, self.r)
     if self.bought then
         love.graphics.setColor(self.color[1], self.color[2], self.color[3], 1)

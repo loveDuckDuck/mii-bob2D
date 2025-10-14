@@ -80,7 +80,7 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
 
     GCamera:detach()
     -- Score
-    love.graphics.setColor(G_default_color)
+    love.graphics.setColor(GDefaultColor)
     love.graphics.print(
         self.score,
         GW - 20,
@@ -93,7 +93,7 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     )
     love.graphics.setColor(255, 255, 255)
     -- HP
-    local r, g, b = unpack(G_hp_color)
+    local r, g, b = unpack(GHPColor)
     local hp, max_hp = self.player.hp, self.player.max_hp
     love.graphics.setColor(r, g, b)
     love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 48 * (hp / max_hp), 4)
@@ -101,7 +101,7 @@ function TestingRoom:draw()                   -- Drawing TestingRoom visuals her
     love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 48, 4)
 
     -- BOOST
-    local r, g, b = unpack(G_boost_color)
+    local r, g, b = unpack(GBoostColor)
     local boost, max_boost = self.player.boost, self.player.maxBoost
     love.graphics.setColor(r, g, b)
     love.graphics.rectangle("fill", GW / 2, GH - 16, 48 * (boost / max_boost), 4)

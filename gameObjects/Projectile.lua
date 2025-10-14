@@ -17,7 +17,7 @@ function Projectile:new(area, x, y, opts)
 	self.attack = opts.attack or "Neutral"
 	self.velocity = opts.velocity or 300
 	self.rotation = opts.rotation or 0
-	self.color = opts.color or G_default_color
+	self.color = opts.color or GDefaultColor
 	self.parent = opts.parent
 	self.invisible = false
 
@@ -300,7 +300,7 @@ function Projectile:draw()
 	if self.invisible then return end
 
 	if self.attack == 'Bounce' then
-		love.graphics.setColor(table.random(G_default_colors))
+		love.graphics.setColor(table.random(GDefaultColors))
 	else
 		love.graphics.setColor(self.color)
 	end
@@ -308,7 +308,7 @@ function Projectile:draw()
 	local drawForm = self.form or Attacks["Neutral"].resource
 	drawForm(self.x, self.y, self.radiusSpace, self.radiusSpace)
 
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end
 
 function Projectile:die()

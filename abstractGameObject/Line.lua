@@ -4,7 +4,7 @@ function Line:new(node_1_id, node_2_id)
     self.node_1_id, self.node_2_id = node_1_id, node_2_id
     self.node_1, self.node_2 = TreeLogic.TreeStats[node_1_id], TreeLogic.TreeStats[node_2_id]
     self.color = {}
-    for index, value in ipairs(G_default_color) do
+    for index, value in ipairs(GDefaultColor) do
         self.color[index] = value
     end
     self.active = false
@@ -28,7 +28,7 @@ function Line:update(dt)
 end
 
 function Line:draw()
-    love.graphics.setColor(G_background_color)
+    love.graphics.setColor(GBackgroundColor)
     love.graphics.line(self.node_1.x, self.node_1.y, self.node_2.x, self.node_2.y)
     if self.active then
         love.graphics.setColor(self.color[1], self.color[2], self.color[3], 1)

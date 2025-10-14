@@ -8,8 +8,10 @@ function MultiplierManager:new(player)
 	self.random = 0
 	self.hp_multiplier = 50
 	self.luckMultiplier = 50
-
+	self.damage_multiplier = 50
+	self.size_multiplier = 50
 	self.velocity_multiplier = 50
+
 	self.friction_multiplier = 50
 	self.shoot_cooldown_timer_multiplier = 50
 	-- TO IMPLEMENTEAD
@@ -23,7 +25,6 @@ function MultiplierManager:new(player)
 	self.boost_recharge_rate_multiplier = 50
 	self.invulnerability_time_multiplier = 50
 	self.ammo_consumption_multiplier = 50
-	self.size_multiplier = 50
 	self.stat_boost_duration_multiplier = 50
 	self.projectile_duration_multiplier = 50
 end
@@ -46,6 +47,8 @@ end
 
 function MultiplierManager:onAmmoPickupChance()
 	self.random = math.random(0.005, 0.01)
+	local fiftyFifty = math.random(0, 100)
+
 	local color = { math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0) }
 	if self.chances.hp_multiplier:next() then
 		self.player.max_hp = self.player.max_hp + self.player.max_hp * self.random
@@ -58,7 +61,7 @@ function MultiplierManager:onAmmoPickupChance()
 		self.player.acceleration = self.player.acceleration + self.player.acceleration * self.random
 		self.player.baseMaxVelocity = self.player.baseMaxVelocity + self.player.baseMaxVelocity * self.random
 		self.player.maxVelocity = self.player.maxVelocity + self.player.maxVelocity * self.random
-		self.player.friction = self.player.friction - self.player.friction * self.random 
+		self.player.friction = self.player.friction - self.player.friction * self.random
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
 			{ text = "FASTER!@R", color = color })
 	end
@@ -66,8 +69,23 @@ function MultiplierManager:onAmmoPickupChance()
 		self.player.acceleration = self.player.acceleration - self.player.acceleration * self.random
 		self.player.baseMaxVelocity = self.player.baseMaxVelocity - self.player.baseMaxVelocity * self.random
 		self.player.maxVelocity = self.player.maxVelocity - self.player.maxVelocity * self.random
-		self.player.friction = self.player.friction + self.player.friction * self.random 
+		self.player.friction = self.player.friction + self.player.friction * self.random
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
 			{ text = "SLOWWER BORTHA!", color = color })
+	end
+
+	if self.chances.damage_multiplier:next() then
+		self.player.projectileManager.damage = self.player.projectileManager.damage +
+			(fiftyFifty < 50 and -1 or 1) * self.player.projectileManager.damage * self.random
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
+			{ text = fiftyFifty < 50 and "KILLLLLLL!!!" or "im gonna bee killed", color = color })
+	end
+
+	if self.chances.size_multiplier:next() then
+		self.player.projectileManager.size = self.player.projectileManager.size + (
+			fiftyFifty < 50 and -1 or 1) * self.player.projectileManager.size * self.random
+
+		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
+			{ text = fiftyFifty < 50 and "BIGGER!" or "smallllllll", color = color })
 	end
 end

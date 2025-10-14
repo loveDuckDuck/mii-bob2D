@@ -26,7 +26,7 @@ function HasteArea:update(dt)
 end
 
 function HasteArea:draw()
-	love.graphics.setColor(G_ammo_color)
+	love.graphics.setColor(GAmmoColor)
 	love.graphics.circle("line", self.x, self.y, self.radius + math.customRandom(-2, 2))
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end

@@ -5,12 +5,14 @@ function EnemyProjectile:new(area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
 	self.velocity = opts.velocity or G_default_player_velocity
-	self.color = opts.color or G_hp_color
+	self.color = opts.color or GHPColor
 	self.damage = opts.damage or 2
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(self.velocity * math.cos(self.rotation), self.velocity * math.sin(self.rotation))
 	self.collider:setCollisionClass("EnemyProjectile")
+	self.timer:after(1, function() self:die() end)
+
 end
 
 function EnemyProjectile:checkCollision(dt)
@@ -22,6 +24,7 @@ function EnemyProjectile:checkCollision(dt)
 		end
 		self:die()
 	end
+	
 end
 
 function EnemyProjectile:update(dt)
@@ -48,7 +51,7 @@ function EnemyProjectile:draw()
 	PushRotate(self.x, self.y, self.collider:getAngle())
 	love.graphics.circle("line", self.x, self.y, self.radiusSpace)
 	love.graphics.pop()
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end
 
 function EnemyProjectile:die()

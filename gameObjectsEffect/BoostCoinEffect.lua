@@ -2,7 +2,7 @@ BoostCoinEffect = GameObject:extend()
 
 function BoostCoinEffect:new(area, x, y, opts)
 	BoostCoinEffect.super.new(self, area, x, y, opts)
-	self.current_color = G_default_color
+	self.current_color = GDefaultColor
 	self.timer:after(0.2, function()
 		self.current_color = self.color
 		self.timer:after(0.35, function()
@@ -35,7 +35,7 @@ function BoostCoinEffect:draw()
 	love.graphics.setColor(self.current_color)
 	GDraft:rhombus(self.x, self.y, 1.34 * self.w, 1.34 * self.h, "fill")
     GDraft:rhombus(self.x, self.y, self.SX*2*self.w, self.SY*2*self.h, 'line')
-    love.graphics.setColor(G_default_color)
+    love.graphics.setColor(GDefaultColor)
 end
 
 function BoostCoinEffect:destroy()

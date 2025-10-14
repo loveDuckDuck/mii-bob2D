@@ -19,7 +19,7 @@ function ResourceCoin:draw()
 	PushRotate(self.x, self.y, self.collider:getAngle())
 	self.power.resource(self.x, self.y, self.w, self.h)
 	love.graphics.pop()
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end
 function ResourceCoin:die()
 	self.dead = true

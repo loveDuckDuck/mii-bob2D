@@ -52,7 +52,7 @@ function ResolutionModule:draw()
     if not self.active then return end
 
     local width = self.selection_widths[self.selection_index][1]
-    local r, g, b = unpack(G_default_color)
+    local r, g, b = unpack(GDefaultColor)
     love.graphics.setColor(r, g, b, 27)
     local x_offset = self.console.font:getWidth('    ')
     love.graphics.rectangle('fill', 8 + x_offset - 2, self.y + self.selection_index * 12, width + 4,

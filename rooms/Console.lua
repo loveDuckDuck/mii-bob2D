@@ -8,7 +8,7 @@ function Console:new()
     self.modules = {}
     self.line_y = 8
     self.font = Font
-    self.base_input_text = { '[', G_skill_point_color, 'root', G_default_color, ']arch~ :  ' }
+    self.base_input_text = { '[', GSkillPointColor, 'root', GDefaultColor, ']arch~ :  ' }
     self:addInputLine(0.25)
     self.input_text = {}
     self.timer_delete_counter = 0
@@ -70,7 +70,7 @@ function Console:draw()
         love.graphics.draw(line.text, line.x, line.y)
     end
     if self.inputting and self.cursor_visible then
-        local r, g, b = unpack(G_default_color)
+        local r, g, b = unpack(GDefaultColor)
         love.graphics.setColor(r, g, b, 96)
         local input_text = ''
         for _, character in ipairs(self.input_text) do input_text = input_text .. character end

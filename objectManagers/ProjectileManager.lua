@@ -103,11 +103,11 @@ function ProjectileManager:initAttackPatterns()
 
 				for i = 1, love.math.random(4, 8) do
 					self.player.area:addGameObject('ExplodeParticle', x1, y1,
-						{ color = table.random({ G_default_color, G_boost_color }) })
+						{ color = table.random({ GDefaultColor, GBoostColor }) })
 				end
 				for i = 1, love.math.random(4, 8) do
 					self.player.area:addGameObject('ExplodeParticle', x2, y2,
-						{ color = table.random({ G_default_color, G_boost_color }) })
+						{ color = table.random({ GDefaultColor, GBoostColor }) })
 				end
 			end
 		end
@@ -118,7 +118,7 @@ function ProjectileManager:updateAttack(key)
 	if Attacks[key] then
 		self.attack = key
 		self.damage = Attacks[key].damage
-		self.color = InterpolateColor(Attacks[key].color, self.color, math.customRandom(0, 1))
+		self.color = Attacks[key].color 
 		self.tearIterator = Attacks[key].tears
 		self.shootAngle = Attacks[key].shootAngle or 0
 		self.formTear = Attacks[key].resource

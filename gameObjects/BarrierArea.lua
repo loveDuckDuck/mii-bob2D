@@ -30,5 +30,5 @@ end
 function BarrierArea:draw()
 	love.graphics.setColor(self.color)
 	love.graphics.circle("line", self.x, self.y, self.radius + math.customRandom(-2, 2))
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end

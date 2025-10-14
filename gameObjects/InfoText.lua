@@ -46,7 +46,7 @@ function InfoText:new(area, x, y, opts)
 	self.characters = {}
 	local random_characters = "0123456789!@#$%¨&*()-=+[]^~/;?><.,|abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ"
 	
-	self.all_colors = Moses.append(G_default_colors, G_negative_colors)
+	self.all_colors = Moses.append(GDefaultColors, G_negative_colors)
 	for i = 1, #self.text do
 		table.insert(self.characters, self.text:utf8sub(i, i))
 	end
@@ -109,10 +109,10 @@ function InfoText:draw()
       		love.graphics.setColor(self.background_colors[i])
       		love.graphics.rectangle('fill', self.x + width, self.y - self.font:getHeight()/2, self.font:getWidth(self.characters[i]), self.font:getHeight())
       	end
-    	love.graphics.setColor(self.foreground_colors[i] or self.color or G_default_color)
+    	love.graphics.setColor(self.foreground_colors[i] or self.color or GDefaultColor)
     	love.graphics.print(self.characters[i], self.x + width, self.y, 0, 1, 1, 0, self.font:getHeight()/2)
     end
-    love.graphics.setColor(G_default_color)
+    love.graphics.setColor(GDefaultColor)
 end
 
 function InfoText:destroy()

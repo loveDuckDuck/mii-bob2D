@@ -27,7 +27,7 @@ function Shooter:new(area, x, y, opts)
 			"PreAttackEffect",
 			target_x,
 			target_y,
-			{ shooter = self, color = G_hp_color, duration = 1.0, rotation = self.rotationLookingPlayer }
+			{ shooter = self, color = GHPColor, duration = 1.0, rotation = self.rotationLookingPlayer }
 		)
 		self.timer:after(0.5, function()
 			self.area:addGameObject("EnemyProjectile", self.x, self.y, {
@@ -61,7 +61,7 @@ function Shooter:update(dt)
 end
 
 function Shooter:draw()
-	love.graphics.setColor(G_hp_color)
+	love.graphics.setColor(GHPColor)
 	PushRotate(self.x, self.y, self.rotationLookingPlayer)
 
 	GDraft:lozenge(self.x, self.y, self.w, "line")
@@ -69,12 +69,12 @@ function Shooter:draw()
 
 	love.graphics.pop()
 
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end
 
 function Shooter:die()
 	self.dead = true
 	self.area:addGameObject("InfoText", self.x, self.y, { text = self.name, color = math.threeRamdon() })
-	self.area:addGameObject("EnemyDeathEffect", self.x, self.y, { color = G_hp_color, w = self.w, h = self.h })
+	self.area:addGameObject("EnemyDeathEffect", self.x, self.y, { color = GHPColor, w = self.w, h = self.h })
 	self.area:addGameObject("Ammo", self.x, self.y)
 end

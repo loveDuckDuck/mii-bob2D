@@ -16,7 +16,7 @@ function Explosion:new(area, x, y, opts)
     self.collider:setCollisionClass("Projectile")
     self.collider:setType("static")
 
-    self.color = G_white_cream
+    self.color = GWhiteCream
 
     self.timer:tween(0.2, self, { h = self.offestExplosion, w = self.offestExplosion }, 'in-out-cubic',
         function()
@@ -27,7 +27,7 @@ function Explosion:new(area, x, y, opts)
         end
     )
     self.timer:after(0.05, function()
-        self.color = G_hp_color
+        self.color = GHPColor
     end)
     self.timer:after(0.15, function()
         for i = 1, love.math.random(8, 20) do

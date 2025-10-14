@@ -24,7 +24,7 @@ function Player:new(area, x, y, opts)
 	self.friction = 10
 
 	self.boosting = false
-	self.trailColor = G_skill_point_color
+	self.trailColor = GSkillPointColor
 	self.rotationVelocity = 1.66 * math.pi
 	self.isBounce = false
 
@@ -322,7 +322,7 @@ function Player:draw()
 	love.graphics.setColor(Attacks[self.attack].color)
 	GDraft:circle(self.x, self.y, self.w + 5, nil, "fill")
 
-	love.graphics.setColor(G_default_color)
+	love.graphics.setColor(GDefaultColor)
 end
 
 function Player:tick()
@@ -372,6 +372,6 @@ function Player:die()
 
 	Slow(0.15, 1)
 	for i = 1, love.math.random(8, 12) do
-		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = G_hp_color })
+		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = GHPColor })
 	end
 end

@@ -1,6 +1,5 @@
 GW = 640
 GH = 360
-
 SX = 1
 SY = 1
 
@@ -41,32 +40,4 @@ function love.conf(t)
 	t.modules.timer = true             -- Enable the timer module (boolean), Disabling it will result 0 delta time in love.update
 	t.modules.window = true            -- Enable the window module (boolean)
 	t.modules.thread = true            -- Enable the thread module (boolean)
-
-	G_default_color = { 0.87, 1, 0.81, 1.0 }
-	G_background_color = { 0.06, 0.06, 0.06, 1.0 }
-	G_ammo_color = { 0.48, 0.78, 0.64, 1.0 }
-	G_boost_color = { 0.29, 0.76, 0.85, 1.0 }
-	G_hp_color = { 0.94, 0.40, 0.27, 1.0 }
-	G_skill_point_color = { 1.0000, 0.7765, 0.3647, 1.0 }
-	G_white_cream = { 1.0, 0.9921, 0.8115, 1 }
-
-	G_default_player_velocity = 300
-	G_default_colors = { G_default_color, G_hp_color, G_ammo_color, G_boost_color, G_skill_point_color }
-
-	G_negative_colors = {
-		{ 1 - G_default_color[1],     1 - G_default_color[2],     1 - G_default_color[3] },
-		{ 1 - G_hp_color[1],          1 - G_hp_color[2],          1 - G_hp_color[3] },
-		{ 1 - G_ammo_color[1],        1 - G_ammo_color[2],        1 - G_ammo_color[3] },
-		{ 1 - G_boost_color[1],       1 - G_boost_color[2],       1 - G_boost_color[3] },
-		{ 1 - G_skill_point_color[1], 1 - G_skill_point_color[2], 1 - G_skill_point_color[3] },
-	}
-
-	-- Const value for the coin object
-	COIN_MIN_RANDOM_ROTATION = 0
-	COIN_MAX_RANDOM_ROTATION = 2 * math.pi
-	COIN_MIN_RANDOM_VELOCITY = 10
-	COIN_MAX_RANDOM_VELOCITY = 20
-
-	COIN_BASE_VALUE = 5
-	COIN_ANGULAR_IMPULSE = 24
 end

@@ -279,21 +279,6 @@ function DeleteEveryThing()
 	love.event.quit()
 end
 
---[[
-    -- Use:
-    local dy = target.y - self.y
-    local dx = target.x - self.x
-    local angle = my_atan2(dy, dx)
-    i need to use this because atan2 it deprecated
-    so i need to calculate manually the quadranct, becuase atan, is not safe with x = 0 and
-    return only anglese in Q1 and Q4
-        y
-        ↑
-    Q2  |  Q1     atan2 handles: Q1, Q2, Q3, Q4
-    ------+------  atan handles:   Q1, Q4 only (and maps Q2,Q3 to Q4,Q1)
-    Q3  |  Q4
-
-    ]]
 
 function GlobalAtan2(y, x)
 	if x > 0 then
@@ -384,38 +369,6 @@ function Lerp(a, b, t)
 	return a + (b - a) * t
 end
 
---- Interpolates between two colors.
--- Both colors should be tables with 'r', 'g', and 'b' components (and optionally 'a').
--- The components should be numbers, typically between 0.0 and 1.0.
--- @param color1 The starting color table (e.g., {r=1, g=1, b=0}).
--- @param color2 The ending color table (e.g., {r=0, g=0, b=1}).
--- @param amount A number between 0.0 and 1.0 that represents the mix.
---               0.0 will return color1, 1.0 will return color2,
---               and 0.5 will return a color exactly halfway between them.
--- @return A new color table with the interpolated r, g, b, and a values.
-function InterpolateColor(color1, color2, amount)
-	-- Ensure the amount is clamped between 0 and 1 to prevent invalid color values.
-	local t = math.max(0, math.min(1, amount or 0))
-
-	-- Ensure the input tables are valid
-	if not color1 or not color2 or not color1[1] or not color2[1] then
-		error("Invalid color tables provided for interpolation.")
-		return
-	end
-
-	local new_color = {
-		math.truncate(Lerp(color1[1], color2[1], t), 4),
-		math.truncate(Lerp(color1[2], color2[2], t), 4),
-		math.truncate(Lerp(color1[3], color2[3], t), 4),
-	}
-
-	-- Also interpolate the alpha channel if it exists in both colors
-	if color1[4] and color2[4] then
-		new_color[4] = Lerp(color1[4], color2[4], t)
-	end
-
-	return new_color
-end
 
 function GlobalDistance(x1, y1, x2, y2)
 	return math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))

@@ -101,7 +101,7 @@ Attacks = {
 
 	["Destroyer"] = {
 		name = "Destroyer",
-		damage = 100,
+		damage = 2,
 		cooldown = 1.2,
 		ammo = 4,
 		tears = 1,
@@ -113,7 +113,7 @@ Attacks = {
 	},
 	["Blast"] = {
 		name = "Blast",
-		damage = 100,
+		damage = 2,
 		cooldown = 0.64,
 		ammo = 6,
 		tears = 1,
@@ -125,7 +125,7 @@ Attacks = {
 	},
 	["Spin"] = {
 		name = "Spin",
-		damage = 100,
+		damage = 2,
 		cooldown = 0.32,
 		ammo = 2,
 		tears = 1,
@@ -137,7 +137,7 @@ Attacks = {
 	},
 	["Hearth"] = {
 		name = "Hearth",
-		damage = 100,
+		damage = 2,
 		cooldown = 0.32,
 		ammo = 2,
 		tears = 1,
@@ -149,7 +149,7 @@ Attacks = {
 	},
 	["Flame"] = {
 		name = "Flame",
-		damage = 100,
+		damage = 2,
 		cooldown = 0.048,
 		ammo = 0.4,
 		tears = 1,
@@ -233,4 +233,23 @@ Achievements = {
 		unlocked = false,
 
 	}
+}
+
+GDefaultColor = { 0.87, 1, 0.81, 1.0 }
+GBackgroundColor = { 0.06, 0.06, 0.06, 1.0 }
+GAmmoColor = { 0.48, 0.78, 0.64, 1.0 }
+GBoostColor = { 0.29, 0.76, 0.85, 1.0 }
+GHPColor = { 0.94, 0.40, 0.27, 1.0 }
+GSkillPointColor = { 1.0000, 0.7765, 0.3647, 1.0 }
+GWhiteCream = { 1.0, 0.9921, 0.8115, 1 }
+
+G_default_player_velocity = 300
+GDefaultColors = { GDefaultColor, GHPColor, GAmmoColor, GBoostColor, GSkillPointColor }
+
+G_negative_colors = {
+	{ 1 - GDefaultColor[1],     1 - GDefaultColor[2],     1 - GDefaultColor[3] },
+	{ 1 - GHPColor[1],          1 - GHPColor[2],          1 - GHPColor[3] },
+	{ 1 - GAmmoColor[1],        1 - GAmmoColor[2],        1 - GAmmoColor[3] },
+	{ 1 - GBoostColor[1],       1 - GBoostColor[2],       1 - GBoostColor[3] },
+	{ 1 - GSkillPointColor[1], 1 - GSkillPointColor[2], 1 - GSkillPointColor[3] },
 }

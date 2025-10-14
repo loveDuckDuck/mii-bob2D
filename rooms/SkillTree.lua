@@ -50,7 +50,7 @@ end
 function SkillTree:draw()
     love.graphics.setCanvas(self.main_canvas)
     love.graphics.clear()
-    love.graphics.setColor(G_background_color)
+    love.graphics.setColor(GBackgroundColor)
     love.graphics.rectangle('fill', 0, 0, GW, GH)
 
     GCamera:attach(0, 0, GW, GH)
@@ -90,7 +90,7 @@ function SkillTree:draw()
             -- here cycle in pas by 3, to check the text of the multiplier
             -- like we did previusly to check the lenght
 
-            love.graphics.setColor(G_default_color)
+            love.graphics.setColor(GDefaultColor)
             for i = 1, #stats, 3 do
                 love.graphics.print(stats[i], math.floor(mx + 8),
                     math.floor(my + Font:getHeight() / 2 + math.floor(i / 3) * Font:getHeight()))

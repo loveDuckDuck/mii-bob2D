@@ -90,7 +90,7 @@ end
 local function graphicSetter()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 	love.graphics.setLineStyle('rough')
-	love.graphics.setBackgroundColor(G_background_color)
+	love.graphics.setBackgroundColor(GBackgroundColor)
 	Font = love.graphics.newFont("resource/font/m5x7.ttf", 16)
 	if Font then
 		Font:setFilter("nearest", "nearest")
@@ -149,7 +149,7 @@ function love.load()
 	GTimer = Timer()
 	GCamera = Camera()
 	GRoom = RoomController()
-
+	print(GRoom)
 	GRoom:gotoRoom("Stage", UUID())
 	slow = 1
 	FlashFrames = 0
