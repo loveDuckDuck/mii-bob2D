@@ -25,13 +25,15 @@ function Stage:new()
 	self.counterAttack = 0
 
 	GInput:bind("p", function()
-			Slow(0.15, 1)
+		Slow(0.15, 1)
 
 		self:destroy()
 	end)
 
 	GCamera.smoother = Camera.smooth.damped(100)
 	triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
+	InputBinderPlayerControls()
+
 end
 
 function Stage:update(dt)

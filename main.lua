@@ -17,7 +17,8 @@ TreeLogic = require("utils/TreeStats")
 
 require("libraries/string/utf8")
 require("globals")
-Bitser = require 'bitser'
+
+--Bitser = require 'bitser'
 
 --Area = require 'gameObject/Area'
 
@@ -25,20 +26,25 @@ function flash(frames)
 	FlashFrames = frames
 end
 
-function love.save()
-	local save_data = {}
-	-- Set all save data here
-	Bitser.dumpLoveFile('save', save_data)
-end
+--[[
 
-function load()
-	if love.filesystem.exists('save') then
-		local save_data = bitser.loadLoveFile('save')
-		-- Load all saved data here
-	else
-		FirstRunEver = true
-	end
-end
+	TODO : save and load game
+
+]]
+-- function love.save()
+-- 	local save_data = {}
+-- 	-- Set all save data here
+-- 	Bitser.dumpLoveFile('save', save_data)
+-- end
+
+-- function load()
+-- 	if love.filesystem.exists('save') then
+-- 		local save_data = bitser.loadLoveFile('save')
+-- 		-- Load all saved data here
+-- 	else
+-- 		FirstRunEver = true
+-- 	end
+-- end
 
 function resizeWidthHeight(w, h)
 	love.window.setMode(w, h)
@@ -85,53 +91,48 @@ local function graphicSetter()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 	love.graphics.setLineStyle('rough')
 	love.graphics.setBackgroundColor(G_background_color)
-
 	Font = love.graphics.newFont("resource/font/m5x7.ttf", 16)
-
 	if Font then
 		Font:setFilter("nearest", "nearest")
 		love.graphics.setFont(Font)
 	end
 end
 
-local function inputBinder()
-	GInput = Input()
+function InputBinderMoveThroughRooms()
+	GInput:bind("escape", "DeleteEveryThing")
+	GInput:bind("f1", "goToSkillTree")
+	GInput:bind("f2", "goToConsole")
+	GInput:bind("f3", "goToTestingRoom")
+end
 
+function InputBinderPlayerControls()
+	GInput:unbindAll()
 	GInput:bind("a", "left")
 	GInput:bind("d", "right")
 	GInput:bind("w", "up")
-
 	GInput:bind("s", "down")
+
 	GInput:bind("space", "boosting")
-
-	GInput:bind("b", "b")
-
-
 	GInput:bind("down", "shootdown")
 	GInput:bind("up", "shootup")
 	GInput:bind("left", "shootleft")
 	GInput:bind("right", "shootright")
-
-	GInput:bind("escape", "DeleteEveryThing")
-	GInput:bind("wheelup", "zoomIn")
-	GInput:bind("wheeldown", "zoomOut")
-
-	GInput:bind("f1", "goToSkillTree")
-	GInput:bind("f2", "goToConsole")
-	GInput:bind("f3", "goToTestingRoom")
-
-
-	GInput:bind("wheelup", "zoomIn")
-	GInput:bind("wheeldown", "zoomOut")
-	GInput:bind("return", "enter")
-	GInput:bind("backspace", "delete")
+	InputBinderMoveThroughRooms()
 end
 
-function love.load()
-	love.graphics.setDefaultFilter("nearest", "nearest")
+function InputBinderSkillTree()
+    GInput:unbindAll()
+    GInput:bind("wheelup", "zoomIn")
+    GInput:bind("wheeldown", "zoomOut")
+	InputBinderMoveThroughRooms()
+end
 
+
+
+
+function love.load()
+	GInput = Input()
 	graphicSetter()
-	inputBinder()
 	GDraft = Draft()
 	GLoader = Loader()
 
@@ -142,13 +143,11 @@ function love.load()
 	GLoader:getRequireFiles("objectManagers")
 	GLoader:getRequireFiles("gameObjects")
 	GLoader:getRequireFiles("modules")
-
 	GLoader:getRequireFiles("rooms")
 
 
 	GTimer = Timer()
 	GCamera = Camera()
-	--GCamera.scale = 1
 	GRoom = RoomController()
 
 	GRoom:gotoRoom("Stage", UUID())

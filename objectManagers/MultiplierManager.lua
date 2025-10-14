@@ -7,7 +7,6 @@ function MultiplierManager:new(player)
 
 	self.random = 0
 	self.hp_multiplier = 50
-
 	self.luckMultiplier = 50
 
 	self.velocity_multiplier = 50

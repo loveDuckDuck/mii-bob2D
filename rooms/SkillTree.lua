@@ -7,13 +7,18 @@ function SkillTree:new()
     self.nodes = {}
     self.lines = {}
     for id, node in ipairs(TreeLogic.TreeStats) do table.insert(self.nodes, Node(id, node.x, node.y)) end
-    
+
     for id, node in ipairs(TreeLogic.TreeStats) do
         for _, linked_node_id in ipairs(node.links) do
             table.insert(self.lines, Line(id, linked_node_id))
         end
     end
-    
+
+    self.main_canvas = love.graphics.newCanvas(GW, GH) -- Create main canvas object 🖼️
+
+    InputBinderSkillTree()
+
+
     self.previous_mx, self.previous_my = 0, 0
 end
 
@@ -43,8 +48,11 @@ function SkillTree:update(dt)
 end
 
 function SkillTree:draw()
+    love.graphics.setCanvas(self.main_canvas)
+    love.graphics.clear()
     love.graphics.setColor(G_background_color)
     love.graphics.rectangle('fill', 0, 0, GW, GH)
+
     GCamera:attach(0, 0, GW, GH)
     love.graphics.setLineWidth(1 / GCamera.scale)
     for _, line in ipairs(self.lines) do line:draw() end
@@ -55,8 +63,11 @@ function SkillTree:draw()
     -- Stats rectangle and create
 
     local testmx, testmy = love.mouse.getPosition()
+
+    testmx, testmy = testmx / SX, testmy / SY
     love.graphics.setColor(0.5, 0.5, 0.5, 222)
     love.graphics.circle('fill', testmx, testmy, 16)
+
     love.graphics.setFont(Font)
     for _, node in ipairs(self.nodes) do
         if node.hot then
@@ -87,9 +98,14 @@ function SkillTree:draw()
         end
     end
 
+    love.graphics.setCanvas()
 
     love.graphics.setColor(1, 1, 1, 1)
-    love.graphics.setBlendMode("alpha", "premultiplied")
+    love.graphics.setBlendMode('alpha', 'premultiplied')
+    local x = (love.graphics.getWidth() - GW * SX) / 2
+    local y = (love.graphics.getHeight() - GH * SY) / 2
+    love.graphics.draw(self.main_canvas, x, y, 0, SX, SY)
+    love.graphics.setBlendMode('alpha')
 end
 
 function SkillTree:destroy()

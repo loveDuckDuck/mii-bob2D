@@ -18,6 +18,13 @@ function Console:new()
         self.cursor_visible = not self.cursor_visible
     end)
     GCamera:lookAt(GW / 2, GH / 2)
+
+
+    GInput:unbindAll()
+    GInput:bind("return", "enter")
+    GInput:bind("backspace", "delete")
+    GInput:bind("down", "shootdown")
+    GInput:bind("up", "shootup")
 end
 
 function Console:update(dt) -- Update stage logic here 🕹️
@@ -75,7 +82,7 @@ function Console:draw()
     for _, module in ipairs(self.modules) do module:draw() end
     GCamera:detach()
     love.graphics.setCanvas()
-    
+
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setBlendMode('alpha', 'premultiplied')
     love.graphics.draw(self.main_canvas, 0, 0, 0, SX, SY)
