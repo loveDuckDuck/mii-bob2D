@@ -326,3 +326,8 @@ function Projectile:explode()
 		w = 3 * self.radiusSpace
 	})
 end
+
+function Projectile:destroy()
+    Projectile.super.destroy(self)
+end
+

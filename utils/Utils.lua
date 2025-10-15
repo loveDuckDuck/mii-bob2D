@@ -448,3 +448,21 @@ function table.shallow_copy(t)
 	end
 	return t2
 end
+
+
+function math.miFloor(number)
+	return math.floor(number * 100 + 0.5)/ 100
+end
+
+
+function ReturnValuePercentage(value, percentage,probability)
+	return math.miFloor(value + (probability < 50 and (1) or (-1)) * (value * percentage))
+end
+
+
+function table.allNil(t)
+	for key, value in pairs(t) do
+		t[key] = nil
+	end
+	
+end

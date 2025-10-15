@@ -30,3 +30,9 @@ function HasteArea:draw()
 	love.graphics.circle("line", self.x, self.y, self.radius + math.customRandom(-2, 2))
 	love.graphics.setColor(GDefaultColor)
 end
+
+
+function HasteArea:destroy()
+    HasteArea.super.destroy(self)
+end
+

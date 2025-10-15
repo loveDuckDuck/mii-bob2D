@@ -21,3 +21,7 @@ function StatCoin:update(dt)
 	end
 end
 
+
+function StatCoin:destroy()
+    StatCoin.super.destroy(self)
+end

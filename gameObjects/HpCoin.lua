@@ -28,3 +28,9 @@ function HpCoin:die()
 	end
 	self.area:addGameObject("InfoText", self.x, self.y, { text = "+HP ?!!!", color =  math.threeRamdon() })
 end
+
+
+function HpCoin:destroy()
+    HpCoin.super.destroy(self)
+end
+

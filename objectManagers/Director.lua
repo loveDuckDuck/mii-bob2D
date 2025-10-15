@@ -148,3 +148,8 @@ function Director:setRecourceSpawnsForThisRound()
 		end)
 	end
 end
+
+function Director:destroy()
+	self.timer:destroy()
+	table.allNil(self)
+end

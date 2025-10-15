@@ -179,3 +179,8 @@ function ProjectileManager:shoot(distance)
 		self:createProjectile(distance)
 	end
 end
+
+
+function ProjectileManager:destroy()
+	table.allNil(self)
+end

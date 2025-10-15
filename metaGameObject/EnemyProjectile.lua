@@ -58,3 +58,9 @@ function EnemyProjectile:die()
 	self.dead = true
 	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, { color = self.color, w = 3 * self.radiusSpace })
 end
+
+function EnemyProjectile:destroy()
+    EnemyProjectile.super.destroy(self)
+end
+
+

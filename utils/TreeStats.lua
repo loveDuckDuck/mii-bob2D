@@ -58,7 +58,7 @@ local function generateSkillTree()
     TreeLogic.TreeStats[node_id] = {
         x = 0,
         y = 0,
-        stats = {"nothing"},
+        stats = {},
         links = {}
     }
     node_id = node_id + 1

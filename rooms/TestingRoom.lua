@@ -51,6 +51,7 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
     --     self.player:setAttack(table.keys(Attacks)[self.counterAttack])
     -- end)
 
+	InputBinderPlayerControls()
 
     GInput:bind("z", function()
         self.counterAttack = self.counterAttack + 1

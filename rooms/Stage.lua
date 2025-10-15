@@ -24,16 +24,15 @@ function Stage:new()
 	self.font = Font
 	self.counterAttack = 0
 
+
+
+	GCamera.smoother = Camera.smooth.damped(100)
+	--triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
 	GInput:bind("p", function()
 		Slow(0.15, 1)
 
 		self:destroy()
 	end)
-
-	GCamera.smoother = Camera.smooth.damped(100)
-	triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
-	InputBinderPlayerControls()
-
 end
 
 function Stage:update(dt)
@@ -44,6 +43,14 @@ function Stage:update(dt)
 	if (self.player.dead) then
 		self:destroy()
 	end
+end
+
+function Stage:activate()
+	print("Stage Active")
+end
+
+function Stage:deactivate()
+	print("Stage deactivate")
 end
 
 function Stage:draw()
@@ -91,21 +98,25 @@ function Stage:draw()
 end
 
 function Stage:destroy()
+	GInput:unbind("p")  -- Unbind the "p" key callback
+
 	self:finish()
 end
 
 function Stage:finish()
-	GTimer:after(1, function()
-		self.area:destroy()
-		self.director = nil
-		self.area = nil
-		GRoom:removeRoom("Stage")
+	self.area:destroy()
+	self.director:destroy()
+	self.director = nil
+	self.area = nil
+	self.main_canvas:release()
 
-		GRoom:gotoRoom('Stage', UUID())
+	table.allNil(self)
+	GRoom:removeRoom("Stage")
 
-		if not Achievements['10K Fighter'] and self.score >= 10000 then
-			Achievements['10K Fighter'] = true
-			-- Do whatever else that should be done when an achievement is unlocked
-		end
-	end)
+	GRoom:gotoRoom('Stage', UUID())
+
+	if not Achievements['10K Fighter'] and self.score >= 10000 then
+		Achievements['10K Fighter'] = true
+		-- Do whatever else that should be done when an achievement is unlocked
+	end
 end

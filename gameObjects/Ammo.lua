@@ -25,3 +25,8 @@ function Ammo:die()
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { s = 3, color = GAmmoColor })
 	end
 end
+
+function Ammo:destroy()
+    Ammo.super.destroy(self)
+end
+

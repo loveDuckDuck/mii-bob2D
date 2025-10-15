@@ -16,10 +16,18 @@ function SkillTree:new()
 
     self.main_canvas = love.graphics.newCanvas(GW, GH) -- Create main canvas object 🖼️
 
-    InputBinderSkillTree()
-
 
     self.previous_mx, self.previous_my = 0, 0
+end
+
+
+
+function SkillTree:activate()
+    print("SkillTree Active")
+end
+
+function SkillTree:deactivate()
+    print("SkillTree deactivate")
 end
 
 function SkillTree:update(dt)
@@ -64,9 +72,9 @@ function SkillTree:draw()
 
     local testmx, testmy = love.mouse.getPosition()
 
-    testmx, testmy = testmx / SX, testmy / SY
+    testmx, testmy = testmx / SX , testmy / SY 
     love.graphics.setColor(0.5, 0.5, 0.5, 222)
-    love.graphics.circle('fill', testmx, testmy, 16)
+    love.graphics.circle('fill', testmx, testmy, 16 / SX)
 
     love.graphics.setFont(Font)
     for _, node in ipairs(self.nodes) do

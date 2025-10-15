@@ -5,8 +5,8 @@ function ResourceCoin:new(area, x, y, opts)
 	ResourceCoin.super.new(self, area, x, y, opts)
 	self.power = table.randomResource(Attacks)
 end
-function ResourceCoin:updata(dt)
-	ResourceCoin.super.updata(self, dt)
+function ResourceCoin:update(dt)
+	ResourceCoin.super.update(self, dt)
 	if self.x < 0 or self.y < 0   or self.x > GW  or self.y > GH  then
 		self:die()
 	end
@@ -30,3 +30,10 @@ function ResourceCoin:die()
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { s = 3, color = self.power.color })
 	end
 end
+
+
+
+function ResourceCoin:destroy()
+    ResourceCoin.super.destroy(self)
+end
+

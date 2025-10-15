@@ -71,27 +71,27 @@ function Player:new(area, x, y, opts)
 	-- CHANCES
 
 	-- GENERATE CHANCES
-	self.chance = PlayerChanceManager(self, self.projectileManager)
+	self.chance = ChanceManager(self, self.projectileManager)
 	self.multiplierManager = MultiplierManager(self)
 
 	self.chance:generateChances()
 	self.multiplierManager:generateChanceMultiplier()
 
 	self:setAttack("Hearth")
-	self.timer:every(0.01, function()
-		self.area:addGameObject(
-			"TrailParticle",
-			self.x - self.w * math.cos(self.rotation),
-			self.y - self.h * math.sin(self.rotation),
-			{
-				parent = self,
-				radius = math.customRandom(2, 4),
-				duration = math.customRandom(0.15, 0.25),
-				color = self
-					.trailColor
-			}
-		)
-	end)
+	-- self.timer:every(0.01, function()
+	-- 	self.area:addGameObject(
+	-- 		"TrailParticle",
+	-- 		self.x - self.w * math.cos(self.rotation),
+	-- 		self.y - self.h * math.sin(self.rotation),
+	-- 		{
+	-- 			parent = self,
+	-- 			radius = math.customRandom(2, 4),
+	-- 			duration = math.customRandom(0.15, 0.25),
+	-- 			color = self
+	-- 				.trailColor
+	-- 		}
+	-- 	)
+	-- end)
 
 
 	self.timer:every(5, function()
@@ -161,9 +161,6 @@ function Player:move(dt)
 
 	local targetAngle = self.rotation
 
-	--[[
-	TODO : fix this issues with the rotation
-	]]
 
 	--Check diagonal movements first (they require two keys)
 	if GInput:down("shootup") and GInput:down("shootright") then
@@ -311,7 +308,8 @@ function Player:draw()
 	love.graphics.print("damage :" .. self.projectileManager.damage, self.x + 50, self.y - 110)
 	love.graphics.print("tears :" .. self.projectileManager.tearIterator, self.x + 50, self.y - 130)
 	love.graphics.print("shootAngle : " .. self.projectileManager.shootAngle, self.x + 50, self.y - 150)
-	local velocity = math.sqrt(self.xvel ^ 2 + self.yvel ^ 2)
+	local velocity = math.miFloor(math.sqrt(self.xvel ^ 2 + self.yvel ^ 2))
+
 	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
 	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
 
@@ -374,4 +372,11 @@ function Player:die()
 	for i = 1, love.math.random(8, 12) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = GHPColor })
 	end
+end
+
+function Player:destroy()
+	self.chance:destroy()
+	self.projectileManager:destroy()
+	self.ASPDMultiplier:destroy()
+	Player.super.destroy(self)
 end

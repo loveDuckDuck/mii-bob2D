@@ -32,3 +32,8 @@ function BarrierArea:draw()
 	love.graphics.circle("line", self.x, self.y, self.radius + math.customRandom(-2, 2))
 	love.graphics.setColor(GDefaultColor)
 end
+function BarrierArea:destroy()
+    BarrierArea.super.destroy(self)
+end
+
+

@@ -1,19 +1,22 @@
 -- in main.lua
 
-Object = require("libraries/classic/classic")
+Object         = require("libraries/classic/classic")
 
-Loader = require("Loader")
-Input = require("libraries/input/Input")
-Timer = require("libraries/enhanced_timer/EnhancedTimer")
-Camera = require("libraries/hump/camera")
-Draft = require("libraries/draft/draft")
-Vector = require("libraries/hump/vector")
-Physics = require("libraries/windfield")
-Moses = require("libraries/moses/moses")
+Loader         = require("Loader")
+Input          = require("libraries/input/Input")
+Timer          = require("libraries/enhanced_timer/EnhancedTimer")
+Camera         = require("libraries/hump/camera")
+Draft          = require("libraries/draft/draft")
+Vector         = require("libraries/hump/vector")
+Physics        = require("libraries/windfield")
+Moses          = require("libraries/moses/moses")
+Profiler       = require("libraries/Piefiller/piefiller")
+local Prof     = Profiler:new()
+
 --utilities
-Util = require("utils/Utils")
+Util           = require("utils/Utils")
 RoomController = require("utils/RoomController")
-TreeLogic = require("utils/TreeStats")
+TreeLogic      = require("utils/TreeStats")
 
 require("libraries/string/utf8")
 require("globals")
@@ -50,6 +53,7 @@ function resizeWidthHeight(w, h)
 	love.window.setMode(w, h)
 	SX, SY = love.graphics.getWidth() / GW, love.graphics.getHeight() / GH
 	print("Resized to: " .. w .. "x" .. h .. "  SX: " .. SX .. " SY: " .. SY)
+	RES_X, RES_Y = w, h
 end
 
 function resize(s)
@@ -60,6 +64,23 @@ end
 function love.draw()
 	DrawGarbageCollector()
 	GRoom:draw()
+	--Prof:draw()
+	-- local y_offset = 0
+	-- local x_offset = 0
+
+	-- for _, value in pairs(data.items) do
+	-- 	for _, ivalue in pairs(value) do
+	-- 		if type(ivalue) ~= "table" then
+	-- 			love.graphics.print(_ .. ": " .. ivalue, x_offset, y_offset)
+	-- 			y_offset = y_offset + 20 -- Increment the y-coordinate for the next line
+	-- 			if y_offset > RES_Y then
+	-- 				print(y_offset)
+	-- 				x_offset = x_offset + 300
+	-- 				y_offset = 0
+	-- 			end
+	-- 		end
+	-- 	end
+	-- end
 end
 
 -- in main.lua
@@ -68,11 +89,13 @@ function love.textinput(t)
 end
 
 function love.update(dt)
+--	Prof:attach()
+
 	if GInput:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
 	end
-	if GInput:pressed("goToTestingRoom") then
-		GRoom:gotoRoom("TestingRoom", 1)
+	if GInput:pressed("goToStage") then
+		GRoom:gotoRoom("Stage", 1) -- XXX : fiX
 	end
 	if GInput:pressed("goToConsole") then
 		GRoom:gotoRoom("Console", 3)
@@ -82,9 +105,11 @@ function love.update(dt)
 		GRoom:gotoRoom("SkillTree", 2)
 	end
 
-	GRoom:update(dt * slow)
 	GCamera:update(dt * slow)
 	GTimer:update(dt * slow)
+	GRoom:update(dt * slow)
+	--Prof:detach()
+	--data = Prof:unpack()
 end
 
 local function graphicSetter()
@@ -98,40 +123,40 @@ local function graphicSetter()
 	end
 end
 
-function InputBinderMoveThroughRooms()
+local function inputBinder()
 	GInput:bind("escape", "DeleteEveryThing")
+
 	GInput:bind("f1", "goToSkillTree")
 	GInput:bind("f2", "goToConsole")
-	GInput:bind("f3", "goToTestingRoom")
-end
+	GInput:bind("f3", "goToStage")
 
-function InputBinderPlayerControls()
-	GInput:unbindAll()
 	GInput:bind("a", "left")
 	GInput:bind("d", "right")
 	GInput:bind("w", "up")
 	GInput:bind("s", "down")
 
-	GInput:bind("space", "boosting")
 	GInput:bind("down", "shootdown")
 	GInput:bind("up", "shootup")
 	GInput:bind("left", "shootleft")
 	GInput:bind("right", "shootright")
-	InputBinderMoveThroughRooms()
+
+	GInput:bind("space", "boosting")
+
+	GInput:bind("wheelup", "zoomIn")
+	GInput:bind("wheeldown", "zoomOut")
+end
+
+function InputBinderPlayerControls()
+	GInput:unbindAll()
 end
 
 function InputBinderSkillTree()
-    GInput:unbindAll()
-    GInput:bind("wheelup", "zoomIn")
-    GInput:bind("wheeldown", "zoomOut")
-	InputBinderMoveThroughRooms()
+	GInput:unbindAll()
 end
-
-
-
 
 function love.load()
 	GInput = Input()
+	inputBinder()
 	graphicSetter()
 	GDraft = Draft()
 	GLoader = Loader()
@@ -150,7 +175,7 @@ function love.load()
 	GCamera = Camera()
 	GRoom = RoomController()
 	print(GRoom)
-	GRoom:gotoRoom("Stage", UUID())
+	GRoom:gotoRoom("Stage", 1) -- XXX : fix
 	slow = 1
 	FlashFrames = 0
 	resizeWidthHeight(1280, 720)

@@ -26,6 +26,7 @@ function Area:update(dt)
 		if game_object.dead then
 			game_object:destroy()
 			table.remove(self.game_objects, i)
+			table.remove(self.gameObjectType,i)
 		end
 	end
 end
@@ -48,34 +49,41 @@ function Area:draw()
 end
 
 function Area:drawOnly(types)
-    table.sort(self.game_objects, function(a, b) 
-        if a.depth == b.depth then return a.creation_time < b.creation_time
-        else return a.depth < b.depth end
-    end)
+	table.sort(self.game_objects, function(a, b)
+		if a.depth == b.depth then
+			return a.creation_time < b.creation_time
+		else
+			return a.depth < b.depth
+		end
+	end)
 
-    for _, game_object in ipairs(self.game_objects) do 
-        if game_object.graphics_types then
-            if #fn.intersection(types, game_object.graphics_types) > 0 then
-                game_object:draw() 
-            end
-        end
-    end
+	for _, game_object in ipairs(self.game_objects) do
+		if game_object.graphics_types then
+			if #fn.intersection(types, game_object.graphics_types) > 0 then
+				game_object:draw()
+			end
+		end
+	end
 end
 
 function Area:drawExcept(types)
-    table.sort(self.game_objects, function(a, b) 
-        if a.depth == b.depth then return a.creation_time < b.creation_time
-        else return a.depth < b.depth end
-    end)
+	table.sort(self.game_objects, function(a, b)
+		if a.depth == b.depth then
+			return a.creation_time < b.creation_time
+		else
+			return a.depth < b.depth
+		end
+	end)
 
-    for _, game_object in ipairs(self.game_objects) do 
-        if not game_object.graphics_types then game_object:draw() 
-        else
-            if #fn.intersection(types, game_object.graphics_types) == 0 then
-                game_object:draw()
-            end
-        end
-    end
+	for _, game_object in ipairs(self.game_objects) do
+		if not game_object.graphics_types then
+			game_object:draw()
+		else
+			if #fn.intersection(types, game_object.graphics_types) == 0 then
+				game_object:draw()
+			end
+		end
+	end
 end
 
 -- the idea behind it is like the add the room to the persistent type
@@ -102,6 +110,20 @@ if I got a world physic add to it set it to null and destroy
 ]]
 
 function Area:destroy()
+
+	print("In area : ")
+
+	for i = 0, #self.gameObjectType, 1 do
+		print(self.gameObjectType[i])
+	end
+
+
+	if #self.game_objects == #self.gameObjectType then
+		print("correct")
+	end
+
+	print("In destroy area : ")
+
 	for i = #self.game_objects, 1, -1 do
 		local game_object = self.game_objects[i]
 		print("Destroy : " .. self.gameObjectType[i])
@@ -109,6 +131,7 @@ function Area:destroy()
 		table.remove(self.game_objects, i)
 	end
 	self.game_objects = {}
+	self.gameObjectType= {}
 
 	if self.world then
 		self.world:destroy()

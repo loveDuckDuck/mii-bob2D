@@ -1,13 +1,13 @@
-PlayerChanceManager = Object:extend()
+ChanceManager = Object:extend()
 
-function PlayerChanceManager:new(player, projectileManager)
+function ChanceManager:new(player, projectileManager)
 	self.player = player
 	if not self.player then
-		error("PlayerChanceManager needs a player!")
+		error("ChanceManager needs a player!")
 	end
 	self.projectileManager = projectileManager
 	if not self.projectileManager then
-		error("PlayerChanceManager needs a projectileManager!")
+		error("ChanceManager needs a projectileManager!")
 	end
 
 	-- LUCK
@@ -48,7 +48,7 @@ function PlayerChanceManager:new(player, projectileManager)
 	self.shield_projectile_chance = 100
 end
 
-function PlayerChanceManager:returnRandomOffset()
+function ChanceManager:returnRandomOffset()
 	local xOffset = math.customRandom(-1, 10)
 	local yOffset = math.customRandom(-10, 10)
 	return xOffset, yOffset
@@ -58,7 +58,7 @@ end
 -- Iterates over the Player's fields, and for each field with a key containing "_chance" and a numeric value,
 -- creates a chance list using `CreateChanceList` with the value as the probability for `true` and the remainder for `false`.
 -- The generated chance lists are stored in the `self.chances` table, keyed by the original field name.
-function PlayerChanceManager:generateChances()
+function ChanceManager:generateChances()
 	self.chances = {}
 	for k, v in pairs(self) do
 		if k:find("_chance") and type(v) == "number" then
@@ -70,9 +70,9 @@ function PlayerChanceManager:generateChances()
 	end
 end
 
-function PlayerChanceManager:getChance() end
+function ChanceManager:getChance() end
 
-function PlayerChanceManager:onAmmoPickupChance()
+function ChanceManager:onAmmoPickupChance()
 	local xOffset, yOffset = self:returnRandomOffset()
 	if self.chances.launch_homing_projectile_on_ammo_pickup_chance:next()
 
@@ -126,7 +126,7 @@ function PlayerChanceManager:onAmmoPickupChance()
 	self:onBoostPickupChange()
 end
 
-function PlayerChanceManager:onBoostPickupChange()
+function ChanceManager:onBoostPickupChange()
 	local xOffset, yOffset = self:returnRandomOffset()
 
 	if self.chances.spawn_boost_on_kill_chance:next() then
@@ -146,7 +146,7 @@ function PlayerChanceManager:onBoostPickupChange()
 	end
 end
 
-function PlayerChanceManager:onKill()
+function ChanceManager:onKill()
 	local xOffset, yOffset = self:returnRandomOffset()
 
 	if self.chances.barrage_on_kill_chance:next() then
@@ -191,7 +191,7 @@ function PlayerChanceManager:onKill()
 	end
 end
 
-function PlayerChanceManager:onGainSomeHp()
+function ChanceManager:onGainSomeHp()
 	local xOffset, yOffset = self:returnRandomOffset()
 
 	if self.chances.gain_some_hp_chance:next() then
@@ -214,7 +214,7 @@ function PlayerChanceManager:onGainSomeHp()
 	end
 end
 
-function PlayerChanceManager:onFreakProjectileDirection()
+function ChanceManager:onFreakProjectileDirection()
 	if self.chances.projectile_ninety_degree_change_chance:next() then
 		self.projectileManager.projectile_ninety_degree_change =
 			not self.projectileManager.projectile_ninety_degree_change
@@ -224,7 +224,7 @@ function PlayerChanceManager:onFreakProjectileDirection()
 	end
 end
 
-function PlayerChanceManager:onWavyProjectilesChance()
+function ChanceManager:onWavyProjectilesChance()
 	if self.chances.wavy_projectiles_chance:next() then
 		self.projectileManager.wavy_projectiles = not self.projectileManager.wavy_projectiles
 		print("WAVYY : " .. (self.projectileManager.wavy_projectiles and "YESS" or "NOOOO"))
@@ -233,7 +233,7 @@ function PlayerChanceManager:onWavyProjectilesChance()
 	end
 end
 
-function PlayerChanceManager:onShieldProjectileChance()
+function ChanceManager:onShieldProjectileChance()
 	if self.chances.shield_projectile_chance:next() then
 		self.projectileManager.shield = not self.projectileManager.shield
 		print("SHIELD : " .. (self.projectileManager.shield and "YESS" or "NO"))
@@ -241,3 +241,6 @@ function PlayerChanceManager:onShieldProjectileChance()
 	end
 end
 
+function ChanceManager:destroy()
+	table.allNil(self)
+end

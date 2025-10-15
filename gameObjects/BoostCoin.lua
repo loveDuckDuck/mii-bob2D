@@ -22,3 +22,6 @@ function BoostCoin:die()
 	self.dead = true
 	self.area:addGameObject("InfoText", self.x, self.y, { text = "+BOOST", color = GBoostColor })
 end
+function BoostCoin:destroy()
+    BoostCoin.super.destroy(self)
+end

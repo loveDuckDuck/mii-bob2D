@@ -36,3 +36,6 @@ function CoinObject:update(dt)
 	end
 end
 
+function CoinObject:destroy()
+	CoinObject.super.destroy(self)
+end

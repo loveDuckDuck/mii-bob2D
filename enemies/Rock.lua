@@ -65,6 +65,9 @@ function Rock:draw()
 	love.graphics.setColor(GDefaultColor)
 end
 
+function Rock:destroy()
+    Rock.super.destroy(self)
+end
 
 
 

@@ -51,6 +51,7 @@ function MultiplierManager:onAmmoPickupChance()
 
 	local color = { math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0) }
 	if self.chances.hp_multiplier:next() then
+		
 		self.player.max_hp = self.player.max_hp + self.player.max_hp * self.random
 		self.player.hp = self.player.hp + self.player.hp * self.random
 
@@ -58,34 +59,32 @@ function MultiplierManager:onAmmoPickupChance()
 			{ text = "LIFE HOE", color = color })
 	end
 	if self.chances.velocity_multiplier:next() then
-		self.player.acceleration = self.player.acceleration + self.player.acceleration * self.random
-		self.player.baseMaxVelocity = self.player.baseMaxVelocity + self.player.baseMaxVelocity * self.random
-		self.player.maxVelocity = self.player.maxVelocity + self.player.maxVelocity * self.random
-		self.player.friction = self.player.friction - self.player.friction * self.random
+		self.player.acceleration = ReturnValuePercentage(self.player.acceleration, self.random, fiftyFifty)
+		self.player.baseMaxVelocity = ReturnValuePercentage(self.player.baseMaxVelocity, self.random, fiftyFifty)
+		self.player.maxVelocity = ReturnValuePercentage(self.player.maxVelocity, self.random, fiftyFifty)
+		self.player.friction = ReturnValuePercentage(self.player.friction, self.random, fiftyFifty)
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
-			{ text = "FASTER!@R", color = color })
-	end
-	if self.chances.friction_multiplier:next() then
-		self.player.acceleration = self.player.acceleration - self.player.acceleration * self.random
-		self.player.baseMaxVelocity = self.player.baseMaxVelocity - self.player.baseMaxVelocity * self.random
-		self.player.maxVelocity = self.player.maxVelocity - self.player.maxVelocity * self.random
-		self.player.friction = self.player.friction + self.player.friction * self.random
-		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
-			{ text = "SLOWWER BORTHA!", color = color })
+			{ text = fiftyFifty < 50 and "FASTER!@R" or "slowwwwwwwwwwwwwwwww", color = color })
 	end
 
 	if self.chances.damage_multiplier:next() then
-		self.player.projectileManager.damage = self.player.projectileManager.damage +
-			(fiftyFifty < 50 and -1 or 1) * self.player.projectileManager.damage * self.random
+		self.player.projectileManager.damage = ReturnValuePercentage(self.player.projectileManager.damage, self.random,
+			fiftyFifty)
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
 			{ text = fiftyFifty < 50 and "KILLLLLLL!!!" or "im gonna bee killed", color = color })
 	end
 
 	if self.chances.size_multiplier:next() then
-		self.player.projectileManager.size = self.player.projectileManager.size + (
-			fiftyFifty < 50 and -1 or 1) * self.player.projectileManager.size * self.random
+		self.player.projectileManager.size = ReturnValuePercentage(self.player.projectileManager.size, self.random,
+			fiftyFifty)
 
 		self.player.area:addGameObject("InfoText", self.player.x, self.player.y,
 			{ text = fiftyFifty < 50 and "BIGGER!" or "smallllllll", color = color })
 	end
+end
+
+
+
+function MultiplierManager:destroy()
+	table.allNil(self)
 end

@@ -2,6 +2,10 @@ GW = 640
 GH = 360
 SX = 1
 SY = 1
+RES_X = 640
+RES_Y = 360
+
+
 
 function love.conf(t)
 	t.identity = nil                   -- The name of the save directory (string)

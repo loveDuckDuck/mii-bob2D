@@ -78,3 +78,7 @@ function Shooter:die()
 	self.area:addGameObject("EnemyDeathEffect", self.x, self.y, { color = GHPColor, w = self.w, h = self.h })
 	self.area:addGameObject("Ammo", self.x, self.y)
 end
+
+function Shooter:destroy()
+    Shooter.super.destroy(self)
+end
