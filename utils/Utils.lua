@@ -29,130 +29,14 @@ function math.customRandom(min, max)
 	return (min > max and (love.math.random() * (min - max) + max)) or (love.math.random() * (max - min) + min)
 end
 
-function count_all(f)
-	local seen = {}
-	local count_table
-	count_table = function(t)
-		if seen[t] then
-			return
-		end
-		f(t)
-		seen[t] = true
-		for k, v in pairs(t) do
-			if type(v) == "table" then
-				count_table(v)
-			elseif type(v) == "userdata" then
-				f(v)
-			end
-		end
+function table.counterSort(t)
+	local a = {}
+	for k, v in pairs(t) do
+		table.insert(a, { key = k, value = v })
 	end
-	count_table(_G)
-end
 
-function type_count()
-	local counts = {}
-	local enumerate = function(o)
-		local t = type_name(o)
-		counts[t] = (counts[t] or 0) + 1
-	end
-	count_all(enumerate)
-	return counts
-end
-
-global_type_table = nil
-function type_name(o)
-	if global_type_table == nil then
-		global_type_table = {}
-		for k, v in pairs(_G) do
-			global_type_table[v] = k
-		end
-		global_type_table[0] = "table"
-	end
-	return global_type_table[getmetatable(o) or 0] or "Unknown"
-end
-
-
-
--- Original functions remain the same
-global_type_table = nil
-function type_name(o)
-    if global_type_table == nil then
-        global_type_table = {}
-        for k, v in pairs(_G) do
-            -- Map the value (the object) to its global name (the key)
-            global_type_table[v] = k
-        end
-        -- Special case for tables without a metatable
-        global_type_table[0] = "table"
-    end
-    -- getmetatable(o) returns nil if no metatable, so use 'or 0' to hit the special case
-    return global_type_table[getmetatable(o) or 0] or "Unknown"
-end
-
-function count_all(f)
-    local seen = {}
-    local count_table
-    count_table = function(t)
-        if seen[t] then
-            return
-        end
-        f(t) -- Call function f on the table itself
-        seen[t] = true
-        for k, v in pairs(t) do
-            if type(v) == "table" then
-                count_table(v)
-            elseif type(v) == "userdata" then
-                f(v) -- Call function f on the userdata object
-            -- Note: 'f' is *not* called on other types (string, number, function) that are values 'v' in the table.
-            -- This function only counts the objects that can contain other objects (tables) or are C-defined (userdata).
-            end
-        end
-    end
-    count_table(_G)
-end
-
-function type_count_and_print_unknowns()
-    local counts = {}
-    -- Table to specifically store objects classified as "Unknown"
-    local unknown_objects = {}
-
-    local enumerate = function(o)
-        local t = type_name(o)
-
-        -- 1. Increment the count
-        counts[t] = (counts[t] or 0) + 1
-
-        -- 2. Store the unknown object
-        if t == "Unknown" then
-            table.insert(unknown_objects, o)
-        end
-    end
-
-    count_all(enumerate)
-
-    -- Print the unknown objects after traversal is complete
-    print("\n--- Unknown Objects Found ---")
-    for i, obj in ipairs(unknown_objects) do
-        local obj_type = type(obj)
-        local obj_id = tostring(obj) -- Unique identifier/address (good for debugging)
-        
-        -- Attempt to print a useful representation
-        if obj_type == "table" then
-            -- Note: Printing a table directly shows its address, not its contents.
-            print(string.format("Unknown #%d: Type: %s, Address: %s, Keys: %d",
-                                i, obj_type, obj_id, select(2, next(obj)) ~= nil and #obj > 0 and #obj or 0))
-        elseif obj_type == "userdata" then
-            print(string.format("Unknown #%d: Type: %s, Address: %s",
-                                i, obj_type, obj_id))
-        else
-            -- Should not happen with current count_all logic, but safe to include
-            print(string.format("Unknown #%d: Type: %s, Value: %s",
-                                i, obj_type, tostring(obj)))
-        end
-    end
-    print("-------------------------------\n")
-
-    return counts
+	table.sort(a, function(x, y) return x.value > y.value end)
+	return a
 end
 
 function table.pairsByKeys(t, f)
@@ -160,9 +44,9 @@ function table.pairsByKeys(t, f)
 	for n in pairs(t) do table.insert(a, n) end
 	table.sort(a)
 
-	local i = 0                -- iterator variable
-	
-	local iter = function()    -- iterator function
+	local i = 0          -- iterator variable
+
+	local iter = function() -- iterator function
 		i = i + 1
 		if a[i] == nil then
 			return nil
@@ -172,44 +56,6 @@ function table.pairsByKeys(t, f)
 	end
 
 	return iter
-end
-
-
-
-function table.counterSort(t)
-	
-	local a = {}
-	for k, v in pairs(t) do
-		table.insert(a, { key = k, value = v })
-	end
-
-	table.sort(a, function(x, y) return x.value > y.value end)
-	return a
-
-end
-
-function DrawGarbageCollector()
-	love.graphics.setColor(0, 1, 0, 1)
-	love.graphics.print("Before collection: " .. collectgarbage("count") / 1024, 0, 0)
-	collectgarbage()
-	love.graphics.print("After collection: " .. collectgarbage("count") / 1024, 0, 20)
-
-	-- Print the header for object counts
-	love.graphics.print("Object count:", 0, 40)
-
-	local counts = type_count()
-	local y_offset = 60
-	-- Loop through the counts and print each on a new line
-	counts = table.counterSort(counts)
-	for x = 1, #counts do
-		love.graphics.print(counts[x].key .. ": " .. counts[x].value, 0, y_offset)
-		y_offset = y_offset + 20 -- Increment the y-coordinate for the next line
-	end
-
-	love.graphics.print(GW .. " : " .. GH, 0, y_offset)
-	y_offset = y_offset + 20
-
-	love.graphics.setColor(1, 1, 1, 1)
 end
 
 function PushRotate(x, y, r)
@@ -278,7 +124,6 @@ function DeleteEveryThing()
 	print("DeleteEveryThing")
 	love.event.quit()
 end
-
 
 function GlobalAtan2(y, x)
 	if x > 0 then
@@ -369,7 +214,6 @@ function Lerp(a, b, t)
 	return a + (b - a) * t
 end
 
-
 function GlobalDistance(x1, y1, x2, y2)
 	return math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
 end
@@ -449,20 +293,16 @@ function table.shallow_copy(t)
 	return t2
 end
 
-
 function math.miFloor(number)
-	return math.floor(number * 100 + 0.5)/ 100
+	return math.floor(number * 100 + 0.5) / 100
 end
 
-
-function ReturnValuePercentage(value, percentage,probability)
+function ReturnValuePercentage(value, percentage, probability)
 	return math.miFloor(value + (probability < 50 and (1) or (-1)) * (value * percentage))
 end
-
 
 function table.clear(t)
 	for key, value in pairs(t) do
 		t[key] = nil
 	end
-	
 end

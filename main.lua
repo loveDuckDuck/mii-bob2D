@@ -21,6 +21,7 @@ TreeLogic      = require("utils/TreeStats")
 require("libraries/string/utf8")
 require("globals")
 
+
 --Bitser = require 'bitser'
 
 --Area = require 'gameObject/Area'
@@ -62,8 +63,9 @@ function resize(s)
 end
 
 function love.draw()
-	DrawGarbageCollector()
+	--DrawGarbageCollector()
 	GRoom:draw()
+	GameTracker:draw()
 	--Prof:draw()
 	-- local y_offset = 0
 	-- local x_offset = 0
@@ -108,6 +110,7 @@ function love.update(dt)
 	GCamera:update(dt * slow)
 	GTimer:update(dt * slow)
 	GRoom:update(dt * slow)
+	GameTracker:update(dt * slow)
 	--Prof:detach()
 	--data = Prof:unpack()
 end
@@ -170,7 +173,8 @@ function love.load()
 	GLoader:getRequireFiles("modules")
 	GLoader:getRequireFiles("rooms")
 
-
+	GameTracker = Game()
+	GameTracker:init()
 	GTimer = Timer()
 	GCamera = Camera()
 	GRoom = RoomController()

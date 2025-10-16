@@ -69,12 +69,12 @@ function Player:new(area, x, y, opts)
 
 	-- GENERATE CHANCES
 	self.projectileManager = ProjectileManager(self)
-	self.chance = ChanceManager(self, self.projectileManager)
+	self.changeManager = ChanceManager(self, self.projectileManager)
 	self.multiplierManager = MultiplierManager(self)
-	self.ASPDMultiplier = Stat(1)
+	self.statMultiplier = Stat(1)
 
 
-	self.chance:generateChances()
+	self.changeManager:generateChances()
 	self.multiplierManager:generateChanceMultiplier()
 
 	self:setAttack("Hearth")
@@ -102,7 +102,7 @@ function Player:new(area, x, y, opts)
 		correct this one
 	]]
 	-- self.timer:after(1, function()
-	-- 	self.chance:onShieldProjectileChance()
+	-- 	self.changeManager:onShieldProjectileChance()
 	-- end)
 end
 
@@ -151,9 +151,9 @@ function Player:move(dt)
 		self.boosting = not self.boosting
 
 		if self.boosting then
-			self.chance.luckMultiplier = self.chance.luckMultiplier * 2
+			self.changeManager.luckMultiplier = self.changeManager.luckMultiplier * 2
 		else
-			self.chance.luckMultiplier = self.chance.luckMultiplier / 2
+			self.changeManager.luckMultiplier = self.changeManager.luckMultiplier / 2
 		end
 
 		self.maxVelocity = self.boosting and 2 * self.baseMaxVelocity or self.baseMaxVelocity
@@ -198,7 +198,7 @@ function Player:move(dt)
 
 	if self.enabledToShoot then
 		self.shoot_timer = self.shoot_timer + dt
-		if self.shoot_timer > self.shoot_cooldown / self.ASPDMultiplier.value then
+		if self.shoot_timer > self.shoot_cooldown / self.statMultiplier.value then
 			self.shoot_timer = 0
 			self:shoot()
 		end
@@ -257,18 +257,18 @@ function Player:checkCollision(dt)
 		if object:is(Ammo) then
 			self:addAmmo(object.cointValue)
 			self:addScore(object.cointValue * 10)
-			self.chance:onAmmoPickupChance()
+			self.changeManager:onAmmoPickupChance()
 			self.multiplierManager:onAmmoPickupChance()
 			object:die()
 		elseif object:is(BoostCoin) then
 			object:die()
-			self.chance:onBoostPickupChange()
+			self.changeManager:onBoostPickupChange()
 		elseif object:is(ResourceCoin) then
 			self.attack = object.power.name
 			self:setAttack(self.attack)
 			object:die()
 		elseif object:is(HpCoin) then
-			self.chance:onGainSomeHp()
+			self.changeManager:onGainSomeHp()
 			object:die()
 		end
 	end
@@ -284,12 +284,12 @@ end
 function Player:updateASPDMultiplier(dt)
 	self.additionalASPDMultiplier = {}
 	if self.insideHasteArea then
-		self.ASPDMultiplier:increase(100)
+		self.statMultiplier:increase(100)
 	end
 	if self.ASPDBoosting then
-		self.ASPDMultiplier:increase(100)
+		self.statMultiplier:increase(100)
 	end
-	self.ASPDMultiplier:update(dt)
+	self.statMultiplier:update(dt)
 end
 
 function Player:update(dt)
@@ -311,7 +311,7 @@ function Player:draw()
 	local velocity = math.miFloor(math.sqrt(self.xvel ^ 2 + self.yvel ^ 2))
 
 	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
-	love.graphics.print("luck : " .. self.chance.luckMultiplier, self.x + 50, self.y - 190)
+	love.graphics.print("luck : " .. self.changeManager.luckMultiplier, self.x + 50, self.y - 190)
 
 	love.graphics.print("static velocity : " .. self.baseMaxVelocity, self.x + 50, self.y - 210)
 	love.graphics.print("static friction : " .. self.friction, self.x + 50, self.y - 230)
@@ -372,9 +372,8 @@ end
 
 function Player:destroy()
 	self.projectileManager:destroy()
-	self.chance:destroy()
+	self.changeManager:destroy()
 	self.multiplierManager:destroy()
-	--self.ASPDMultiplier:destroy()
 
 	Player.super.destroy(self)
 end
