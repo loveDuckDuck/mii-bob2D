@@ -242,5 +242,5 @@ function ChanceManager:onShieldProjectileChance()
 end
 
 function ChanceManager:destroy()
-	table.allNil(self)
+	table.clear(self)
 end

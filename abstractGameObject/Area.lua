@@ -6,15 +6,6 @@ function Area:new(room)
 	self.gameObjectType = {}
 end
 
---[[
-The # operator in Lua returns the length of a
-sequence (usually the highest integer index in
-an array-like table).
-
-for var = start, stop, step do
-    -- loop body
-end
-]]
 
 function Area:update(dt)
 	if self.world then
@@ -26,7 +17,7 @@ function Area:update(dt)
 		if game_object.dead then
 			game_object:destroy()
 			table.remove(self.game_objects, i)
-			table.remove(self.gameObjectType,i)
+			table.remove(self.gameObjectType, i)
 		end
 	end
 end
@@ -110,28 +101,16 @@ if I got a world physic add to it set it to null and destroy
 ]]
 
 function Area:destroy()
-
-	print("In area : ")
-
-	for i = 0, #self.gameObjectType, 1 do
-		print(self.gameObjectType[i])
-	end
-
-
 	if #self.game_objects == #self.gameObjectType then
 		print("correct")
 	end
-
-	print("In destroy area : ")
-
 	for i = #self.game_objects, 1, -1 do
 		local game_object = self.game_objects[i]
-		print("Destroy : " .. self.gameObjectType[i])
 		game_object:destroy()
 		table.remove(self.game_objects, i)
 	end
 	self.game_objects = {}
-	self.gameObjectType= {}
+	self.gameObjectType = {}
 
 	if self.world then
 		self.world:destroy()

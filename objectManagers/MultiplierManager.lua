@@ -84,7 +84,6 @@ function MultiplierManager:onAmmoPickupChance()
 end
 
 
-
 function MultiplierManager:destroy()
-	table.allNil(self)
+	table.clear(self)
 end

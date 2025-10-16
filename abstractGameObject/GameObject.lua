@@ -25,9 +25,6 @@ function GameObject:destroy()
     self.timer:destroy()
     if self.collider then self.collider:destroy() end
     self.collider = nil
-    for k, _ in pairs(self) do
-        self[k] = nil
-    end
-
+--    table.clear(self)
 end
 

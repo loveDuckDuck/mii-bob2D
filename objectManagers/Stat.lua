@@ -34,7 +34,3 @@ function Stat:decrease(percentage)
 	table.insert(self.additives, -percentage * 0.01)
 end
 
-
-function Stat:destroy()
-	table.allNil(self)
-end

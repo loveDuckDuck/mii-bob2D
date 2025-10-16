@@ -460,7 +460,7 @@ function ReturnValuePercentage(value, percentage,probability)
 end
 
 
-function table.allNil(t)
+function table.clear(t)
 	for key, value in pairs(t) do
 		t[key] = nil
 	end

@@ -42,9 +42,9 @@ function Director:new(stage, player)
 		["ResourceCoin"] = 1,
 		["BoostCoin"] = 2,
 		["Ammo"] = 3,
-	}	
+	}
 
-self.resource_spawn_chances = {}
+	self.resource_spawn_chances = {}
 	for i = 1, 1024 do
 		self.resource_spawn_chances[i] = CreateChanceList(
 			{ "Ammo", love.math.random(2, 8) },
@@ -103,17 +103,19 @@ function Director:setEnemySpawnsForThisRound()
 end
 
 function Director:update(dt)
-	self.round_timer = self.round_timer + dt
-	if self.timer  then
-		self.timer:update(dt)
-	end -- Update the timer if any
+	if self.player then
+		self.round_timer = self.round_timer + dt
+		if self.timer then
+			self.timer:update(dt)
+		end -- Update the timer if any
 
-	if self.round_timer > self.round_duration /self.stage.player.multiplierManager.enemy_spawn_rate_multiplier  then
-		self.round_timer = 0
-		self.difficulty = self.difficulty + 1
-		self:setEnemySpawnsForThisRound()
-		self:setRecourceSpawnsForThisRound()
-		print("New round! Difficulty: " .. self.difficulty)
+		if self.round_timer > self.round_duration / self.player.multiplierManager.enemy_spawn_rate_multiplier then
+			self.round_timer = 0
+			self.difficulty = self.difficulty + 1
+			self:setEnemySpawnsForThisRound()
+			self:setRecourceSpawnsForThisRound()
+			print("New round! Difficulty: " .. self.difficulty)
+		end
 	end
 end
 
@@ -150,6 +152,5 @@ function Director:setRecourceSpawnsForThisRound()
 end
 
 function Director:destroy()
-	self.timer:destroy()
-	table.allNil(self)
+	table.clear(self)
 end

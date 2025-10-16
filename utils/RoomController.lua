@@ -54,6 +54,9 @@ end
 
 function RoomController:gotoRoom(roomName, roomUUID, ...)
 	print("n : ", table.count(self.roomsCreated))
+	if self.roomsCreated[roomName] then
+		self:removeRoom(roomName)
+	end
 	print("roomName : ", roomName, " roomUUID : ", roomUUID)
 	self.roomsCreated = { [roomName] = roomUUID }
 	if self.current_room and self.rooms[roomUUID] then
@@ -81,25 +84,14 @@ end
 
 function RoomController:removeRoom(roomName)
 	if self.roomsCreated[roomName] then
-		destroyAllTable(self.rooms[self.roomsCreated[roomName]])
+		self.rooms[self.roomsCreated[roomName]]:destroy()
+		table.clear(self.rooms[self.roomsCreated[roomName]])
 		self.rooms[self.roomsCreated[roomName]] = nil
 		self.roomsCreated[roomName] = nil
 	end
 end
 
-function destroyAllTable(t)
-	for k, v in pairs(t) do
-		if type(v) == "table" then
-			destroyAllTable(v)
-			if t[k].destroy then
-				t[k]:destroy()
-			end
-			t[k] = nil
-		else
-			t[k] = nil
-		end
-	end
-end
+
 
 function RoomController:__tostring()
 	return "RoomController"

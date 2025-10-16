@@ -3,7 +3,6 @@ function Player:new(area, x, y, opts)
 	Player.super.new(self, area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
-	self.projectileManager = ProjectileManager(self)
 
 	-- PHYSICS
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
@@ -29,8 +28,8 @@ function Player:new(area, x, y, opts)
 	self.isBounce = false
 
 	-- HP
-	self.hp = 100
-	self.max_hp = 100
+	self.hp = 10
+	self.max_hp = 10
 
 	--BOOST ABILTY
 	self.boost = 1
@@ -58,7 +57,6 @@ function Player:new(area, x, y, opts)
 
 	-- ASPD
 	self.baseASPDMultiplier = 1
-	self.ASPDMultiplier = Stat(1)
 	self.ASPDBoosting = 1
 	self.additionalASPDMultiplier = {}
 
@@ -68,11 +66,13 @@ function Player:new(area, x, y, opts)
 
 	-- treeToPlayer(self)
 	self:setStats()
-	-- CHANCES
 
 	-- GENERATE CHANCES
+	self.projectileManager = ProjectileManager(self)
 	self.chance = ChanceManager(self, self.projectileManager)
 	self.multiplierManager = MultiplierManager(self)
+	self.ASPDMultiplier = Stat(1)
+
 
 	self.chance:generateChances()
 	self.multiplierManager:generateChanceMultiplier()
@@ -358,25 +358,23 @@ function Player:setAttack(attack)
 end
 
 function Player:die()
-	self.dead = true
+
 	flash(4)
 	GCamera:shake(6, 60, 0.4)
-
-
-	self.projectileManager = nil
-	self.chance = nil
-	self.multiplierManager = nil
-	self.ASPDMultiplier = nil
-
 	Slow(0.15, 1)
 	for i = 1, love.math.random(8, 12) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = GHPColor })
 	end
+
+	GRoom.current_room:finish()
+
 end
 
 function Player:destroy()
-	self.chance:destroy()
 	self.projectileManager:destroy()
-	self.ASPDMultiplier:destroy()
+	self.chance:destroy()
+	self.multiplierManager:destroy()
+	--self.ASPDMultiplier:destroy()
+
 	Player.super.destroy(self)
 end

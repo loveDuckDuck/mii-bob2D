@@ -29,18 +29,21 @@ function Stage:new()
 	GCamera.smoother = Camera.smooth.damped(100)
 	--triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
 	GInput:bind("p", function()
-		Slow(0.15, 1)
-
 		self:destroy()
 	end)
 end
 
 function Stage:update(dt)
-	self.director:update(dt)
 	GCamera:lockPosition(dt, GW / 2, GH / 2)
 	GCamera:update(dt)
-	self.area:update(dt)
-	if (self.player.dead) then
+
+	if self.player then
+		self.director:update(dt)
+
+		self.area:update(dt)
+	end
+
+	if (not self.player) then
 		self:destroy()
 	end
 end
@@ -54,8 +57,7 @@ function Stage:deactivate()
 end
 
 function Stage:draw()
-	if self.area == nil then
-		print("Area is nil, cannot draw Stage") --- IGNORE ---
+	if not self.player then
 		return
 	end
 	love.graphics.setCanvas(self.main_canvas)
@@ -98,25 +100,21 @@ function Stage:draw()
 end
 
 function Stage:destroy()
-	GInput:unbind("p")  -- Unbind the "p" key callback
+	self.director:destroy()
+	self.area:destroy()
+	self.area = nil
+	self.player = nil
 
-	self:finish()
+	--table.clear(self)
 end
 
 function Stage:finish()
-	self.area:destroy()
-	self.director:destroy()
-	self.director = nil
-	self.area = nil
-	self.main_canvas:release()
+	GTimer:after(1, function()
+		GRoom:gotoRoom('Stage', UUID())
 
-	table.allNil(self)
-	GRoom:removeRoom("Stage")
-
-	GRoom:gotoRoom('Stage', UUID())
-
-	if not Achievements['10K Fighter'] and self.score >= 10000 then
-		Achievements['10K Fighter'] = true
-		-- Do whatever else that should be done when an achievement is unlocked
-	end
+		if not Achievements['10K Fighter'] then
+			Achievements['10k Fighter'] = true
+			-- Do whatever else that should be done when an achievement is unlocked
+		end
+	end)
 end

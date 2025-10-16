@@ -182,5 +182,5 @@ end
 
 
 function ProjectileManager:destroy()
-	table.allNil(self)
+	table.clear(self)
 end
