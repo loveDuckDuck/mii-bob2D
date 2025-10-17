@@ -21,8 +21,9 @@ function Stage:new()
 	self.director = Director(self, self.player)
 
 	self.score = 0
-	self.font = Font
+	self.font = GFont
 	self.counterAttack = 0
+	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
 
 
 
@@ -31,6 +32,9 @@ function Stage:new()
 	GInput:bind("p", function()
 		self:destroy()
 	end)
+
+
+	
 end
 
 function Stage:update(dt)

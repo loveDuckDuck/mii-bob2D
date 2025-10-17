@@ -30,7 +30,7 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
 
 
     self.score = 0
-    self.font = Font
+    self.font = GFont
     self.counterAttack = 0
     -- GInput:bind("mouse1", function()
     --     self.counterAttack = self.counterAttack + 1
