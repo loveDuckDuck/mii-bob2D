@@ -10,8 +10,6 @@ Draft          = require("libraries/draft/draft")
 Vector         = require("libraries/hump/vector")
 Physics        = require("libraries/windfield")
 Moses          = require("libraries/moses/moses")
-Profiler       = require("libraries/Piefiller/piefiller")
-local Prof     = Profiler:new()
 
 --utilities
 Util           = require("utils/Utils")
@@ -64,7 +62,6 @@ end
 function love.draw()
 	DrawGarbageCollector()
 	GRoom:draw()
-	--Prof:draw()
 	-- local y_offset = 0
 	-- local x_offset = 0
 
@@ -89,7 +86,6 @@ function love.textinput(t)
 end
 
 function love.update(dt)
---	Prof:attach()
 
 	if GInput:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
@@ -108,8 +104,6 @@ function love.update(dt)
 	GCamera:update(dt * slow)
 	GTimer:update(dt * slow)
 	GRoom:update(dt * slow)
-	--Prof:detach()
-	--data = Prof:unpack()
 end
 
 local function graphicSetter()
