@@ -3,7 +3,7 @@ Shooter = Enemy:extend()
 function Shooter:new(area, x, y, opts)
 	Shooter.super.new(self, area, x, y, opts)
 	self.name = "Shooter"
-	self.target = GRoom.current_room.player
+	self.target = GRoom.currentRoom.player
 
 	-- coinvalues
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)

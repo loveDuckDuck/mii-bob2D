@@ -97,7 +97,6 @@ end
 function InfoText:draw()
 	if not self.visible then return end
 
-    local scale_factor = 10 -- Define your scale factor once (NOTE: Changed self.scaleFactor to this local var for consistency with your snippet)
     love.graphics.setFont(self.font) -- Ensure font is set outside the loop
 
     -- 1. Pre-calculate the total unscaled width

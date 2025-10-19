@@ -1,7 +1,7 @@
 RoomController = Object:extend()
 
 function RoomController:new()
-	self.current_room = nil
+	self.currentRoom = nil
 	self.rooms = {}
 	if type(self.rooms) ~= "table" then
 		print("Error: self.rooms is not a table. It might be nil.")
@@ -12,14 +12,14 @@ function RoomController:new()
 end
 
 function RoomController:update(dt)
-	if self.current_room then
-		self.current_room:update(dt)
+	if self.currentRoom then
+		self.currentRoom:update(dt)
 	end
 end
 
 function RoomController:draw()
-	if self.current_room then
-		self.current_room:draw()
+	if self.currentRoom then
+		self.currentRoom:draw()
 	end
 	if FlashFrames then
 		FlashFrames = FlashFrames - 1
@@ -36,19 +36,19 @@ end
 
 function RoomController:goToRoomMenu(roomType, roomUUID, ...)
 	print("roomType : ", roomType, " roomUUID : ", roomUUID)
-	if self.current_room and self.rooms[roomUUID] then
-		if self.current_room.deactivate then
-			self.current_room:deactivate()
+	if self.currentRoom and self.rooms[roomUUID] then
+		if self.currentRoom.deactivate then
+			self.currentRoom:deactivate()
 		end
-		self.current_room = self.rooms[roomUUID]
-		if self.current_room.activate then
-			if self.current_room.bindInputs then
-				self.current_room:bindInputs()
+		self.currentRoom = self.rooms[roomUUID]
+		if self.currentRoom.activate then
+			if self.currentRoom.bindInputs then
+				self.currentRoom:bindInputs()
 			end
-			self.current_room:activate()
+			self.currentRoom:activate()
 		end
 	else
-		self.current_room = self:addRoom(roomType, roomUUID, ...)
+		self.currentRoom = self:addRoom(roomType, roomUUID, ...)
 	end
 end
 
@@ -59,19 +59,19 @@ function RoomController:gotoRoom(roomName, roomUUID, ...)
 	end
 	print("roomName : ", roomName, " roomUUID : ", roomUUID)
 	self.roomsCreated = { [roomName] = roomUUID }
-	if self.current_room and self.rooms[roomUUID] then
-		if self.current_room.deactivate then
-			self.current_room:deactivate()
+	if self.currentRoom and self.rooms[roomUUID] then
+		if self.currentRoom.deactivate then
+			self.currentRoom:deactivate()
 		end
-		self.current_room = self.rooms[roomUUID]
-		if self.current_room.activate then
-			if self.current_room.bindInputs then
-				self.current_room:bindInputs()
+		self.currentRoom = self.rooms[roomUUID]
+		if self.currentRoom.activate then
+			if self.currentRoom.bindInputs then
+				self.currentRoom:bindInputs()
 			end
-			self.current_room:activate()
+			self.currentRoom:activate()
 		end
 	else
-		self.current_room = self:addRoom(roomName, roomUUID, ...)
+		self.currentRoom = self:addRoom(roomName, roomUUID, ...)
 	end
 end
 

@@ -5,7 +5,7 @@ function HasteArea:new(area, x, y, opts)
 	if opts.parent then
 		self.parent = opts.parent
 	else
-		self.parent = GRoom.current_room.player
+		self.parent = GRoom.currentRoom.player
 	end
 	self.radius = math.customRandom(64, 96)
 	self.timer:after(4, function()

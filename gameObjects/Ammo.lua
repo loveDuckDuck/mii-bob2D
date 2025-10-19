@@ -24,8 +24,6 @@ function Ammo:die()
 	for i = 1, love.math.random(4, 8) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { s = 3, color = GAmmoColor })
 	end
-	self.area:addGameObject("InfoText", GW / 2, GH / 2,
-		{ text = "sio pera", color = math.threeRamdon(), height = 50, width = 100 })
 end
 
 function Ammo:destroy()

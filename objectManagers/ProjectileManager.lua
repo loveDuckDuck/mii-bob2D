@@ -126,9 +126,6 @@ function ProjectileManager:updateAttack(key)
 end
 
 function ProjectileManager:update(dt)
-	if self.player.ammo <= 0 and Attacks[self.attack].ammo > 0 then
-		self.player:setAttack("Neutral")
-	end
 end
 
 -- Helper function to create a projectile at a given angle offset

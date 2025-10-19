@@ -85,7 +85,7 @@ end
 
 -- in main.lua
 function love.textinput(t)
-	if GRoom.current_room.textinput then GRoom.current_room:textinput(t) end
+	if GRoom.currentRoom.textinput then GRoom.currentRoom:textinput(t) end
 end
 
 function love.update(dt)

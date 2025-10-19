@@ -36,6 +36,7 @@ function Director:new(stage, player)
 	self.enemy_to_points = {
 		["Rock"] = 1,
 		["Shooter"] = 2,
+		["BigRock"] = 2
 	}
 
 	self.resource_to_points = {
@@ -48,7 +49,8 @@ function Director:new(stage, player)
 	for i = 1, 1024 do
 		self.resource_spawn_chances[i] = CreateChanceList(
 			{ "Ammo", love.math.random(2, 8) },
-			{ "BoostCoin", love.math.random(1, 4) }
+			{ "BoostCoin", love.math.random(1, 4) },	
+			{ "ResourceCoin", love.math.random(1, 6) }
 		)
 	end
 
@@ -56,14 +58,19 @@ function Director:new(stage, player)
 		[1] = CreateChanceList({ "Rock", 1 }),
 		[2] = CreateChanceList({ "Rock", 8 }, { "Shooter", 4 }),
 		[3] = CreateChanceList({ "Rock", 8 }, { "Shooter", 8 }),
-		[4] = CreateChanceList({ "Rock", 4 }, { "Shooter", 8 }),
+		[4] = CreateChanceList({ "Rock", 4 }, { "Shooter", 8 }, { "BigRock", 2 }),
 	}
 	for i = 5, 1024 do
 		self.enemy_spawn_chances[i] = CreateChanceList(
 			{ "Rock", love.math.random(2, 12) },
-			{ "Shooter", love.math.random(2, 12) }
+			{ "Shooter", love.math.random(2, 12) },
+			{ "BigRock", love.math.random(1, 6) }
 		)
 	end
+
+
+
+
 
 	self:setEnemySpawnsForThisRound()
 	self:setRecourceSpawnsForThisRound()

@@ -37,14 +37,9 @@ function Player:new(area, x, y, opts)
 
 	-- FLATS HP
 	self.flat_hp = 0
-	-- AMMO
-	self.maxAmmo = 100
-	self.ammo = self.maxAmmo
-	-- MULTIPLIER AMMO
-	self.hp_ammo = 1
-	-- FLATS AMMO
-	self.flat_ammo = 0
-	self.ammo_gain = 0
+
+
+	self.ammo = 0
 
 	-- SHOOTING
 	self.shoot_timer = 0
@@ -78,20 +73,20 @@ function Player:new(area, x, y, opts)
 	self.multiplierManager:generateChanceMultiplier()
 
 	self:setAttack("Hearth")
-	-- self.timer:every(0.01, function()
-	-- 	self.area:addGameObject(
-	-- 		"TrailParticle",
-	-- 		self.x - self.w * math.cos(self.rotation),
-	-- 		self.y - self.h * math.sin(self.rotation),
-	-- 		{
-	-- 			parent = self,
-	-- 			radius = math.customRandom(2, 4),
-	-- 			duration = math.customRandom(0.15, 0.25),
-	-- 			color = self
-	-- 				.trailColor
-	-- 		}
-	-- 	)
-	-- end)
+	self.timer:every(0.01, function()
+		self.area:addGameObject(
+			"TrailParticle",
+			self.x - self.w * math.cos(self.rotation),
+			self.y - self.h * math.sin(self.rotation),
+			{
+				parent = self,
+				radius = math.customRandom(2, 4),
+				duration = math.customRandom(0.15, 0.25),
+				color = self
+					.trailColor
+			}
+		)
+	end)
 
 
 	self.timer:every(5, function()
@@ -110,9 +105,7 @@ function Player:setStats()
 	-- multiply the max hp by the multiplier
 	self.max_hp = self.max_hp + self.flat_hp
 	self.hp = self.max_hp
-	-- multiply the max ammo by the multiplier
-	self.maxAmmo = (self.maxAmmo + self.flat_ammo) * self.hp_ammo
-	self.ammo = self.maxAmmo
+
 end
 
 function Player:physics(dt)
@@ -257,7 +250,6 @@ function Player:checkCollision(dt)
 		local collision_data = self.collider:getEnterCollisionData("Collectable")
 		local object = collision_data.collider:getObject()
 		if object:is(Ammo) then
-			self:addAmmo(object.cointValue)
 			self:addScore(object.cointValue * 10)
 			self.changeManager:onAmmoPickupChance()
 			self.multiplierManager:onAmmoPickupChance()
@@ -304,19 +296,6 @@ function Player:update(dt)
 end
 
 function Player:draw()
-	love.graphics.print("ammo : " .. self.ammo, self.x + 50, self.y - 50)
-	love.graphics.print("hp : " .. self.hp, self.x + 50, self.y - 70)
-	love.graphics.print("attack : " .. self.attack, self.x + 50, self.y - 90)
-	love.graphics.print("damage :" .. self.projectileManager.damage, self.x + 50, self.y - 110)
-	love.graphics.print("tears :" .. self.projectileManager.tearIterator, self.x + 50, self.y - 130)
-	love.graphics.print("shootAngle : " .. self.projectileManager.shootAngle, self.x + 50, self.y - 150)
-	local velocity = math.miFloor(math.sqrt(self.xvel ^ 2 + self.yvel ^ 2))
-
-	love.graphics.print("velocity : " .. velocity, self.x + 50, self.y - 170)
-	love.graphics.print("luck : " .. self.changeManager.luckMultiplier, self.x + 50, self.y - 190)
-
-	love.graphics.print("static velocity : " .. self.baseMaxVelocity, self.x + 50, self.y - 210)
-	love.graphics.print("static friction : " .. self.friction, self.x + 50, self.y - 230)
 
 
 	love.graphics.setColor(Attacks[self.attack].color)
@@ -329,18 +308,12 @@ function Player:tick()
 	self.area:addGameObject("TickEffect", self.x, self.y, { parent = self })
 end
 
-function Player:addAmmo(amount)
-	self.ammo = self.ammo + amount + self.ammo_gain
-	if self.ammo < 0 then
-		self.ammo = 0
-	end
-end
 
 function Player:addScore(amount)
-	GRoom.current_room.score = GRoom.current_room.score + amount
+	GRoom.currentRoom.score = GRoom.currentRoom.score + amount
 
-	if GRoom.current_room.score >= GRoom.current_room.goalScore then
-		GRoom.current_room.goalScore = GRoom.current_room.goalScore + 30
+	if GRoom.currentRoom.score >= GRoom.currentRoom.goalScore then
+		GRoom.currentRoom.goalScore = GRoom.currentRoom.goalScore + 30
 		
 		--[[
 			TODO : evaluate
@@ -359,7 +332,6 @@ function Player:shoot()
 	)
 
 	self.projectileManager:shoot(distance)
-	self:addAmmo(-Attacks[self.attack].ammo)
 end
 
 function Player:setAttack(attack)
@@ -376,7 +348,7 @@ function Player:die()
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = GHPColor })
 	end
 
-	GRoom.current_room:finish()
+	GRoom.currentRoom:finish()
 end
 
 function Player:destroy()

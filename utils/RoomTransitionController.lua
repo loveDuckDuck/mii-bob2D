@@ -7,7 +7,7 @@ The idea is to create a transition between the room and the room to go, the idea
 ]]
 
 function RoomTransitionController:new()
-	self.current_room = nil
+	self.currentRoom = nil
 	self.rooms = {}
 	self.roomTransition = {}
 	if type(self.rooms) ~= "table" then
@@ -19,14 +19,14 @@ function RoomTransitionController:new()
 end
 
 function RoomTransitionController:update(dt)
-	if self.current_room then
-		self.current_room:update(dt)
+	if self.currentRoom then
+		self.currentRoom:update(dt)
 	end
 end
 
 function RoomTransitionController:draw()
-	if self.current_room then
-		self.current_room:draw()
+	if self.currentRoom then
+		self.currentRoom:draw()
 	end
 	if FlashFrames then
 		FlashFrames = FlashFrames - 1
@@ -44,8 +44,8 @@ end
 --[[
     -- Cause im persistent i need to chage this
     function gotoRoom(room_type, ...)
-        if current_room and current_room.destroy then current_room:destroy() end
-        current_room = _G[room_type](...)
+        if currentRoom and currentRoom.destroy then currentRoom:destroy() end
+        currentRoom = _G[room_type](...)
     end
 
 ]]
@@ -53,16 +53,16 @@ end
 function RoomTransitionController:gotoRoom(room_type, room_name, ...)
 	print("room_type : ", room_type, " room_name : ", room_name)
 	
-	if self.current_room and self.rooms[room_name] then
-		if self.current_room.deactivate then
-			self.current_room:deactivate()
+	if self.currentRoom and self.rooms[room_name] then
+		if self.currentRoom.deactivate then
+			self.currentRoom:deactivate()
 		end
-		self.current_room = self.rooms[room_name]
-		if self.current_room.activate then
-			self.current_room:activate()
+		self.currentRoom = self.rooms[room_name]
+		if self.currentRoom.activate then
+			self.currentRoom:activate()
 		end
 	else
-		self.current_room = self:addRoom(room_type, room_name, ...)
+		self.currentRoom = self:addRoom(room_type, room_name, ...)
 	end
 end
 

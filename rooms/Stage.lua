@@ -21,18 +21,31 @@ function Stage:new()
 	self.director = Director(self, self.player)
 
 	self.score = 0
+	self.goalScore = 30
 	self.font = GFont
 	self.counterAttack = 0
 	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
 
 	GCamera.smoother = Camera.smooth.damped(100)
 	--triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
-	GInput:bind("p", function()
-		self:destroy()
+	GInput:bind("mouse1", function()
+		self.counterAttack = self.counterAttack + 1
+
+		if self.counterAttack > Lenght(Attacks) then
+			self.counterAttack = 1
+		end
+
+		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
 	end)
+	GInput:bind("mouse2", function()
+		self.counterAttack = self.counterAttack - 1
 
+		if self.counterAttack < 1 then
+			self.counterAttack = Lenght(Attacks)
+		end
 
-	
+		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
+	end)
 end
 
 function Stage:update(dt)
@@ -67,6 +80,20 @@ function Stage:draw()
 	GCamera:attach(0, 0, GW, GH)
 	self.area:draw()
 	GCamera:detach()
+
+	-- Stats player
+	love.graphics.print("hp : " .. self.player.hp, 0, 70)
+	love.graphics.print("attack : " .. self.player.attack, 0, 90)
+	love.graphics.print("damage :" .. self.player.projectileManager.damage, 0, 110)
+	love.graphics.print("tears :" .. self.player.projectileManager.tearIterator, 0, 130)
+	love.graphics.print("shootAngle : " .. self.player.projectileManager.shootAngle, 0, 150)
+	local velocity = math.floor(math.sqrt(self.player.xvel ^ 2 + self.player.yvel ^ 2))
+	love.graphics.print("velocity : " .. velocity, 0, 170)
+	love.graphics.print("luck : " .. self.player.changeManager.luckMultiplier, 0, 190)
+	love.graphics.print("static velocity : " .. self.player.baseMaxVelocity, 0, 210)
+	love.graphics.print("static friction : " .. self.player.friction, 0, 230)
+
+
 
 	-- Score
 	love.graphics.setColor(GDefaultColor)

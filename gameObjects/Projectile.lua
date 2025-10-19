@@ -131,7 +131,7 @@ function Projectile:checkCollision()
 			self:explode()
 
 			if object.hp <= 0 then
-				GRoom.current_room.player.changeManager:onKill()
+				GRoom.currentRoom.player.changeManager:onKill()
 			end
 		end
 	end

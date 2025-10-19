@@ -15,7 +15,6 @@ Attacks = {
 		ammo = 2,
 		tears = 2,
 		shootAngle = math.pi / 12,
-
 		abbreviation = "2",
 		color = { 0.29, 0.76, 0.85, 1.0 },
 
@@ -83,7 +82,7 @@ Attacks = {
 
 	["Destroyer"] = {
 		name = "Destroyer",
-		damage = 2,
+		damage = 100,
 		cooldown = 1.2,
 		ammo = 4,
 		tears = 1,
@@ -178,7 +177,7 @@ Attacks = {
 
 	},
 }
-Enemies = { "Rock", "Shooter" }
+Enemies = { "Rock", "Shooter", "BigRock" }
 
 
 Achievements = {
