@@ -13,7 +13,7 @@ Constructor:
 		opts (table): Additional options, including the 'text' to display.
 
 Fields:
-	font (Font): The font used for rendering the text.
+	font (GFont): The font used for rendering the text.
 	layer (number): The rendering layer.
 	background_colors (table): Per-character background colors.
 	foreground_colors (table): Per-character foreground colors.
@@ -39,15 +39,12 @@ InfoText = GameObject:extend()
 
 function InfoText:new(area, x, y, opts)
 	InfoText.super.new(self, area, x, y, opts)
-	self.font = Font
+	self.font = GFont
 	self.layer = 80
 	self.background_colors = {}
 	self.foreground_colors = {}
 	self.characters = {}
-	self.height = opts.height or self.font:getHeight() / 2
-	self.width = opts.width or function(text)
-		return self.font:getWidth(text)
-	end
+	self.scaleFactor = opts.scaleFactor or 1
 	local random_characters = "0123456789!@#$%¨&*()-=+[]^~/;?><.,|abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ"
 
 	self.all_colors = Moses.append(GDefaultColors, G_negative_colors)
@@ -100,30 +97,66 @@ end
 function InfoText:draw()
 	if not self.visible then return end
 
-	for i = 1, #self.characters do
-		local width = 0
-		if i > 1 then
-			for j = 1, i - 1 do
-				width = width + self.font:getWidth(self.characters[j])
-			end
-		end
-		if self.background_colors[i] then
-			love.graphics.setColor(self.background_colors[i])
-			love.graphics.rectangle('fill', self.x + width, self.y - self.font:getHeight() / 2,
-				type(self.width) == "number" and self.width or self.width(self.characters[i]),
-				self.height)
-		end
-		love.graphics.setColor(self.foreground_colors[i] or self.color or GDefaultColor)
+    local scale_factor = 10 -- Define your scale factor once (NOTE: Changed self.scaleFactor to this local var for consistency with your snippet)
+    love.graphics.setFont(self.font) -- Ensure font is set outside the loop
 
-		PushRotate(0,0,0)
-		love.graphics.scale(2, 2)
+    -- 1. Pre-calculate the total unscaled width
+    local total_unscaled_width = 0
+    for i = 1, #self.characters do
+        total_unscaled_width = total_unscaled_width + self.font:getWidth(self.characters[i])
+    end
+    local font_height_unscaled = self.font:getHeight()
 
-		love.graphics.print(self.characters[i], self.x + width, self.y, 0, 1, 1, 0, self.height)
-		love.graphics.pop()
-	end
-	love.graphics.setColor(GDefaultColor)
+    love.graphics.push() -- Push the state once for the entire text
+
+    -- 1. Translate the origin to the intended center point (self.x, self.y)
+    love.graphics.translate(self.x, self.y)
+
+    -- 2. Scale the coordinate system
+    love.graphics.scale(self.scaleFactor, self.scaleFactor)
+
+    -- 3. CRITICAL CENTERING STEP: Translate backward by half the total unscaled size.
+    -- This makes the whole scaled text centered on the original (self.x, self.y).
+    love.graphics.translate(-total_unscaled_width / 2, -font_height_unscaled / 2)
+
+
+    local accumulated_width_unscaled = 0 -- We'll track the width in the new *scaled* system
+
+    for i = 1, #self.characters do
+        local char = self.characters[i]
+        local char_width_unscaled = self.font:getWidth(char)
+
+        -- Background Rectangle
+        if self.background_colors[i] then
+            love.graphics.setColor(self.background_colors[i])
+            -- The position is accumulated_width_unscaled, Y position is 0 relative to the adjusted origin.
+            love.graphics.rectangle(
+                'fill',
+                accumulated_width_unscaled,                     -- X position (relative to the adjusted origin)
+                0,                                              -- Y position (relative to the adjusted origin)
+                char_width_unscaled,                            -- Width
+                font_height_unscaled                            -- Height
+            )
+        end
+
+        -- Foreground Text
+        love.graphics.setColor(self.foreground_colors[i] or self.color or GDefaultColor)
+        love.graphics.print(
+            char,
+            accumulated_width_unscaled,                         -- X position (relative to the adjusted origin)
+            0,                                                  -- Y position (relative to the adjusted origin)
+            0,                                                  -- Rotation (r)
+            1, 1,                                               -- Scale factors (sx, sy)
+            0, 0                                                -- Origin offset (ox, oy) - NO offset needed here
+        )
+
+        -- Update the accumulated width for the next character
+        accumulated_width_unscaled = accumulated_width_unscaled + char_width_unscaled
+    end
+
+    love.graphics.pop() -- Restore the previous state
+    love.graphics.setColor(GDefaultColor)
 end
-
 function InfoText:destroy()
 	InfoText.super.destroy(self)
 end

@@ -89,7 +89,6 @@ function love.textinput(t)
 end
 
 function love.update(dt)
---	Prof:attach()
 
 	if GInput:pressed("DeleteEveryThing") then
 		DeleteEveryThing()
@@ -117,10 +116,10 @@ local function graphicSetter()
 	love.graphics.setDefaultFilter('nearest', 'nearest')
 	love.graphics.setLineStyle('rough')
 	love.graphics.setBackgroundColor(GBackgroundColor)
-	Font = love.graphics.newFont("resource/font/m5x7.ttf", 16)
-	if Font then
-		Font:setFilter("nearest", "nearest")
-		love.graphics.setFont(Font)
+	GFont = love.graphics.newFont("resource/font/m5x7.ttf", 16)
+	if GFont then
+		GFont:setFilter("nearest", "nearest")
+		love.graphics.setFont(GFont)
 	end
 end
 

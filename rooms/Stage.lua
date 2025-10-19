@@ -21,15 +21,18 @@ function Stage:new()
 	self.director = Director(self, self.player)
 
 	self.score = 0
-	self.goalScore = 30
-	self.font = Font
+	self.font = GFont
 	self.counterAttack = 0
+	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
 
 	GCamera.smoother = Camera.smooth.damped(100)
 	--triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
 	GInput:bind("p", function()
 		self:destroy()
 	end)
+
+
+	
 end
 
 function Stage:update(dt)

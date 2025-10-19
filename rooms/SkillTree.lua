@@ -76,7 +76,7 @@ function SkillTree:draw()
     love.graphics.setColor(0.5, 0.5, 0.5, 222)
     love.graphics.circle('fill', testmx, testmy, 16 / SX)
 
-    love.graphics.setFont(Font)
+    love.graphics.setFont(GFont)
     for _, node in ipairs(self.nodes) do
         if node.hot then
             local stats = TreeLogic.TreeStats[node.id].stats
@@ -84,8 +84,8 @@ function SkillTree:draw()
             local max_text_width = 0
             -- here cycle in pas by 3, to check the text of the multiplier
             for i = 1, #stats, 3 do
-                if Font:getWidth(stats[i]) > max_text_width then
-                    max_text_width = Font:getWidth(stats[i])
+                if GFont:getWidth(stats[i]) > max_text_width then
+                    max_text_width = GFont:getWidth(stats[i])
                 end
             end
             -- Draw rectangle witch contains the text
@@ -93,7 +93,7 @@ function SkillTree:draw()
             mx, my = mx / SX, my / SY
             love.graphics.setColor(0, 0, 0, 222)
             love.graphics.rectangle('fill', mx, my, 16 + max_text_width,
-                Font:getHeight() + (#stats / 3) * Font:getHeight())
+                GFont:getHeight() + (#stats / 3) * GFont:getHeight())
             -- Draw the text
             -- here cycle in pas by 3, to check the text of the multiplier
             -- like we did previusly to check the lenght
@@ -101,7 +101,7 @@ function SkillTree:draw()
             love.graphics.setColor(GDefaultColor)
             for i = 1, #stats, 3 do
                 love.graphics.print(stats[i], math.floor(mx + 8),
-                    math.floor(my + Font:getHeight() / 2 + math.floor(i / 3) * Font:getHeight()))
+                    math.floor(my + GFont:getHeight() / 2 + math.floor(i / 3) * GFont:getHeight()))
             end
         end
     end

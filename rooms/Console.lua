@@ -7,7 +7,7 @@ function Console:new()
 
     self.modules = {}
     self.line_y = 8
-    self.font = Font
+    self.font = GFont
     self.base_input_text = { '[', GSkillPointColor, 'root', GDefaultColor, ']arch~ :  ' }
     self:addInputLine(0.25)
     self.input_text = {}
