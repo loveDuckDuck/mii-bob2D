@@ -149,7 +149,9 @@ function Player:move(dt)
 	if GInput:pressed("boosting") then
 		-- turbo nigga
 		self.boosting = not self.boosting
-
+		--[[
+			TODO : evaluate
+		]]
 		if self.boosting then
 			self.changeManager.luckMultiplier = self.changeManager.luckMultiplier * 2
 		else
@@ -336,6 +338,15 @@ end
 
 function Player:addScore(amount)
 	GRoom.current_room.score = GRoom.current_room.score + amount
+
+	if GRoom.current_room.score >= GRoom.current_room.goalScore then
+		GRoom.current_room.goalScore = GRoom.current_room.goalScore + 30
+		
+		--[[
+			TODO : evaluate
+		]]
+		self.changeManager:onBoostPickupChange()
+	end
 end
 
 function Player:shoot()
@@ -358,7 +369,6 @@ function Player:setAttack(attack)
 end
 
 function Player:die()
-
 	flash(4)
 	GCamera:shake(6, 60, 0.4)
 	Slow(0.15, 1)
@@ -367,7 +377,6 @@ function Player:die()
 	end
 
 	GRoom.current_room:finish()
-
 end
 
 function Player:destroy()

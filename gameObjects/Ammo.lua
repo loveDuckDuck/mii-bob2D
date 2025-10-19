@@ -19,14 +19,15 @@ end
 
 function Ammo:die()
 	self.dead = true
-	self.area:addGameObject("InfoText", self.x, self.y, { text = ("+" .. self.cointValue), color =  math.threeRamdon() })
+	self.area:addGameObject("InfoText", self.x, self.y, { text = ("+" .. self.cointValue), color = math.threeRamdon() })
 	self.area:addGameObject("AmmoEffect", self.x, self.y, { color = GAmmoColor, w = self.w, h = self.h })
 	for i = 1, love.math.random(4, 8) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { s = 3, color = GAmmoColor })
 	end
+	self.area:addGameObject("InfoText", GW / 2, GH / 2,
+		{ text = "sio pera", color = math.threeRamdon(), height = 50, width = 100 })
 end
 
 function Ammo:destroy()
-    Ammo.super.destroy(self)
+	Ammo.super.destroy(self)
 end
-

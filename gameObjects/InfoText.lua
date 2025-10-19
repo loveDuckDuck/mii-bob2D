@@ -44,8 +44,12 @@ function InfoText:new(area, x, y, opts)
 	self.background_colors = {}
 	self.foreground_colors = {}
 	self.characters = {}
+	self.height = opts.height or self.font:getHeight() / 2
+	self.width = opts.width or function(text)
+		return self.font:getWidth(text)
+	end
 	local random_characters = "0123456789!@#$%¨&*()-=+[]^~/;?><.,|abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWYXZ"
-	
+
 	self.all_colors = Moses.append(GDefaultColors, G_negative_colors)
 	for i = 1, #self.text do
 		table.insert(self.characters, self.text:utf8sub(i, i))
@@ -94,27 +98,32 @@ function InfoText:new(area, x, y, opts)
 end
 
 function InfoText:draw()
-    if not self.visible then return end
+	if not self.visible then return end
 
-    --love.graphics.setFont(self.font)
-    for i = 1, #self.characters do
-        local width = 0
-        if i > 1 then
-            for j = 1, i-1 do
-                width = width + self.font:getWidth(self.characters[j])
-            end
-        end
+	for i = 1, #self.characters do
+		local width = 0
+		if i > 1 then
+			for j = 1, i - 1 do
+				width = width + self.font:getWidth(self.characters[j])
+			end
+		end
+		if self.background_colors[i] then
+			love.graphics.setColor(self.background_colors[i])
+			love.graphics.rectangle('fill', self.x + width, self.y - self.font:getHeight() / 2,
+				type(self.width) == "number" and self.width or self.width(self.characters[i]),
+				self.height)
+		end
+		love.graphics.setColor(self.foreground_colors[i] or self.color or GDefaultColor)
 
-        if self.background_colors[i] then
-      		love.graphics.setColor(self.background_colors[i])
-      		love.graphics.rectangle('fill', self.x + width, self.y - self.font:getHeight()/2, self.font:getWidth(self.characters[i]), self.font:getHeight())
-      	end
-    	love.graphics.setColor(self.foreground_colors[i] or self.color or GDefaultColor)
-    	love.graphics.print(self.characters[i], self.x + width, self.y, 0, 1, 1, 0, self.font:getHeight()/2)
-    end
-    love.graphics.setColor(GDefaultColor)
+		PushRotate(0,0,0)
+		love.graphics.scale(2, 2)
+
+		love.graphics.print(self.characters[i], self.x + width, self.y, 0, 1, 1, 0, self.height)
+		love.graphics.pop()
+	end
+	love.graphics.setColor(GDefaultColor)
 end
 
 function InfoText:destroy()
-    InfoText.super.destroy(self)
+	InfoText.super.destroy(self)
 end

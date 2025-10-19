@@ -10,8 +10,6 @@ Draft          = require("libraries/draft/draft")
 Vector         = require("libraries/hump/vector")
 Physics        = require("libraries/windfield")
 Moses          = require("libraries/moses/moses")
-Profiler       = require("libraries/Piefiller/piefiller")
-local Prof     = Profiler:new()
 
 --utilities
 Util           = require("utils/Utils")

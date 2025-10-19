@@ -3,15 +3,15 @@ ProjectileManager = Object:extend()
 function ProjectileManager:new(player)
 	self.player = player
 	self.attack = "Neutral"
+
 	self.damage = 1
 	self.color = { 0.1, 0.1, 0.1, 1 }
 	self.size = 5
-	self.sizeMultilplier = 1
+
 	self.shootAngle = 0
 	self.tearIterator = 1
 	self.velocity = 300
-	self.velocityMultilplier = 1
-	self.formTear = {}
+
 	self.projectile_ninety_degree_change = false
 	self.wavy_projectiles = false
 	self.fast_slow = false
@@ -23,7 +23,9 @@ function ProjectileManager:new(player)
 
 	self:initAttackPatterns()
 end
-
+--[[
+	TODO: fix player attack fromt the projectile manager
+]]
 function ProjectileManager:initAttackPatterns()
 	self.attackPatterns = {
 		Neutral = function(distance)
@@ -117,11 +119,9 @@ end
 function ProjectileManager:updateAttack(key)
 	if Attacks[key] then
 		self.attack = key
-		self.damage = Attacks[key].damage
-		self.color = Attacks[key].color 
+		self.color = Attacks[key].color
 		self.tearIterator = Attacks[key].tears
 		self.shootAngle = Attacks[key].shootAngle or 0
-		self.formTear = Attacks[key].resource
 	end
 end
 
@@ -133,8 +133,8 @@ end
 
 -- Helper function to create a projectile at a given angle offset
 function ProjectileManager:createProjectile(distance, angleOffset, extraParams)
-	angleOffset = angleOffset or 0
-	extraParams = extraParams or {}
+	local angleOffset = angleOffset or 0
+	local extraParams = extraParams or {}
 
 	local angle = self.player.rotation + angleOffset
 	local x = self.player.x + 1.5 * distance * math.cos(angle)
@@ -146,8 +146,6 @@ function ProjectileManager:createProjectile(distance, angleOffset, extraParams)
 
 	self.player.area:addGameObject("Projectile", x, y, params)
 end
-
-
 
 function ProjectileManager:shoot(distance)
 	-- Prepare mods and stats
@@ -162,16 +160,17 @@ function ProjectileManager:shoot(distance)
 
 	self.stats = {
 		parent = self.player,
-		velocity = self.velocity * self.velocityMultilplier,
+		velocity = self.velocity,
 		damage = self.damage,
 		color = self.color,
 		distance = distance,
 		attack = self.attack,
-		form = self.formTear
+		size = self.size,
+
 	}
 
 	-- Execute attack pattern
-	local pattern =  self.attackPatterns[self.attack]
+	local pattern = self.attackPatterns[self.attack]
 	if pattern then
 		pattern(distance)
 	else
@@ -179,7 +178,6 @@ function ProjectileManager:shoot(distance)
 		self:createProjectile(distance)
 	end
 end
-
 
 function ProjectileManager:destroy()
 	table.clear(self)

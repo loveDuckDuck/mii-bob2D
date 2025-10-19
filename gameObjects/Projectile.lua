@@ -13,7 +13,7 @@ function Projectile:new(area, x, y, opts)
 	self.speed = opts.speed or 1
 	self.scale = opts.scale or 5
 	-- Core properties
-	self.radiusSpace = opts.s or 2.5
+	self.size = opts.size or 2.5
 	self.attack = opts.attack or "Neutral"
 	self.velocity = opts.velocity or 300
 	self.rotation = opts.rotation or 0
@@ -24,10 +24,9 @@ function Projectile:new(area, x, y, opts)
 	-- Damage calculation
 	local attackData = Attacks[self.attack]
 	self.damage = opts.damage or (attackData and attackData.damage) or 1
-	self.form = opts.form or (attackData and attackData.resource)
 
 	-- Physics setup
-	self.collider = area.world:newCircleCollider(x, y, self.radiusSpace)
+	self.collider = area.world:newCircleCollider(x, y, self.size)
 	self.collider:setObject(self)
 	self.collider:setLinearVelocity(
 		self.velocity * math.cos(self.rotation),
@@ -36,11 +35,11 @@ function Projectile:new(area, x, y, opts)
 	self.collider:setCollisionClass("Projectile")
 
 	-- Initialize modifiers
-	self:initializeModifiers(opts)
+	self:initializeModifiers()
 	self:initializeAttackBehavior()
 end
 
-function Projectile:initializeModifiers(opts)
+function Projectile:initializeModifiers()
 	-- Ninety degree change modifier
 	if self.projectile_ninety_degree_change then
 		self.timer:after(0.2, function()
@@ -117,7 +116,7 @@ function Projectile:startTrailEffect()
 		self.area:addGameObject('ProjectileTrail', self.x, self.y, {
 			rotation = Vector(self.collider:getLinearVelocity()):angle(),
 			color = self.color,
-			radiusSpace = self.radiusSpace
+			size = self.size
 		})
 	end)
 end
@@ -162,7 +161,7 @@ function Projectile:updateHoming()
 	-- Move towards target
 	if self.target then
 		local projectile_heading = Vector(self.collider:getLinearVelocity()):normalized()
-		local angle = GlobalAtan2(self.target.y - self.y, self.target.x - self.x)
+		local angle =  math.miAtan2(self.target.y - self.y, self.target.x - self.x)
 		local to_target_heading = Vector(math.cos(angle), math.sin(angle)):normalized()
 		local final_heading = (projectile_heading + to_target_heading):normalized()
 		self.collider:setLinearVelocity(self.velocity * final_heading.x, self.velocity * final_heading.y)
@@ -214,7 +213,6 @@ function Projectile:createSplitProjectiles()
 		velocity = self.velocity,
 		damage = self.damage,
 		distance = self.distance,
-		form = self.formTear,
 		attack = self.attack
 	}
 
@@ -304,10 +302,7 @@ function Projectile:draw()
 	else
 		love.graphics.setColor(self.color)
 	end
-
-	local drawForm = self.form or Attacks["Neutral"].resource
-	drawForm(self.x, self.y, self.radiusSpace, self.radiusSpace)
-
+	GDraft:circle(self.x, self.y, self.size , nil, "fill")
 	love.graphics.setColor(GDefaultColor)
 end
 
@@ -315,7 +310,7 @@ function Projectile:die()
 	self.dead = true
 	self.area:addGameObject("ProjectileDeathEffect", self.x, self.y, {
 		color = self.color,
-		w = 3 * self.radiusSpace
+		w = 3 * self.size
 	})
 end
 
@@ -323,7 +318,7 @@ function Projectile:explode()
 	self.dead = true
 	self.area:addGameObject("ExplodeParticle", self.x, self.y, {
 		color = self.color,
-		w = 3 * self.radiusSpace
+		w = 3 * self.size
 	})
 end
 

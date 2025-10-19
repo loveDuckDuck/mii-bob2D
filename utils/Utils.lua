@@ -125,7 +125,7 @@ function DeleteEveryThing()
 	love.event.quit()
 end
 
-function GlobalAtan2(y, x)
+function math.miAtan2(y, x)
 	if x > 0 then
 		return math.atan(y / x)
 	elseif x < 0 then

@@ -21,10 +21,9 @@ function Stage:new()
 	self.director = Director(self, self.player)
 
 	self.score = 0
+	self.goalScore = 30
 	self.font = Font
 	self.counterAttack = 0
-
-
 
 	GCamera.smoother = Camera.smooth.damped(100)
 	--triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")

@@ -1,47 +1,46 @@
 -- main.lua
-local ciao <const> = "zzz"
 
 function love.load()
 	-- Load the shader (save the shader code as "blackhole.glsl")
 	
 
-	blackhole_shader = love.graphics.newShader("blackhole.glsl")
-	triangle = love.graphics.newShader("triangle.glsl")
-	noise = love.graphics.newImage("noise.png")
-	mask = love.graphics.newImage("mask.png") -- Replace with your image
+	-- blackhole_shader = love.graphics.newShader("blackhole.glsl")
+	-- triangle = love.graphics.newShader("triangle.glsl")
+	-- noise = love.graphics.newImage("noise.png")
+	-- mask = love.graphics.newImage("mask.png") -- Replace with your image
 
-	-- Create a test image to distort (you can use any image)
-	love.graphics.setDefaultFilter("linear", "linear")
-	test_image = love.graphics.newImage("water.png") -- Replace with your image
+	-- -- Create a test image to distort (you can use any image)
+	-- love.graphics.setDefaultFilter("linear", "linear")
+	-- test_image = love.graphics.newImage("water.png") -- Replace with your image
 
 
-	triangle:send("simplex", noise)
-	triangle:send("mask", mask)
+	-- triangle:send("simplex", noise)
+	-- triangle:send("mask", mask)
 
-	-- Shader parameters
-	center_x = love.graphics.getWidth() / 2
-	center_y = love.graphics.getHeight() / 2
-	black_hole_radius = 150
-	distortion_strength = 0.5
+	-- -- Shader parameters
+	-- center_x = love.graphics.getWidth() / 2
+	-- center_y = love.graphics.getHeight() / 2
+	-- black_hole_radius = 150
+	-- distortion_strength = 0.5
 
-	-- Set initial shader values
-	blackhole_shader:send("center_pos", { center_x, center_y })
-	blackhole_shader:send("radius", black_hole_radius)
-	blackhole_shader:send("strength", distortion_strength)
+	-- -- Set initial shader values
+	-- blackhole_shader:send("center_pos", { center_x, center_y })
+	-- blackhole_shader:send("radius", black_hole_radius)
+	-- blackhole_shader:send("strength", distortion_strength)
 end
 
 function love.update(dt)
 	-- Optional: Make the black hole follow the mouse
-	center_x = love.mouse.getX()
-	center_y = love.mouse.getY()
+	-- center_x = love.mouse.getX()
+	-- center_y = love.mouse.getY()
 
-	-- Update shader with new center position
-	blackhole_shader:send("center_pos", { center_x, center_y })
+	-- -- Update shader with new center position
+	-- blackhole_shader:send("center_pos", { center_x, center_y })
 
-	-- Optional: Animate the strength
-	distortion_strength = 0.5 + 0.3 * math.sin(love.timer.getTime() * 2)
-	blackhole_shader:send("strength", distortion_strength)
-	triangle:send("time", love.timer.getTime())
+	-- -- Optional: Animate the strength
+	-- distortion_strength = 0.5 + 0.3 * math.sin(love.timer.getTime() * 2)
+	-- blackhole_shader:send("strength", distortion_strength)
+	-- triangle:send("time", love.timer.getTime())
 
 end
 

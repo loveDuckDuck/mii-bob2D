@@ -47,7 +47,7 @@ function Shooter:update(dt)
 		local dy = self.target.y - self.y
 		local dx = self.target.x - self.x
 
-		local angle = GlobalAtan2(dy, dx)
+		local angle =  math.miAtan2(dy, dx)
 		self.rotationLookingPlayer = angle
 		local toTargetHeading = Vector.new(math.cos(angle), math.sin(angle)):normalized()
 		local finalHeading = (projectileHeading + 0.1 * toTargetHeading):normalized()

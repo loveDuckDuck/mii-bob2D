@@ -13,16 +13,16 @@ function ChanceManager:new(player, projectileManager)
 	-- LUCK
 	self.luckMultiplier = 1
 
-	self.regain_hp_on_cycle_chance = 100
+	self.regain_hp_on_cycle_chance = 50
 	self.regain_full_ammo_on_cycle_chance = 1
 	self.change_attack_on_cycle_chance = 10
 	self.spawn_haste_area_on_cycle_chance = 1
-	self.barrage_on_cycle_chance = 100
+	self.barrage_on_cycle_chance = 50
 	self.launch_homing_projectile_on_cycle_chance = 1
-	self.regain_ammo_on_kill_chance = 100
-	self.launch_homing_projectile_on_kill_chance = 100
-	self.regain_boost_on_kill_chance = 100
-	self.spawn_haste_area_on_sp_pickup_chance = 100
+	self.regain_ammo_on_kill_chance = 50
+	self.launch_homing_projectile_on_kill_chance = 50
+	self.regain_boost_on_kill_chance = 50
+	self.spawn_haste_area_on_sp_pickup_chance = 50
 
 	-- IMPLEMENTEAD WHEN I PICK UP A AMMO
 	-- SO THIS IMPLEMENTATION DOESNT AFFECT MY PLAYER
@@ -37,15 +37,15 @@ function ChanceManager:new(player, projectileManager)
 	self.projectile_ninety_degree_change_chance = 50
 
 	-- SPAWNER ELEMENT
-	self.spawn_hp_coin_chance = 100
-	self.spawn_barrier_chance = 100
+	self.spawn_hp_coin_chance = 50
+	self.spawn_barrier_chance = 50
 
 
 
 
 	-- MODIFIER
-	self.wavy_projectiles_chance = 100
-	self.shield_projectile_chance = 100
+	self.wavy_projectiles_chance = 50
+	self.shield_projectile_chance = 50
 end
 
 function ChanceManager:returnRandomOffset()
@@ -145,6 +145,12 @@ function ChanceManager:onBoostPickupChange()
 		)
 	end
 end
+
+function ChanceManager:onScoreAchieved()
+	
+end
+
+
 
 function ChanceManager:onKill()
 	local xOffset, yOffset = self:returnRandomOffset()

@@ -152,5 +152,6 @@ function Director:setRecourceSpawnsForThisRound()
 end
 
 function Director:destroy()
+	self.timer:destroy()
 	table.clear(self)
 end

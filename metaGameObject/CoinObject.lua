@@ -24,7 +24,7 @@ function CoinObject:update(dt)
 		local dy = target.y - self.y
 		local dx = target.x - self.x
 
-		local angle = GlobalAtan2(dy, dx)
+		local angle =  math.miAtan2(dy, dx)
 		local toTargetHeading = Vector.new(math.cos(angle), math.sin(angle)):normalized()
 		local finalHeading = (projectileHeading + 0.1 * toTargetHeading):normalized()
 		self.collider:setLinearVelocity(self.velocity * finalHeading.x, self.velocity * finalHeading.y)

@@ -16,15 +16,7 @@ end
 function Game:draw()
     -- -- Draw game objects and UI elements here
     love.graphics.print("Game is running : ", 0, 10)
-    -- -- Optionally, draw memory usage info
-    -- love.graphics.print(string.format("before collectgarbage current memory usage: %.2f KB", collectgarbage("count")) , 0, 30)
-
-    -- collectgarbage()
-
-
-    -- love.graphics.print(string.format("after collectgarbage current memory usage: %.2f KB", collectgarbage("count")), 0, 50)
-    -- --self:DrawGarbageCollector()
-
+--    self:DrawGarbageCollector()
     -- fine grained memory changes
     if self.diff > 0 then
          love.graphics.print(string.format("memory use\t+%dKB (%d bytes)", self.diff / 1024, self.new - self.memoryInit),0, 30)
@@ -125,15 +117,11 @@ end
 
 function Game:DrawGarbageCollector()
     love.graphics.setColor(0, 1, 0, 1)
-    love.graphics.print("Before collection: " .. collectgarbage("count") / 1024, 0, 60)
-    --collectgarbage()
-    love.graphics.print("After collection: " .. collectgarbage("count") / 1024, 0, 80)
-
     -- Print the header for object counts
     love.graphics.print("Object count:", 0, 100)
 
     local counts = self:type_count()
-    local y_offset = 100
+    local y_offset = 120
     -- Loop through the counts and print each on a new line
     counts = table.counterSort(counts)
     for x = 1, #counts do
@@ -159,9 +147,9 @@ function Game:memoryCheck()
 
     -- fine grained memory changes
     if self.diff > 0 then
-        print(string.format("memory use\t+%dKB (%d bytes)", self.diff / 1024, self.new - self.memoryInit))
+      --  print(string.format("memory use\t+%dKB (%d bytes)", self.diff / 1024, self.new - self.memoryInit))
     elseif self.diff < 0 then
-        print(string.format("memory free\t%dKB (%d bytes)", self.diff / 1024, self.new - self.memoryInit))
+     --   print(string.format("memory free\t%dKB (%d bytes)", self.diff / 1024, self.new - self.memoryInit))
     end
 
     self.memoryUsed = self.new

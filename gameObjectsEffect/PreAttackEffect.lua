@@ -28,11 +28,7 @@ function PreAttackEffect:update(dt)
 	end
 end
 
-function PreAttackEffect:draw()
-	
-
-	
-end
+function PreAttackEffect:draw() end
 
 function PreAttackEffect:destroy()
 	PreAttackEffect.super.destroy(self)

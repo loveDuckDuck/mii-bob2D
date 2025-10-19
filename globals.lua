@@ -7,9 +7,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "N",
 		color = { 1.0, 0.9921, 0.8115, 1.0 },
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 10, nil, "line")
-		end,
 	},
 	["Double"] = {
 		name = "Double",
@@ -21,9 +18,7 @@ Attacks = {
 
 		abbreviation = "2",
 		color = { 0.29, 0.76, 0.85, 1.0 },
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Triple"] = {
 		name = "Triple",
@@ -34,9 +29,6 @@ Attacks = {
 		shootAngle = math.pi / 4,
 		abbreviation = "3",
 		color = { 0.98, 0.80, 0.80, 1.00 },
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 10, nil, "line")
-		end,
 	},
 	["Rapid"] = {
 		name = "Rapid",
@@ -46,9 +38,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "R",
 		color = { 1.0, 0.98, 0.80, 1.00 },
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Homing"] = {
 		name = "Homing",
@@ -58,9 +48,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "Ho",
 		color = { 0.5632, 0.8722, 0.1111, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Spread"] = {
 		name = "Spread",
@@ -70,9 +58,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "SP",
 		color = { 0.3711, 0.1210, 0.9678, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Back"] = {
 		name = "Back",
@@ -82,9 +68,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "BK",
 		color = { 0.7755, 0.9211, 0.1633, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Side"] = {
 		name = "Side",
@@ -94,9 +78,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "SD",
 		color = { 0.8811, 0.5678, 0.3409, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 
 	["Destroyer"] = {
@@ -107,9 +89,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "DKILL",
 		color = { 1.00, 1.00, 1.00, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:star(x, y, w * 10, w * 5, w * 2, w)
-		end,
+
 	},
 	["Blast"] = {
 		name = "Blast",
@@ -119,9 +99,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "BIG BOY BLAST",
 		color = { 0.6542, 0.1675, 1.00, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Spin"] = {
 		name = "Spin",
@@ -131,9 +109,7 @@ Attacks = {
 		tears = 1,
 		abbreviation = "G.I ROBOT",
 		color = { 0.9222, 0.1675, 0.3287, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
+
 	},
 	["Hearth"] = {
 		name = "Hearth",
@@ -143,9 +119,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "mi love for you",
 		color = { 1.9, 0.1675, 0.3287, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
 	},
 	["Flame"] = {
 		name = "Flame",
@@ -155,9 +128,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "THE BRIDE",
 		color = { 0.1, 1.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
 	},
 
 	["Bounce"] = {
@@ -168,9 +138,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "ASS BOUNCE ???",
 		color = { 0.1, 1.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
 	},
 
 	["2Split"] = {
@@ -181,9 +148,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "TWO BITCHIESSSS",
 		color = { 0.1, 1.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
 	},
 	["4Split"] = {
 		name = "4Split",
@@ -193,9 +157,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "GANG BANG",
 		color = { 0.31, 0.0, 0.3287, 1.00 }, -- rgb(252, 216, 205)
-		resource = function(x, y, w, h)
-			GDraft:circle(x, y, w + 5, nil, "line")
-		end,
 	},
 	["Lightning"] = {
 		name = "Lightning",
@@ -205,7 +166,6 @@ Attacks = {
 		tears = 1,
 		abbreviation = "Ka-chow!",
 		color = { 1.0, 1.0, 1.0, 1.00 }, -- rgb(252, 216, 205)
-
 	},
 	["Explode"] = {
 		name = "Explode",
@@ -217,10 +177,6 @@ Attacks = {
 		color = { 1, 0, 0, 1.00 }, -- rgb(252, 216, 205)
 
 	},
-
-
-
-
 }
 Enemies = { "Rock", "Shooter" }
 
@@ -247,9 +203,9 @@ G_default_player_velocity = 300
 GDefaultColors = { GDefaultColor, GHPColor, GAmmoColor, GBoostColor, GSkillPointColor }
 
 G_negative_colors = {
-	{ 1 - GDefaultColor[1],     1 - GDefaultColor[2],     1 - GDefaultColor[3] },
-	{ 1 - GHPColor[1],          1 - GHPColor[2],          1 - GHPColor[3] },
-	{ 1 - GAmmoColor[1],        1 - GAmmoColor[2],        1 - GAmmoColor[3] },
-	{ 1 - GBoostColor[1],       1 - GBoostColor[2],       1 - GBoostColor[3] },
+	{ 1 - GDefaultColor[1],    1 - GDefaultColor[2],    1 - GDefaultColor[3] },
+	{ 1 - GHPColor[1],         1 - GHPColor[2],         1 - GHPColor[3] },
+	{ 1 - GAmmoColor[1],       1 - GAmmoColor[2],       1 - GAmmoColor[3] },
+	{ 1 - GBoostColor[1],      1 - GBoostColor[2],      1 - GBoostColor[3] },
 	{ 1 - GSkillPointColor[1], 1 - GSkillPointColor[2], 1 - GSkillPointColor[3] },
 }
