@@ -298,7 +298,7 @@ function math.miFloor(number)
 end
 
 function ReturnValuePercentage(value, percentage, probability)
-	return math.miFloor(value + (probability < 50 and (1) or (-1)) * (value * percentage))
+	return math.miFloor(value + (probability < 25 and (1) or (-1)) * (value * percentage))
 end
 
 function table.clear(t)

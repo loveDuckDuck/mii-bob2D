@@ -302,7 +302,7 @@ function Projectile:draw()
 	else
 		love.graphics.setColor(self.color)
 	end
-	GDraft:circle(self.x, self.y, self.size , nil, "fill")
+	love.graphics.circle("fill", self.x, self.y, self.size)
 	love.graphics.setColor(GDefaultColor)
 end
 

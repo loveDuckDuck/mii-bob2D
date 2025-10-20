@@ -20,7 +20,7 @@ function Player:new(area, x, y, opts)
 	self.acceleration = 1000
 	self.baseMaxVelocity = 100
 	self.maxVelocity = self.baseMaxVelocity
-	self.friction = 10
+	self.friction = 5
 
 	self.boosting = false
 	self.trailColor = GSkillPointColor
@@ -28,8 +28,8 @@ function Player:new(area, x, y, opts)
 	self.isBounce = false
 
 	-- HP
-	self.hp = 10
-	self.max_hp = 10
+	self.hp = 70
+	self.max_hp = 70
 
 	--BOOST ABILTY
 	self.boost = 1
@@ -37,8 +37,6 @@ function Player:new(area, x, y, opts)
 
 	-- FLATS HP
 	self.flat_hp = 0
-
-
 	self.ammo = 0
 
 	-- SHOOTING
@@ -270,7 +268,15 @@ function Player:checkCollision(dt)
 		local collision_data = self.collider:getEnterCollisionData("Enemy")
 		local object = collision_data.collider:getObject()
 		if object:is(Rock) then
-			self:hit(30)
+			self:hit(10)
+		end
+		if object:is(Shooter) then
+			self:hit(15)
+		end
+		if object:is(BigRock) then
+			self:hit(25)
+			flash(2)
+			Slow(0.75, 0.25)
 		end
 	end
 end
@@ -297,7 +303,6 @@ end
 
 function Player:draw()
 
-
 	love.graphics.setColor(Attacks[self.attack].color)
 	GDraft:circle(self.x, self.y, self.w + 5, nil, "fill")
 
@@ -314,10 +319,6 @@ function Player:addScore(amount)
 
 	if GRoom.currentRoom.score >= GRoom.currentRoom.goalScore then
 		GRoom.currentRoom.goalScore = GRoom.currentRoom.goalScore + 30
-		
-		--[[
-			TODO : evaluate
-		]]
 		self.changeManager:onBoostPickupChange()
 	end
 end

@@ -5,7 +5,7 @@ function MultiplierManager:new(player)
 		self.player = player
 	end
 	self.random = 0
-	self.hp_multiplier = 90
+	self.hp_multiplier = 60
 	self.luckMultiplier = 90
 	self.damage_multiplier = 90
 	self.size_multiplier = 90
@@ -26,6 +26,7 @@ function MultiplierManager:new(player)
 	self.ammo_consumption_multiplier = 50
 	self.stat_boost_duration_multiplier = 50
 	self.projectile_duration_multiplier = 50
+	self.all_colors = Moses.append(GDefaultColors, G_negative_colors)
 end
 
 --- Generates chance lists for all numeric fields in the Player object whose keys contain "_chance".
@@ -45,7 +46,7 @@ function MultiplierManager:generateChanceMultiplier()
 end
 
 function MultiplierManager:onAmmoPickupChance()
-	self.random = math.random(0.005, 0.01)
+	self.random = math.random(0.1, 0.5)
 	local fiftyFifty = math.random(0, 100)
 
 	local color = { math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0) }
@@ -66,6 +67,7 @@ function MultiplierManager:onAmmoPickupChance()
 	if self.chances.damage_multiplier:next() then
 		self.player.projectileManager.damage = ReturnValuePercentage(self.player.projectileManager.damage, self.random,
 			fiftyFifty)
+		print(self.player.projectileManager.damage)
 		self:printText(fiftyFifty < 50 and "KILLLLLLL!!!" or "im gonna bee killed", 2, color)
 	end
 
@@ -82,11 +84,12 @@ function MultiplierManager:destroy()
 end
 
 function MultiplierManager:printText(text, scaleFactor, color)
+	local offsetX = math.random(0, GW)
+	local offsetY = math.random(0, GH)
+	local color = self.all_colors[math.random(1, #self.all_colors)]
 
-	local offset = math.random(-100, 100)
 
-
-	self.player.area:addGameObject("InfoText", GW / 2, GH / 2 + offset,
+	self.player.area:addGameObject("InfoText", offsetX, offsetY,
 		{
 			text = text,
 			color = color,

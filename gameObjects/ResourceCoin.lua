@@ -4,6 +4,8 @@ ResourceCoin = CoinObject:extend()
 function ResourceCoin:new(area, x, y, opts)
 	ResourceCoin.super.new(self, area, x, y, opts)
 	self.power = table.randomResource(Attacks)
+	self.radius = math.random(7, 17)
+	self.timer:tween(3, self, { radius = 1 }, 'in-out-cubic')
 end
 
 function ResourceCoin:update(dt)
@@ -16,7 +18,10 @@ end
 function ResourceCoin:draw()
 	love.graphics.setColor(self.power.color)
 	PushRotate(self.x, self.y, self.collider:getAngle())
-	GDraft:circle(self.x, self.y, math.random(5, 10), nil, "fill")
+
+
+	GDraft:circle(self.x, self.y, self.radius, nil, "fill")
+
 	love.graphics.pop()
 	love.graphics.setColor(GDefaultColor)
 end
