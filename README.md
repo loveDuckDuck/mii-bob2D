@@ -35,21 +35,7 @@ This game is based on [BYTEPATH](https://github.com/a327ex/BYTEPATH) tutorial
 
 ---
 
-## Folder Structure
-- conf.lua globals.lua Loader.lua main.lua 
-- abstractGameObject/ 
-- enemies/ gameObjects/
-- gameObjectsEffect/ 
-- libraries/ 
-- metaGameObject/ 
-- modules/ 
-- objectManagers/ 
-- resource/ 
-- rooms/ 
-- sound/ 
-- studinLUA/ 
-- utils/
----
+
 
 ### Key Directories
 
@@ -97,7 +83,7 @@ This game is based on [BYTEPATH](https://github.com/a327ex/BYTEPATH) tutorial
 
 ## Libraries Used
 
-- **classic** - Simple OOP for Lua.
-- **hump** - Camera, timer, vector math, gamestate.
-- **windfield** - Physics and collision 
-- **moses** Functional programming utilities.
+- **[classic](https://github.com/rxi/classic/)** - Simple OOP for Lua.
+- **[hump](https://github.com/vrld/hump)** - Camera, timer, vector math, gamestate.
+- **[windfield](https://github.com/a327ex/windfield)** - Physics and collision 
+- **[moses](https://github.com/Yonaba/Moses)** Functional programming utilities.

@@ -19,16 +19,6 @@ function TestingRoom:new()       -- Create new TestingRoom object 📝
     -- when instante this TestingRoom
     self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
 
-    -- self.wall =
-    -- {
-    --     self.area:addGameObject("Wall", 0, 0, { width = 1, height = GH }), --left
-    --     self.area:addGameObject("Wall", GW, 0, { width = 1, height = GH }), -- rigth
-    --     self.area:addGameObject("Wall", 0, 0, { width = GW, height = 1 }), -- up
-    --     self.area:addGameObject("Wall", 0, GH, { width = GW, height = 1 }), -- down
-
-    -- }
-
-
     self.score = 0
     self.font = GFont
     self.counterAttack = 0
