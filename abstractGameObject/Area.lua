@@ -50,7 +50,8 @@ function Area:drawOnly(types)
 
 	for _, game_object in ipairs(self.game_objects) do
 		if game_object.graphics_types then
-			if #fn.intersection(types, game_object.graphics_types) > 0 then
+			if #Moses.intersection(types, game_object.graphics_types) > 0 then
+				print(game_object.name)
 				game_object:draw()
 			end
 		end
@@ -70,7 +71,7 @@ function Area:drawExcept(types)
 		if not game_object.graphics_types then
 			game_object:draw()
 		else
-			if #fn.intersection(types, game_object.graphics_types) == 0 then
+			if #Moses.intersection(types, game_object.graphics_types) == 0 then
 				game_object:draw()
 			end
 		end

@@ -70,7 +70,7 @@ function Player:new(area, x, y, opts)
 	self.changeManager:generateChances()
 	self.multiplierManager:generateChanceMultiplier()
 
-	self:setAttack("Hearth")
+	self:setAttack("Neutral")
 	self.timer:every(0.01, function()
 		self.area:addGameObject(
 			"TrailParticle",

@@ -4,7 +4,7 @@ function CoinObject:new(area, x, y, opts)
 	CoinObject.super.new(self, area, x, y, opts)
 
 	self.w, self.h = 8, 8
-	self.collider = self.area.world:newRectangleCollider(self.x, self.y, self.w, self.h)
+	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
 	self.collider:setObject(self)
 	self.collider:setCollisionClass("Collectable")
 

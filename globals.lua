@@ -1,10 +1,8 @@
---[[ 
-  Attacks Table:
-  Contains definitions for various attack types, including their properties
-  such as damage, cooldown, ammo usage, and visual representation.
---]]
+-- ==========================
+-- Attacks Configuration
+-- ==========================
 Attacks = {
-    -- Neutral attack: Basic attack with no ammo cost
+    -- Neutral Attack
     ["Neutral"] = {
         name = "Neutral",
         cooldown = 0.24,
@@ -15,7 +13,7 @@ Attacks = {
         color = { 1.0, 0.9921, 0.8115, 1.0 },
     },
 
-    -- Double attack: Fires two projectiles at a slight angle
+    -- Double Attack
     ["Double"] = {
         name = "Double",
         cooldown = 0.32,
@@ -27,7 +25,7 @@ Attacks = {
         color = { 0.29, 0.76, 0.85, 1.0 },
     },
 
-    -- Triple attack: Fires three projectiles in a spread
+    -- Triple Attack
     ["Triple"] = {
         name = "Triple",
         damage = 12,
@@ -39,7 +37,7 @@ Attacks = {
         color = { 0.98, 0.80, 0.80, 1.00 },
     },
 
-    -- Rapid attack: Fast-firing attack with low damage
+    -- Rapid Attack
     ["Rapid"] = {
         name = "Rapid",
         damage = 1,
@@ -50,7 +48,7 @@ Attacks = {
         color = { 1.0, 0.98, 0.80, 1.00 },
     },
 
-    -- Homing attack: Projectiles that home in on targets
+    -- Homing Attack
     ["Homing"] = {
         name = "Homing",
         damage = 3,
@@ -61,7 +59,7 @@ Attacks = {
         color = { 0.5632, 0.8722, 0.1111, 1.00 },
     },
 
-    -- Spread attack: Fires multiple projectiles in a wide arc
+    -- Spread Attack
     ["Spread"] = {
         name = "Spread",
         damage = 2,
@@ -72,7 +70,7 @@ Attacks = {
         color = { 0.3711, 0.1210, 0.9678, 1.00 },
     },
 
-    -- Back attack: Fires projectiles backward
+    -- Back Attack
     ["Back"] = {
         name = "Back",
         damage = 2,
@@ -83,7 +81,7 @@ Attacks = {
         color = { 0.7755, 0.9211, 0.1633, 1.00 },
     },
 
-    -- Side attack: Fires projectiles to the sides
+    -- Side Attack
     ["Side"] = {
         name = "Side",
         damage = 2,
@@ -94,7 +92,7 @@ Attacks = {
         color = { 0.8811, 0.5678, 0.3409, 1.00 },
     },
 
-    -- Destroyer attack: High-damage attack with long cooldown
+    -- Destroyer Attack
     ["Destroyer"] = {
         name = "Destroyer",
         damage = 100,
@@ -105,30 +103,114 @@ Attacks = {
         color = { 1.00, 1.00, 1.00, 1.00 },
     },
 
-    -- Additional attacks (Blast, Spin, Hearth, etc.)
-    -- These follow the same structure as above
-    ["Blast"] = { ... },
-    ["Spin"] = { ... },
-    ["Hearth"] = { ... },
-    ["Flame"] = { ... },
-    ["Bounce"] = { ... },
-    ["2Split"] = { ... },
-    ["4Split"] = { ... },
-    ["Lightning"] = { ... },
-    ["Explode"] = { ... },
+    -- Blast Attack
+    ["Blast"] = {
+        name = "Blast",
+        damage = 2,
+        cooldown = 0.64,
+        ammo = 6,
+        tears = 1,
+        abbreviation = "BIG BOY BLAST",
+        color = { 0.6542, 0.1675, 1.00, 1.00 },
+    },
+
+    -- Spin Attack
+    ["Spin"] = {
+        name = "Spin",
+        damage = 2,
+        cooldown = 0.32,
+        ammo = 2,
+        tears = 1,
+        abbreviation = "G.I ROBOT",
+        color = { 0.9222, 0.1675, 0.3287, 1.00 },
+    },
+
+    -- Hearth Attack
+    ["Hearth"] = {
+        name = "Hearth",
+        damage = 2,
+        cooldown = 0.32,
+        ammo = 2,
+        tears = 1,
+        abbreviation = "mi love for you",
+        color = { 1.9, 0.1675, 0.3287, 1.00 },
+    },
+
+    -- Flame Attack
+    ["Flame"] = {
+        name = "Flame",
+        damage = 2,
+        cooldown = 0.048,
+        ammo = 0.4,
+        tears = 1,
+        abbreviation = "THE BRIDE",
+        color = { 0.1, 1.0, 0.3287, 1.00 },
+    },
+
+    -- Bounce Attack
+    ["Bounce"] = {
+        name = "Bounce",
+        damage = 2,
+        cooldown = 0.048,
+        ammo = 0.4,
+        tears = 1,
+        abbreviation = "ASS BOUNCE ???",
+        color = { 0.1, 1.0, 0.3287, 1.00 },
+    },
+
+    -- 2Split Attack
+    ["2Split"] = {
+        name = "2Split",
+        damage = 2,
+        cooldown = 0.32,
+        ammo = 3,
+        tears = 1,
+        abbreviation = "TWO BITCHIESSSS",
+        color = { 0.1, 1.0, 0.3287, 1.00 },
+    },
+
+    -- 4Split Attack
+    ["4Split"] = {
+        name = "4Split",
+        damage = 2,
+        cooldown = 0.4,
+        ammo = 4,
+        tears = 1,
+        abbreviation = "GANG BANG",
+        color = { 0.31, 0.0, 0.3287, 1.00 },
+    },
+
+    -- Lightning Attack
+    ["Lightning"] = {
+        name = "Lightning",
+        damage = 0.05,
+        cooldown = 0.05,
+        ammo = 0,
+        tears = 1,
+        abbreviation = "Ka-chow!",
+        color = { 1.0, 1.0, 1.0, 1.00 },
+    },
+
+    -- Explode Attack
+    ["Explode"] = {
+        name = "Explode",
+        damage = 0.05,
+        cooldown = 0.5,
+        ammo = 0,
+        tears = 1,
+        abbreviation = "BOOOOOYAAA",
+        color = { 1, 0, 0, 1.00 },
+    },
 }
 
---[[ 
-  Enemies Table:
-  Contains a list of enemy types present in the game.
---]]
+-- ==========================
+-- Enemies Configuration
+-- ==========================
 Enemies = { "Rock", "Shooter", "BigRock" }
 
---[[ 
-  Achievements Table:
-  Contains definitions for achievements, including their name, description,
-  and unlock status.
---]]
+-- ==========================
+-- Achievements Configuration
+-- ==========================
 Achievements = {
     ['10K Fighter'] = {
         name = "10K Fighter",
@@ -138,10 +220,9 @@ Achievements = {
     }
 }
 
---[[ 
-  Global Colors:
-  Defines various colors used throughout the game for UI elements.
---]]
+-- ==========================
+-- Global Colors
+-- ==========================
 GDefaultColor = { 0.87, 1, 0.81, 1.0 }
 GBackgroundColor = { 0.06, 0.06, 0.06, 1.0 }
 GAmmoColor = { 0.48, 0.78, 0.64, 1.0 }
@@ -150,19 +231,15 @@ GHPColor = { 0.94, 0.40, 0.27, 1.0 }
 GSkillPointColor = { 1.0000, 0.7765, 0.3647, 1.0 }
 GWhiteCream = { 1.0, 0.9921, 0.8115, 1 }
 
---[[ 
-  Default Player Settings:
-  Contains default values for player attributes such as velocity.
---]]
+-- ==========================
+-- Default Player Settings
+-- ==========================
 G_default_player_velocity = 300
-
---[[ 
-  Color Collections:
-  Groups of colors for easier access and manipulation.
---]]
 GDefaultColors = { GDefaultColor, GHPColor, GAmmoColor, GBoostColor, GSkillPointColor }
 
--- Negative colors (inverted colors for effects)
+-- ==========================
+-- Negative Colors
+-- ==========================
 G_negative_colors = {
     { 1 - GDefaultColor[1],    1 - GDefaultColor[2],    1 - GDefaultColor[3] },
     { 1 - GHPColor[1],         1 - GHPColor[2],         1 - GHPColor[3] },

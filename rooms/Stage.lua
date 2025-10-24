@@ -14,8 +14,9 @@ function Stage:new()
 	self.area.world:addCollisionClass("EnemyProjectile", { ignores = { "EnemyProjectile", "Projectile", "Enemy" } })
 	self.area.world:addCollisionClass("Barrier", { ignores = { "Player", "Projectile", "Collectable" } }) -- the world need to check
 
-	self.main_canvas = love.graphics.newCanvas(GW, GH)                                                 -- Create main canvas object 🖼️
-	-- when instante this stage
+	self.main_canvas = love.graphics.newCanvas(GW, GH)
+	self.rgbShiftCanvas = love.graphics.newCanvas(GW, GH)
+	self.final_canvas = love.graphics.newCanvas(GW, GH)
 	self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
 
 	self.director = Director(self, self.player)
@@ -27,7 +28,10 @@ function Stage:new()
 	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
 
 	GCamera.smoother = Camera.smooth.damped(100)
-	--triangle = love.graphics.newShader("resource/shaders/rgbShift.frag")
+
+    self.rgb_shift = love.graphics.newShader('resource/shaders/rgbShift.frag')
+    self.rgb_shift_mag = 10
+
 	GInput:bind("mouse1", function()
 		self.counterAttack = self.counterAttack + 1
 
@@ -75,6 +79,16 @@ function Stage:draw()
 	if not self.player then
 		return
 	end
+
+
+	love.graphics.setCanvas(self.rgbShiftCanvas)
+	love.graphics.clear()
+	GCamera:attach(0, 0, GW, GH)
+	self.area:drawOnly({ 'rgb_shift' })
+	GCamera:detach()
+	love.graphics.setCanvas()
+
+
 	love.graphics.setCanvas(self.main_canvas)
 	love.graphics.clear()
 	GCamera:attach(0, 0, GW, GH)
@@ -118,6 +132,24 @@ function Stage:draw()
 	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
 
 	love.graphics.setCanvas()
+
+
+    love.graphics.setCanvas(self.final_canvas)
+    love.graphics.clear()
+        love.graphics.setColor(255, 255, 255)
+        love.graphics.setBlendMode("alpha", "premultiplied")
+  
+        self.rgb_shift:send('amount', {
+      	math.random(-self.rgb_shift_mag, self.rgb_shift_mag)/GW, 
+      	math.random(-self.rgb_shift_mag, self.rgb_shift_mag)/GH})
+        love.graphics.setShader(self.rgb_shift)
+        love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
+        love.graphics.setShader()
+  
+  		love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
+  		love.graphics.setBlendMode("alpha")
+  	love.graphics.setCanvas()
+
 
 
 	love.graphics.setColor(1, 1, 1, 1)

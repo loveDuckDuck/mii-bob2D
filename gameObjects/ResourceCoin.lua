@@ -4,10 +4,13 @@ ResourceCoin = CoinObject:extend()
 function ResourceCoin:new(area, x, y, opts)
 	ResourceCoin.super.new(self, area, x, y, opts)
 	self.power = table.randomResource(Attacks)
-	self.radius = math.random(7, 17)
 
-	self.timer:tween(3, self, { radius = 1 }, 'in-out-cubic', function()
-		self.timer:tween(3, self, { radius =  math.random(7, 17) }, 'in-out-cubic')
+	self.radius = math.random(7, 17)
+	self.timer:after(1, function()
+		local originalRadius = self.radius
+		self.timer:tween(1, self, { radius = 1 }, 'in-out-cubic', function()
+			self.timer:tween(1, self, { radius = originalRadius }, 'in-out-cubic')
+		end)
 	end)
 end
 
