@@ -49,7 +49,7 @@ function Director:new(stage, player)
 	for i = 1, 1024 do
 		self.resource_spawn_chances[i] = CreateChanceList(
 			{ "Ammo", love.math.random(2, 8) },
-			{ "BoostCoin", love.math.random(1, 4) },	
+			{ "BoostCoin", love.math.random(1, 4) },
 			{ "ResourceCoin", love.math.random(1, 6) }
 		)
 	end
@@ -67,17 +67,16 @@ function Director:new(stage, player)
 			{ "BigRock", love.math.random(1, 6) }
 		)
 	end
-
-
-
-
-
 	self:setEnemySpawnsForThisRound()
 	self:setRecourceSpawnsForThisRound()
 end
 
 function Director:setEnemySpawnsForThisRound()
-	print("Setting enemy spawns for round with difficulty " .. self.difficulty)
+
+	self.stage.area:addGameObject("InfoText", GW / 2, GH / 2,
+		{ scaleFactor = 2, text = "Round " .. tostring(self.difficulty) })
+
+
 	local points = self.difficulty_to_points[self.difficulty]
 
 	-- Find enemies
@@ -102,8 +101,9 @@ function Director:setEnemySpawnsForThisRound()
 		self.timer:after(enemy_spawn_times[i], function()
 			self.stage.area:addGameObject(
 				enemy_list[i],
-				math.customRandom(self.player.x - GW / 2, self.player.x + GW / 2),
-				math.customRandom(self.player.y - GH / 2, self.player.y + GH / 2)
+				math.customRandom(0, GW),
+				math.customRandom(0, GH),
+				{hp = 5 + self.difficulty * 2} -- add hp scaling with difficulty_to_points
 			)
 		end)
 	end
@@ -119,9 +119,11 @@ function Director:update(dt)
 		if self.round_timer > self.round_duration / self.player.multiplierManager.enemy_spawn_rate_multiplier then
 			self.round_timer = 0
 			self.difficulty = self.difficulty + 1
+			self.stage.area:addGameObject("InfoText", GW / 2, GH / 2,
+				{ scaleFactor = 2, text = "Round " .. tostring(self.difficulty) })
+
 			self:setEnemySpawnsForThisRound()
 			self:setRecourceSpawnsForThisRound()
-			print("New round! Difficulty: " .. self.difficulty)
 		end
 	end
 end

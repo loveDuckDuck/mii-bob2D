@@ -4,7 +4,7 @@ function EnemyProjectile:new(area, x, y, opts)
 	EnemyProjectile.super.new(self, area, x, y, opts)
 	-- s rappresente the radius of the collider and the surroi
 	self.radiusSpace = opts.s or 2.5
-	self.velocity = opts.velocity or G_default_player_velocity
+	self.velocity = opts.velocity or 200
 	self.color = opts.color or GHPColor
 	self.damage = opts.damage or 2
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.radiusSpace)

@@ -46,7 +46,7 @@ function MultiplierManager:generateChanceMultiplier()
 end
 
 function MultiplierManager:onAmmoPickupChance()
-	self.random = math.random(0.1, 0.5)
+	self.random = math.customRandom(0.1, 0.5)
 	local fiftyFifty = math.random(0, 100)
 
 	local color = { math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0), math.random(0.1, 1.0) }
@@ -60,7 +60,12 @@ function MultiplierManager:onAmmoPickupChance()
 		self.player.acceleration = ReturnValuePercentage(self.player.acceleration, self.random, fiftyFifty)
 		self.player.baseMaxVelocity = ReturnValuePercentage(self.player.baseMaxVelocity, self.random, fiftyFifty)
 		self.player.maxVelocity = ReturnValuePercentage(self.player.maxVelocity, self.random, fiftyFifty)
-		self.player.friction = ReturnValuePercentage(self.player.friction, self.random, fiftyFifty)
+
+        -- clamp friction to avoid dt * friction >= 1 (which would zero velocities each physics step)
+        local newFriction = ReturnValuePercentage(self.player.friction, self.random, fiftyFifty)
+        self.player.friction = math.max(0.01, math.min(newFriction, 60)) -- adjust upper limit as needed
+
+
 		self:printText(fiftyFifty < 50 and "FASTER!@R" or "slowwwwwwwwwwwwwwwww", 2, color)
 	end
 
