@@ -25,7 +25,7 @@ function Director:new(stage, player)
     This creates a non-linear progression of points based on difficulty.
     ]]
 	self.difficulty_to_points = {}
-	self.difficulty_to_points[1] = 16
+	self.difficulty_to_points[1] = 32
 	for i = 2, 1024, 4 do
 		self.difficulty_to_points[i] = self.difficulty_to_points[i - 1] + 8
 		self.difficulty_to_points[i + 1] = self.difficulty_to_points[i]
