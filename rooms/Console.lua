@@ -33,7 +33,6 @@ function Console:update(dt) -- Update stage logic here 🕹️
     for _, module in ipairs(self.modules) do module:update(dt) end
     if self.inputting then
         if GInput:pressed("enter") then
-            print("return")
             local input_text = ''
             for _, character in ipairs(self.input_text) do
                 input_text = input_text .. character
@@ -42,7 +41,6 @@ function Console:update(dt) -- Update stage logic here 🕹️
 
             self.input_text = {}
             if input_text == 'resolution' then
-                print("resolution")
                 table.insert(self.modules, ResolutionModule(self, self.line_y))
                 self.inputting = false
             else

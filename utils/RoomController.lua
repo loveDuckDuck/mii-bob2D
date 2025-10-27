@@ -3,11 +3,7 @@ RoomController = Object:extend()
 function RoomController:new()
 	self.currentRoom = nil
 	self.rooms = {}
-	if type(self.rooms) ~= "table" then
-		print("Error: self.rooms is not a table. It might be nil.")
-	else
-		print("i am table")
-	end
+
 	self.roomsCreated = {}
 end
 

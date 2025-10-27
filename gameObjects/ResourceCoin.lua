@@ -6,16 +6,21 @@ function ResourceCoin:new(area, x, y, opts)
 	self.power = table.randomResource(Attacks)
 
 	self.radius = math.random(7, 17)
-	self.timer:after(1, function()
-		local originalRadius = self.radius
-		self.timer:tween(1, self, { radius = 1 }, 'in-out-cubic', function()
-			self.timer:tween(1, self, { radius = originalRadius }, 'in-out-cubic')
-		end)
+	self.timer:every(1, function()
+		self:resize()
+	end)
+end
+
+function ResourceCoin:resize()
+	self.timer:tween(1, self, { radius = 1 }, 'in-out-cubic', function()
+		self.timer:tween(1, self, { radius = math.random(7, 17)}, 'in-out-cubic')
 	end)
 end
 
 function ResourceCoin:update(dt)
 	ResourceCoin.super.update(self, dt)
+
+
 	if self.x < 0 or self.y < 0 or self.x > GW or self.y > GH then
 		self:die()
 	end
@@ -24,10 +29,7 @@ end
 function ResourceCoin:draw()
 	love.graphics.setColor(self.power.color)
 	PushRotate(self.x, self.y, self.collider:getAngle())
-
-
-	GDraft:circle(self.x, self.y, self.radius, nil, "fill")
-
+    love.graphics.circle("fill", self.x, self.y, self.radius)   -- Draw red circle with five segments.
 	love.graphics.pop()
 	love.graphics.setColor(GDefaultColor)
 end

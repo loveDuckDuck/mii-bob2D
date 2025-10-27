@@ -121,7 +121,6 @@ function love.quit()
 end
 
 function DeleteEveryThing()
-	print("DeleteEveryThing")
 	love.event.quit()
 end
 

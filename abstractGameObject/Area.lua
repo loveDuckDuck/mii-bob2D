@@ -6,7 +6,6 @@ function Area:new(room)
 	self.gameObjectType = {}
 end
 
-
 function Area:update(dt)
 	if self.world then
 		self.world:update(dt)
@@ -51,7 +50,6 @@ function Area:drawOnly(types)
 	for _, game_object in ipairs(self.game_objects) do
 		if game_object.graphics_types then
 			if #Moses.intersection(types, game_object.graphics_types) > 0 then
-				print(game_object.name)
 				game_object:draw()
 			end
 		end

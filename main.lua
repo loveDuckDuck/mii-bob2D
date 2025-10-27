@@ -15,6 +15,7 @@ Moses          = require("libraries/moses/moses")
 Util           = require("utils/Utils")
 RoomController = require("utils/RoomController")
 TreeLogic      = require("utils/TreeStats")
+GlobalTime = 0
 
 require("libraries/string/utf8")
 require("globals")
@@ -108,6 +109,7 @@ function love.update(dt)
 	GTimer:update(dt * slow)
 	GRoom:update(dt * slow)
 	GameTracker:update(dt * slow)
+	GlobalTime = dt
 	--Prof:detach()
 	--data = Prof:unpack()
 end
@@ -175,7 +177,6 @@ function love.load()
 	GTimer = Timer()
 	GCamera = Camera()
 	GRoom = RoomController()
-	print(GRoom)
 	GRoom:gotoRoom("Stage", 1) -- XXX : fix
 	slow = 1
 	FlashFrames = 0
@@ -197,6 +198,7 @@ function love.run()
 	if love.timer then
 		love.timer.step()
 		dt = love.timer.getDelta() -- with this im gone insert define the fixed delta time
+		
 	end
 
 	-- Main loop time.

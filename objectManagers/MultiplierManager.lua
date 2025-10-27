@@ -72,7 +72,6 @@ function MultiplierManager:onAmmoPickupChance()
 	if self.chances.damage_multiplier:next() then
 		self.player.projectileManager.damage = ReturnValuePercentage(self.player.projectileManager.damage, self.random,
 			fiftyFifty)
-		print(self.player.projectileManager.damage)
 		self:printText(fiftyFifty < 50 and "KILLLLLLL!!!" or "im gonna bee killed", 2, color)
 	end
 

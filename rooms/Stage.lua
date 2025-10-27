@@ -16,6 +16,15 @@ function Stage:new()
 
 	self.main_canvas = love.graphics.newCanvas(GW, GH)
 	self.rgbShiftCanvas = love.graphics.newCanvas(GW, GH)
+
+	self.rgb_shift = love.graphics.newShader('resource/shaders/rgbShift.frag')
+	self.rgb_shift_mag = 2.5
+	-- self.tvShader = love.graphics.newShader('resource/shaders/tvShader.frag')
+	-- self.tvCanvas = love.graphics.newCanvas(GW, GH)
+
+	self.amberShader = love.graphics.newShader('resource/shaders/amber.frag')
+	self.crtShader = love.graphics.newShader('resource/shaders/crtShader.frag')
+
 	self.final_canvas = love.graphics.newCanvas(GW, GH)
 	self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
 
@@ -29,8 +38,6 @@ function Stage:new()
 
 	GCamera.smoother = Camera.smooth.damped(100)
 
-    self.rgb_shift = love.graphics.newShader('resource/shaders/rgbShift.frag')
-    self.rgb_shift_mag = 10
 
 	GInput:bind("mouse1", function()
 		self.counterAttack = self.counterAttack + 1
@@ -50,12 +57,13 @@ function Stage:new()
 
 		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
 	end)
+	self.time = 0
 end
 
 function Stage:update(dt)
 	GCamera:lockPosition(dt, GW / 2, GH / 2)
 	GCamera:update(dt)
-
+	self.time = self.time + dt
 	if self.player then
 		self.director:update(dt)
 
@@ -75,26 +83,19 @@ function Stage:deactivate()
 	print("Stage deactivate")
 end
 
-function Stage:draw()
-	if not self.player then
-		return
-	end
-
-
-	love.graphics.setCanvas(self.rgbShiftCanvas)
-	love.graphics.clear()
-	GCamera:attach(0, 0, GW, GH)
-	self.area:drawOnly({ 'rgb_shift' })
-	GCamera:detach()
-	love.graphics.setCanvas()
-
-
-	love.graphics.setCanvas(self.main_canvas)
-	love.graphics.clear()
-	GCamera:attach(0, 0, GW, GH)
-	self.area:draw()
-	GCamera:detach()
-
+function Stage:numbers()
+	-- Score
+	love.graphics.setColor(GDefaultColor)
+	love.graphics.print(
+		self.score,
+		GW - 20,
+		10,
+		0,
+		1,
+		1,
+		math.floor(self.font:getWidth(self.score) / 2),
+		self.font:getHeight() / 2
+	)
 	-- Stats player
 	love.graphics.print("hp : " .. self.player.hp, 0, 70)
 	love.graphics.print("attack : " .. self.player.attack, 0, 90)
@@ -109,19 +110,6 @@ function Stage:draw()
 
 
 
-	-- Score
-	love.graphics.setColor(GDefaultColor)
-	love.graphics.print(
-		self.score,
-		GW - 20,
-		10,
-		0,
-		1,
-		1,
-		math.floor(self.font:getWidth(self.score) / 2),
-		self.font:getHeight() / 2
-	)
-	love.graphics.setColor(1, 1, 1)
 
 	-- HP
 	local r, g, b = unpack(GHPColor)
@@ -130,33 +118,62 @@ function Stage:draw()
 	love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 156 * (hp / max_hp), 7)
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
 	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
+end
 
+function Stage:draw()
+	if not self.player then
+		return
+	end
+
+	love.graphics.setCanvas(self.rgbShiftCanvas)
+	love.graphics.clear()
+	GCamera:attach(0, 0, GW, GH)
+	self.area:drawOnly({ 'rgb_shift' })
+	GCamera:detach()
 	love.graphics.setCanvas()
 
 
-    love.graphics.setCanvas(self.final_canvas)
-    love.graphics.clear()
-        love.graphics.setColor(255, 255, 255)
-        love.graphics.setBlendMode("alpha", "premultiplied")
-  
-        self.rgb_shift:send('amount', {
-      	math.random(-self.rgb_shift_mag, self.rgb_shift_mag)/GW, 
-      	math.random(-self.rgb_shift_mag, self.rgb_shift_mag)/GH})
-        love.graphics.setShader(self.rgb_shift)
-        love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
-        love.graphics.setShader()
-  
-  		love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
-  		love.graphics.setBlendMode("alpha")
-  	love.graphics.setCanvas()
 
+
+	love.graphics.setCanvas(self.main_canvas)
+	love.graphics.clear()
+	GCamera:attach(0, 0, GW, GH)
+	self.area:drawExcept({ 'rgb_shift' })
+	GCamera:detach()
+	love.graphics.setCanvas()
+
+	love.graphics.setCanvas(self.final_canvas)
+	love.graphics.clear()
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.setBlendMode("alpha", "premultiplied")
+
+	self.rgb_shift:send('amount', {
+		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
+		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
+	})
+
+	love.graphics.setShader(self.rgb_shift)
+	love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
+	love.graphics.setShader()
+
+
+
+	love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
+	love.graphics.setBlendMode("alpha")
+	love.graphics.setCanvas()
 
 
 	love.graphics.setColor(1, 1, 1, 1)
 	love.graphics.setBlendMode('alpha', 'premultiplied')
 	local x = (love.graphics.getWidth() - GW * SX) / 2
 	local y = (love.graphics.getHeight() - GH * SY) / 2
-	love.graphics.draw(self.main_canvas, x, y, 0, SX, SY)
+
+	love.graphics.setShader(self.crtShader)
+	self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
+	self.crtShader:send('iTime',self.time * 10)
+	love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
+	love.graphics.setShader()
+
 	love.graphics.setBlendMode('alpha')
 end
 
@@ -166,7 +183,6 @@ function Stage:destroy()
 	self.area = nil
 	self.player = nil
 
-	--table.clear(self)
 end
 
 function Stage:finish()

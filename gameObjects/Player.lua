@@ -3,6 +3,8 @@ function Player:new(area, x, y, opts)
 	Player.super.new(self, area, x, y, opts)
 	self.x, self.y = x, y
 	self.w, self.h = 12, 12
+	self.name = "Player"
+	self.graphics_types = { 'rgb_shift' }
 
 	-- PHYSICS
 	self.collider = self.area.world:newCircleCollider(self.x, self.y, self.w)
