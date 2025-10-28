@@ -270,13 +270,13 @@ function Player:checkCollision(dt)
 		local collision_data = self.collider:getEnterCollisionData("Enemy")
 		local object = collision_data.collider:getObject()
 		if object:is(Rock) then
-			self:hit(10)
+			self:hit(object.damage)
 		end
 		if object:is(Shooter) then
-			self:hit(15)
+			self:hit(object.damage)
 		end
 		if object:is(BigRock) then
-			self:hit(25)
+			self:hit(object.damage)
 			flash(2)
 			Slow(0.75, 0.25)
 		end

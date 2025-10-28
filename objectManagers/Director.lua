@@ -78,6 +78,17 @@ function Director:setEnemySpawnsForThisRound()
 
 
 	local points = self.difficulty_to_points[self.difficulty]
+	local function getEnemyDamage(enemy)
+		if enemy == "Rock" then
+			return 100 + self.difficulty * 2
+		elseif enemy == "Shooter" then
+			return 150 + self.difficulty * 3
+		elseif enemy == "BigRock" then
+			return 259 + self.difficulty * 4
+		else
+			return 10
+		end
+	end
 
 	-- Find enemies
 	local enemy_list = {}
@@ -103,7 +114,7 @@ function Director:setEnemySpawnsForThisRound()
 				enemy_list[i],
 				math.customRandom(0, GW),
 				math.customRandom(0, GH),
-				{hp = 5 + self.difficulty * 2} -- add hp scaling with difficulty_to_points
+				{hp = 5 + self.difficulty * 2, damage = getEnemyDamage(enemy_list[i])} -- add hp scaling with difficulty_to_points
 			)
 		end)
 	end

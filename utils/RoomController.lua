@@ -3,7 +3,6 @@ RoomController = Object:extend()
 function RoomController:new()
 	self.currentRoom = nil
 	self.rooms = {}
-
 	self.roomsCreated = {}
 end
 
@@ -48,11 +47,12 @@ function RoomController:goToRoomMenu(roomType, roomUUID, ...)
 	end
 end
 
-function RoomController:gotoRoom(roomName, roomUUID, ...)
+function RoomController:gotoRoom(roomName, roomUUID, firstStart, ...)
 	print("n : ", table.count(self.roomsCreated))
 	if self.roomsCreated[roomName] then
 		self:removeRoom(roomName)
 	end
+
 	print("roomName : ", roomName, " roomUUID : ", roomUUID)
 	self.roomsCreated = { [roomName] = roomUUID }
 	if self.currentRoom and self.rooms[roomUUID] then
@@ -86,8 +86,6 @@ function RoomController:removeRoom(roomName)
 		self.roomsCreated[roomName] = nil
 	end
 end
-
-
 
 function RoomController:__tostring()
 	return "RoomController"

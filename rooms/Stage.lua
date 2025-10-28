@@ -38,25 +38,6 @@ function Stage:new()
 
 	GCamera.smoother = Camera.smooth.damped(100)
 
-
-	GInput:bind("mouse1", function()
-		self.counterAttack = self.counterAttack + 1
-
-		if self.counterAttack > Lenght(Attacks) then
-			self.counterAttack = 1
-		end
-
-		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
-	end)
-	GInput:bind("mouse2", function()
-		self.counterAttack = self.counterAttack - 1
-
-		if self.counterAttack < 1 then
-			self.counterAttack = Lenght(Attacks)
-		end
-
-		self.player:setAttack(table.keys(Attacks)[self.counterAttack])
-	end)
 	self.time = 0
 end
 
@@ -126,40 +107,35 @@ function Stage:draw()
 	end
 
 	love.graphics.setCanvas(self.rgbShiftCanvas)
-	love.graphics.clear()
-	GCamera:attach(0, 0, GW, GH)
-	self.area:drawOnly({ 'rgb_shift' })
-	GCamera:detach()
+		love.graphics.clear()
+		GCamera:attach(0, 0, GW, GH)
+		self.area:drawOnly({ 'rgb_shift' })
+		GCamera:detach()
 	love.graphics.setCanvas()
 
-
-
-
 	love.graphics.setCanvas(self.main_canvas)
-	love.graphics.clear()
-	GCamera:attach(0, 0, GW, GH)
-	self.area:drawExcept({ 'rgb_shift' })
-	GCamera:detach()
+		love.graphics.clear()
+		GCamera:attach(0, 0, GW, GH)
+		self.area:drawExcept({ 'rgb_shift' })
+		GCamera:detach()
 	love.graphics.setCanvas()
 
 	love.graphics.setCanvas(self.final_canvas)
-	love.graphics.clear()
-	love.graphics.setColor(1, 1, 1)
-	love.graphics.setBlendMode("alpha", "premultiplied")
+		love.graphics.clear()
+		love.graphics.setColor(1, 1, 1)
+		love.graphics.setBlendMode("alpha", "premultiplied")
 
-	self.rgb_shift:send('amount', {
-		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
-		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
-	})
+		self.rgb_shift:send('amount', {
+			math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
+			math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
+		})
 
-	love.graphics.setShader(self.rgb_shift)
-	love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
-	love.graphics.setShader()
+		love.graphics.setShader(self.rgb_shift)
+		love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
+		love.graphics.setShader()
 
-
-
-	love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
-	love.graphics.setBlendMode("alpha")
+		love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
+		love.graphics.setBlendMode("alpha")
 	love.graphics.setCanvas()
 
 
@@ -169,11 +145,10 @@ function Stage:draw()
 	local y = (love.graphics.getHeight() - GH * SY) / 2
 
 	love.graphics.setShader(self.crtShader)
-	self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
-	self.crtShader:send('iTime',self.time * 10)
-	love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
+		self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
+		self.crtShader:send('iTime', self.time * 10)
+		love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
 	love.graphics.setShader()
-
 	love.graphics.setBlendMode('alpha')
 end
 
@@ -182,13 +157,13 @@ function Stage:destroy()
 	self.area:destroy()
 	self.area = nil
 	self.player = nil
-
 end
 
 function Stage:finish()
+	GRoomTransition:startCoroutineTransition()
+
 	GTimer:after(1, function()
 		GRoom:gotoRoom('Stage', UUID())
-
 		if not Achievements['10K Fighter'] then
 			Achievements['10k Fighter'] = true
 			-- Do whatever else that should be done when an achievement is unlocked

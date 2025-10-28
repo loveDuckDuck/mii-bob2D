@@ -14,6 +14,7 @@ Moses          = require("libraries/moses/moses")
 --utilities
 Util           = require("utils/Utils")
 RoomController = require("utils/RoomController")
+
 TreeLogic      = require("utils/TreeStats")
 GlobalTime = 0
 
@@ -64,6 +65,7 @@ end
 function love.draw()
 	--DrawGarbageCollector()
 	GRoom:draw()
+	GRoomTransition:draw()
 	GameTracker:draw()
 	--Prof:draw()
 	-- local y_offset = 0
@@ -109,6 +111,7 @@ function love.update(dt)
 	GTimer:update(dt * slow)
 	GRoom:update(dt * slow)
 	GameTracker:update(dt * slow)
+	GRoomTransition:update(dt * slow)	
 	GlobalTime = dt
 	--Prof:detach()
 	--data = Prof:unpack()
@@ -177,7 +180,8 @@ function love.load()
 	GTimer = Timer()
 	GCamera = Camera()
 	GRoom = RoomController()
-	GRoom:gotoRoom("Stage", 1) -- XXX : fix
+	GRoomTransition = RoomTransiction()
+	GRoom:gotoRoom("Stage", 1,true) -- XXX : fix
 	slow = 1
 	FlashFrames = 0
 	resizeWidthHeight(1280, 720)
