@@ -44,8 +44,6 @@ function Stage:new()
 
 
 	self.hTransition = 0
-	self.transition_canvas = love.graphics.newCanvas(GW, GH)
-	self:start()
 end
 
 function Stage:update(dt)
@@ -107,12 +105,15 @@ function Stage:numbers()
 end
 
 function Stage:start()
+	self.isInLife = true
+
 	self.timer:tween(0.5, self, { hTransition = GW * SX, }, 'in-out-cubic',
 		function()
 			self.timer:tween(0.5, self, { hTransition = 0 }, 'in-out-cubic',
 				function()
-					print("Finished transition")
+					print("Finished transition", self.hTransition)
 					self.isInLife = false
+					self.director = Director(self, self.player)
 				end)
 		end)
 end
@@ -123,44 +124,44 @@ function Stage:draw()
 	end
 
 	love.graphics.setCanvas(self.rgbShiftCanvas)
-		love.graphics.clear()
-		GCamera:attach(0, 0, GW, GH)
-		self.area:drawOnly({ 'rgb_shift' })
-		GCamera:detach()
+	love.graphics.clear()
+	GCamera:attach(0, 0, GW, GH)
+	self.area:drawOnly({ 'rgb_shift' })
+	GCamera:detach()
 	love.graphics.setCanvas()
 
 	love.graphics.setCanvas(self.main_canvas)
-		love.graphics.clear()
-		GCamera:attach(0, 0, GW, GH)
-		self.area:drawExcept({ 'rgb_shift' })
-		GCamera:detach()
-		-- VVV MOVE THIS BLOCK TO THE END VVV
-		if self.isInLife then
-			love.graphics.setColor(0.87, 1, 0.81, 1.0)
-			-- Note: You may need to adjust this rectangle's position and size
-			-- depending on your scaling, but at least it will be visible now.
-			love.graphics.rectangle('fill', 0, 0, GW * SX, self.hTransition)
-			love.graphics.setColor(1, 1, 1, 1)
-		end
+	love.graphics.clear()
+	GCamera:attach(0, 0, GW, GH)
+	self.area:drawExcept({ 'rgb_shift' })
+	GCamera:detach()
+
+	if self.isInLife then
+		love.graphics.setColor(0.87, 1, 0.81, 1.0)
+		-- Note: You may need to adjust this rectangle's position and size
+		-- depending on your scaling, but at least it will be visible now.
+		love.graphics.rectangle('fill', 0, 0, GW * SX, self.hTransition)
+		love.graphics.setColor(1, 1, 1, 1)
+	end
 	love.graphics.setCanvas()
 
 	love.graphics.setCanvas(self.final_canvas)
-		love.graphics.clear()
-		love.graphics.setColor(1, 1, 1)
-		love.graphics.setBlendMode("alpha", "premultiplied")
+	love.graphics.clear()
+	love.graphics.setColor(1, 1, 1)
+	love.graphics.setBlendMode("alpha", "premultiplied")
 
-		self.rgb_shift:send('amount', {
-			math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
-			math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
-		})
+	self.rgb_shift:send('amount', {
+		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
+		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
+	})
 
-		love.graphics.setShader(self.rgb_shift)
-		love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
-		love.graphics.setShader()
+	love.graphics.setShader(self.rgb_shift)
+	love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
+	love.graphics.setShader()
 
 
-		love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
-		love.graphics.setBlendMode("alpha")
+	love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
+	love.graphics.setBlendMode("alpha")
 	love.graphics.setCanvas()
 
 
@@ -178,17 +179,9 @@ function Stage:draw()
 	love.graphics.setBlendMode('alpha')
 end
 
--- function Stage:destroy()
--- 	self.director:destroy()
--- 	self.area:destroy()
--- 	self.area = nil
--- 	self.player = nil
--- end
-
 function Stage:finish()
 	GTimer:after(0.5, function()
 		self:reset()
-		--GRoom:gotoRoom('Stage', UUID())
 		if not Achievements['10K Fighter'] then
 			Achievements['10k Fighter'] = true
 			-- Do whatever else that should be done when an achievement is unlocked
@@ -196,17 +189,13 @@ function Stage:finish()
 	end)
 end
 
-
-function  Stage:reset()
+function Stage:reset()
 	print("Reset Stage")
 	self.director:destroy()
 	self.area:reset()
 	--self.area = nil
 	self.player = nil
 	self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
-
-	self.director = Director(self, self.player)
-
 	self.score = 0
 	self.goalScore = 30
 	self.font = GFont
@@ -214,15 +203,5 @@ function  Stage:reset()
 	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
 
 	GCamera.smoother = Camera.smooth.damped(100)
-
 	self.time = 0
-	self.isInLife = true
-	self.timer = Timer() -- Initialize the timer
-
-
-	self.hTransition = 0
-	self.transition_canvas = love.graphics.newCanvas(GW, GH)
-	self:start()
-
-	
 end

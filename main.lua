@@ -63,27 +63,12 @@ function resize(s)
 end
 
 function love.draw()
-	--DrawGarbageCollector()
 	GRoom:draw()
 	GRoomTransition:draw()
-	GameTracker:draw()
-	--Prof:draw()
-	-- local y_offset = 0
-	-- local x_offset = 0
 
-	-- for _, value in pairs(data.items) do
-	-- 	for _, ivalue in pairs(value) do
-	-- 		if type(ivalue) ~= "table" then
-	-- 			love.graphics.print(_ .. ": " .. ivalue, x_offset, y_offset)
-	-- 			y_offset = y_offset + 20 -- Increment the y-coordinate for the next line
-	-- 			if y_offset > RES_Y then
-	-- 				print(y_offset)
-	-- 				x_offset = x_offset + 300
-	-- 				y_offset = 0
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
+	GameTracker:draw()
+	--GameTracker:DrawGarbageCollector()
+
 end
 
 -- in main.lua
@@ -99,7 +84,11 @@ function love.update(dt)
 	if GInput:pressed("goToStage") then
 		GRoom:gotoRoom("Stage", 1) -- XXX : fiX
 	end
-	if GInput:pressed("goToConsole") then
+	if GInput:pressed("console") then
+		if GRoom.currentRoom.__name == "Console" then
+			GRoom:gotoRoom("Stage", 1)
+			return
+		end
 		GRoom:gotoRoom("Console", 3)
 	end
 
@@ -113,8 +102,7 @@ function love.update(dt)
 	GameTracker:update(dt * slow)
 	GRoomTransition:update(dt * slow)	
 	GlobalTime = dt
-	--Prof:detach()
-	--data = Prof:unpack()
+
 end
 
 local function graphicSetter()
@@ -140,6 +128,8 @@ local function inputBinder()
 	GInput:bind("w", "up")
 	GInput:bind("s", "down")
 
+	GInput:bind("c", "console")
+
 	GInput:bind("down", "shootdown")
 	GInput:bind("up", "shootup")
 	GInput:bind("left", "shootleft")
@@ -149,6 +139,9 @@ local function inputBinder()
 
 	GInput:bind("wheelup", "zoomIn")
 	GInput:bind("wheeldown", "zoomOut")
+
+	    GInput:bind("return", "enter")
+    GInput:bind("backspace", "delete")
 end
 
 function InputBinderPlayerControls()

@@ -19,12 +19,6 @@ function Console:new()
     end)
     GCamera:lookAt(GW / 2, GH / 2)
 
-
-    GInput:unbindAll()
-    GInput:bind("return", "enter")
-    GInput:bind("backspace", "delete")
-    GInput:bind("down", "shootdown")
-    GInput:bind("up", "shootup")
 end
 
 function Console:update(dt) -- Update stage logic here 🕹️
@@ -125,4 +119,9 @@ function Console:updateText()
     for _, character in ipairs(self.input_text) do input_text = input_text .. character end
     table.insert(base_input_text, input_text)
     self.lines[#self.lines].text:set(base_input_text)
+end
+
+
+function Console:destroy()
+    self.timer:destroy()
 end

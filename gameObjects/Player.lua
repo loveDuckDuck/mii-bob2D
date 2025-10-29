@@ -350,7 +350,7 @@ function Player:die()
 	for i = 1, love.math.random(8, 12) do
 		self.area:addGameObject("ExplodeParticle", self.x, self.y, { color = GHPColor })
 	end
-
+	GRoom.currentRoom:start()
 	GRoom.currentRoom:finish()
 end
 
