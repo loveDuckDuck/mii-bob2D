@@ -36,6 +36,9 @@ function Stage:new()
 	self.counterAttack = 0
 	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
 
+
+
+	
 	GCamera.smoother = Camera.smooth.damped(100)
 
 	self.time = 0
@@ -44,6 +47,9 @@ function Stage:new()
 
 
 	self.hTransition = 0
+
+
+	
 end
 
 function Stage:update(dt)

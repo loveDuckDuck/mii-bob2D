@@ -21,34 +21,10 @@ GlobalTime = 0
 require("libraries/string/utf8")
 require("globals")
 
-
---Bitser = require 'bitser'
-
---Area = require 'gameObject/Area'
-
 function flash(frames)
 	FlashFrames = frames
 end
 
---[[
-
-	TODO : save and load game
-
-]]
--- function love.save()
--- 	local save_data = {}
--- 	-- Set all save data here
--- 	Bitser.dumpLoveFile('save', save_data)
--- end
-
--- function load()
--- 	if love.filesystem.exists('save') then
--- 		local save_data = bitser.loadLoveFile('save')
--- 		-- Load all saved data here
--- 	else
--- 		FirstRunEver = true
--- 	end
--- end
 
 function resizeWidthHeight(w, h)
 	love.window.setMode(w, h)
@@ -64,11 +40,8 @@ end
 
 function love.draw()
 	GRoom:draw()
-	GRoomTransition:draw()
-
 	GameTracker:draw()
 	--GameTracker:DrawGarbageCollector()
-
 end
 
 -- in main.lua
@@ -78,8 +51,8 @@ end
 
 function love.update(dt)
 
-	if GInput:pressed("DeleteEveryThing") then
-		DeleteEveryThing()
+	if GInput:pressed("DeleteEverything") then
+		QuitFGame()
 	end
 	if GInput:pressed("goToStage") then
 		GRoom:gotoRoom("Stage", 1) -- XXX : fiX
@@ -117,10 +90,10 @@ local function graphicSetter()
 end
 
 local function inputBinder()
-	GInput:bind("escape", "DeleteEveryThing")
+	GInput:bind("escape", "DeleteEverything")
 
 	GInput:bind("f1", "goToSkillTree")
-	GInput:bind("f2", "goToConsole")
+	GInput:bind("f2", "console")
 	GInput:bind("f3", "goToStage")
 
 	GInput:bind("a", "left")
@@ -128,7 +101,6 @@ local function inputBinder()
 	GInput:bind("w", "up")
 	GInput:bind("s", "down")
 
-	GInput:bind("c", "console")
 
 	GInput:bind("down", "shootdown")
 	GInput:bind("up", "shootup")
@@ -140,7 +112,7 @@ local function inputBinder()
 	GInput:bind("wheelup", "zoomIn")
 	GInput:bind("wheeldown", "zoomOut")
 
-	    GInput:bind("return", "enter")
+	GInput:bind("return", "enter")
     GInput:bind("backspace", "delete")
 end
 
@@ -178,6 +150,7 @@ function love.load()
 	slow = 1
 	FlashFrames = 0
 	resizeWidthHeight(1280, 720)
+	QuitFGame = DeleteEverything()
 end
 
 function love.run()
