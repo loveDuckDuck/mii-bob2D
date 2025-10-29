@@ -178,16 +178,17 @@ function Stage:draw()
 	love.graphics.setBlendMode('alpha')
 end
 
-function Stage:destroy()
-	self.director:destroy()
-	self.area:destroy()
-	self.area = nil
-	self.player = nil
-end
+-- function Stage:destroy()
+-- 	self.director:destroy()
+-- 	self.area:destroy()
+-- 	self.area = nil
+-- 	self.player = nil
+-- end
 
 function Stage:finish()
 	GTimer:after(0.5, function()
-		GRoom:gotoRoom('Stage', UUID())
+		self:reset()
+		--GRoom:gotoRoom('Stage', UUID())
 		if not Achievements['10K Fighter'] then
 			Achievements['10k Fighter'] = true
 			-- Do whatever else that should be done when an achievement is unlocked
@@ -197,6 +198,31 @@ end
 
 
 function  Stage:reset()
-	
+	print("Reset Stage")
+	self.director:destroy()
+	self.area:reset()
+	--self.area = nil
+	self.player = nil
+	self.player = self.area:addGameObject("Player", GW / 2, GH / 2)
+
+	self.director = Director(self, self.player)
+
+	self.score = 0
+	self.goalScore = 30
+	self.font = GFont
+	self.counterAttack = 0
+	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
+
+	GCamera.smoother = Camera.smooth.damped(100)
+
+	self.time = 0
+	self.isInLife = true
+	self.timer = Timer() -- Initialize the timer
+
+
+	self.hTransition = 0
+	self.transition_canvas = love.graphics.newCanvas(GW, GH)
+	self:start()
+
 	
 end

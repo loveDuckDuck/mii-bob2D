@@ -358,6 +358,5 @@ function Player:destroy()
 	self.projectileManager:destroy()
 	self.changeManager:destroy()
 	self.multiplierManager:destroy()
-
 	Player.super.destroy(self)
 end
