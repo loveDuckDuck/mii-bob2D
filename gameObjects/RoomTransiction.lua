@@ -8,6 +8,8 @@ function RoomTransiction:new()
 	self.timer = Timer() -- Initialize the timer
 	self.crtShader = love.graphics.newShader('resource/shaders/crtShader.frag')
 	self.time = 0
+
+	self.main_canvas = love.graphics.newCanvas(GW, GH)
 end
 
 function RoomTransiction:update(dt)
@@ -26,22 +28,30 @@ function RoomTransiction:draw()
 	if self.isInLife then
 		return
 	end
-	
+
+	love.graphics.setCanvas(self.main_canvas)
+	love.graphics.clear()
+	love.graphics.setColor(0.87, 1, 0.81, 1.0)
+	love.graphics.rectangle('fill', 0, 0, GW * SX, self.h)
+	love.graphics.setColor(1, 1, 1, 1)
+	love.graphics.setCanvas()
+
+	love.graphics.setBlendMode('alpha', 'premultiplied')
+
 	love.graphics.setShader(self.crtShader)
 	self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
 	self.crtShader:send('iTime', self.time * 10)
-	love.graphics.rectangle('fill', 0, 0, GW * SX, self.h)
-	love.graphics.setColor(0.87, 1, 0.81, 1.0)
-	love.graphics.rectangle('fill', GW/2, GH/2, 100, self.h)
+	love.graphics.draw(self.main_canvas, 0, 0, 0, SX, SY)
 
 	love.graphics.setShader()
+	love.graphics.setBlendMode('alpha')
 end
 
 function RoomTransiction:startTransiction()
 	self.isInLife = false
-	self.timer:tween(0.7, self, { h = GW * SX, }, 'in-out-cubic',
+	self.timer:tween(0.5, self, { h = GW * SX, }, 'in-out-cubic',
 		function()
-			self.timer:tween(0.7, self, { h = 0 }, 'in-out-cubic',
+			self.timer:tween(0.5, self, { h = 0 }, 'in-out-cubic',
 				function()
 					self.isInLife = true
 				end)

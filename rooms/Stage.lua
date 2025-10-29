@@ -39,12 +39,20 @@ function Stage:new()
 	GCamera.smoother = Camera.smooth.damped(100)
 
 	self.time = 0
+	self.isInLife = true
+	self.timer = Timer() -- Initialize the timer
+
+
+	self.hTransition = 0
+	self.transition_canvas = love.graphics.newCanvas(GW, GH)
+	self:start()
 end
 
 function Stage:update(dt)
 	GCamera:lockPosition(dt, GW / 2, GH / 2)
 	GCamera:update(dt)
 	self.time = self.time + dt
+	self.timer:update(dt)
 	if self.player then
 		self.director:update(dt)
 
@@ -89,9 +97,6 @@ function Stage:numbers()
 	love.graphics.print("static velocity : " .. self.player.baseMaxVelocity, 0, 210)
 	love.graphics.print("static friction : " .. self.player.friction, 0, 230)
 
-
-
-
 	-- HP
 	local r, g, b = unpack(GHPColor)
 	local hp, max_hp = self.player.hp, self.player.max_hp
@@ -99,6 +104,17 @@ function Stage:numbers()
 	love.graphics.rectangle("fill", GW / 2 - 52, GH - 16, 156 * (hp / max_hp), 7)
 	love.graphics.setColor(r - 32 / 255, g - 32 / 255, b - 32 / 255)
 	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
+end
+
+function Stage:start()
+	self.timer:tween(0.5, self, { hTransition = GW * SX, }, 'in-out-cubic',
+		function()
+			self.timer:tween(0.5, self, { hTransition = 0 }, 'in-out-cubic',
+				function()
+					print("Finished transition")
+					self.isInLife = false
+				end)
+		end)
 end
 
 function Stage:draw()
@@ -118,6 +134,14 @@ function Stage:draw()
 		GCamera:attach(0, 0, GW, GH)
 		self.area:drawExcept({ 'rgb_shift' })
 		GCamera:detach()
+		-- VVV MOVE THIS BLOCK TO THE END VVV
+		if self.isInLife then
+			love.graphics.setColor(0.87, 1, 0.81, 1.0)
+			-- Note: You may need to adjust this rectangle's position and size
+			-- depending on your scaling, but at least it will be visible now.
+			love.graphics.rectangle('fill', 0, 0, GW * SX, self.hTransition)
+			love.graphics.setColor(1, 1, 1, 1)
+		end
 	love.graphics.setCanvas()
 
 	love.graphics.setCanvas(self.final_canvas)
@@ -134,6 +158,7 @@ function Stage:draw()
 		love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
 		love.graphics.setShader()
 
+
 		love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
 		love.graphics.setBlendMode("alpha")
 	love.graphics.setCanvas()
@@ -145,9 +170,10 @@ function Stage:draw()
 	local y = (love.graphics.getHeight() - GH * SY) / 2
 
 	love.graphics.setShader(self.crtShader)
-		self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
-		self.crtShader:send('iTime', self.time * 10)
-		love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
+	self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
+	self.crtShader:send('iTime', self.time * 10)
+
+	love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
 	love.graphics.setShader()
 	love.graphics.setBlendMode('alpha')
 end
@@ -160,13 +186,17 @@ function Stage:destroy()
 end
 
 function Stage:finish()
-	GRoomTransition:startCoroutineTransition()
-
-	GTimer:after(1, function()
+	GTimer:after(0.5, function()
 		GRoom:gotoRoom('Stage', UUID())
 		if not Achievements['10K Fighter'] then
 			Achievements['10k Fighter'] = true
 			-- Do whatever else that should be done when an achievement is unlocked
 		end
 	end)
+end
+
+
+function  Stage:reset()
+	
+	
 end
