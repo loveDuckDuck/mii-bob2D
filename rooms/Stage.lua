@@ -1,8 +1,35 @@
 Stage = Object:extend()
 
-function Stage:new()
-	self.area = Area(self)
+local function bindInputPlayer()
 
+	GInput:bind("a", "left")
+	GInput:bind("d", "right")
+	GInput:bind("w", "up")
+	GInput:bind("s", "down")
+
+	GInput:bind("p", "pause")
+
+	GInput:bind("down", "shootdown")
+	GInput:bind("up", "shootup")
+	GInput:bind("left", "shootleft")
+	GInput:bind("right", "shootright")
+	GInput:bind("space", "boosting")
+
+	GInput:bind("wheelup", "zoomIn")
+	GInput:bind("wheeldown", "zoomOut")
+end
+
+function Stage:new()
+	bindInputPlayer()
+	
+	-- area menu
+	self.areaMenu = Area(self)
+	self.menu  = self.areaMenu:addGameObject("Menu", 0,0)
+
+
+	-- player area
+	self.area = Area(self)
+	
 	self.area:addPhysicsWorld()
 	self.area.world:addCollisionClass("Player")
 
@@ -35,39 +62,36 @@ function Stage:new()
 	self.font = GFont
 	self.counterAttack = 0
 	self.starGameInfo = self.area:addGameObject("StartGameInfo", 0, 0)
-
+	self.pauseGame = false
 	GCamera.smoother = Camera.smooth.damped(100)
 
 	self.time = 0
-	self.isInLife = true
+	self.isPlayerDead = false
 	self.timer = Timer() -- Initialize the timer
-
 
 	self.hTransition = 0
 end
 
+-- check if it correct
 function Stage:update(dt)
-	GCamera:lockPosition(dt, GW / 2, GH / 2)
-	GCamera:update(dt)
-	self.time = self.time + dt
-	self.timer:update(dt)
-	if self.player then
-		self.director:update(dt)
+	--GCamera:lockPosition(dt, GW / 2, GH / 2)
+	if GInput:pressed("pause") then
+		self:startTransition()
+		self.areaMenu:update(dt)
+		self.pauseGame = not self.pauseGame
+	else
+		GCamera:update(dt)
+		self.time = self.time + dt
+		self.timer:update(dt)
+		if self.player then
+			self.director:update(dt)
+			self.area:update(dt)
+		end
 
-		self.area:update(dt)
+		if (not self.player) then
+			self:destroy()
+		end
 	end
-
-	if (not self.player) then
-		self:destroy()
-	end
-end
-
-function Stage:activate()
-	print("Stage Active")
-end
-
-function Stage:deactivate()
-	print("Stage deactivate")
 end
 
 function Stage:numbers()
@@ -104,79 +128,109 @@ function Stage:numbers()
 	love.graphics.rectangle("line", GW / 2 - 52, GH - 16, 156, 7)
 end
 
-function Stage:start()
-	self.isInLife = true
+function Stage:startTransition(var)
+	for index, _ in pairs(self) do
+		if index == var then
+			self[index] = not self[index]
+			print("Starting transition for:", var)
+			break
+		end
+	end
 
 	self.timer:tween(0.5, self, { hTransition = GW * SX, }, 'in-out-cubic',
 		function()
 			self.timer:tween(0.5, self, { hTransition = 0 }, 'in-out-cubic',
 				function()
 					print("Finished transition", self.hTransition)
-					self.isInLife = false
+					self.isPlayerDead = false
 					self.director = Director(self, self.player)
 				end)
 		end)
 end
 
-function Stage:draw()
-	if not self.player then
-		return
-	end
+function Stage:finishTransition()
+	self.isPlayerDead = true
 
+	self.timer:tween(0.5, self, { hTransition = GW * SX, }, 'in-out-cubic',
+		function()
+			self.timer:tween(0.5, self, { hTransition = 0 }, 'in-out-cubic',
+				function()
+					print("Finished transition", self.hTransition)
+					self.isPlayerDead = false
+					self.director = Director(self, self.player)
+				end)
+		end)
+end
+
+function Stage:drawRGBShift()
 	love.graphics.setCanvas(self.rgbShiftCanvas)
 	love.graphics.clear()
 	GCamera:attach(0, 0, GW, GH)
 	self.area:drawOnly({ 'rgb_shift' })
 	GCamera:detach()
 	love.graphics.setCanvas()
+end
 
+function Stage:drawMain()
 	love.graphics.setCanvas(self.main_canvas)
 	love.graphics.clear()
 	GCamera:attach(0, 0, GW, GH)
 	self.area:drawExcept({ 'rgb_shift' })
 	GCamera:detach()
+end
 
-	if self.isInLife then
-		love.graphics.setColor(0.87, 1, 0.81, 1.0)
-		-- Note: You may need to adjust this rectangle's position and size
-		-- depending on your scaling, but at least it will be visible now.
-		love.graphics.rectangle('fill', 0, 0, GW * SX, self.hTransition)
-		love.graphics.setColor(1, 1, 1, 1)
+function Stage:draw()
+	if not self.player then
+		return
 	end
-	love.graphics.setCanvas()
+	if self.pauseGame then
+		self.areaMenu:draw()
+	else
+		self:drawRGBShift()
+		self:drawMain()
 
-	love.graphics.setCanvas(self.final_canvas)
-	love.graphics.clear()
-	love.graphics.setColor(1, 1, 1)
-	love.graphics.setBlendMode("alpha", "premultiplied")
-
-	self.rgb_shift:send('amount', {
-		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
-		math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
-	})
-
-	love.graphics.setShader(self.rgb_shift)
-	love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
-	love.graphics.setShader()
+		if self.isPlayerDead then
+			love.graphics.setColor(0.87, 1, 0.81, 1.0)
+			-- Note: You may need to adjust this rectangle's position and size
+			-- depending on your scaling, but at least it will be visible now.
+			love.graphics.rectangle('fill', 0, 0, GW * SX, self.hTransition)
+			love.graphics.setColor(1, 1, 1, 1)
+		end
 
 
-	love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
-	love.graphics.setBlendMode("alpha")
-	love.graphics.setCanvas()
+		love.graphics.setCanvas()
+		love.graphics.setCanvas(self.final_canvas)
+		love.graphics.clear()
+		love.graphics.setColor(1, 1, 1)
+		love.graphics.setBlendMode("alpha", "premultiplied")
+
+		self.rgb_shift:send('amount', {
+			math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GW,
+			math.customRandom(-self.rgb_shift_mag, self.rgb_shift_mag) / GH
+		})
+
+		love.graphics.setShader(self.rgb_shift)
+		love.graphics.draw(self.rgbShiftCanvas, 0, 0, 0, 1, 1)
+		love.graphics.setShader()
+
+		love.graphics.draw(self.main_canvas, 0, 0, 0, 1, 1)
+		love.graphics.setBlendMode("alpha")
+		love.graphics.setCanvas()
 
 
-	love.graphics.setColor(1, 1, 1, 1)
-	love.graphics.setBlendMode('alpha', 'premultiplied')
-	local x = (love.graphics.getWidth() - GW * SX) / 2
-	local y = (love.graphics.getHeight() - GH * SY) / 2
+		love.graphics.setColor(1, 1, 1, 1)
+		love.graphics.setBlendMode('alpha', 'premultiplied')
+		local x = (love.graphics.getWidth() - GW * SX) / 2
+		local y = (love.graphics.getHeight() - GH * SY) / 2
 
-	love.graphics.setShader(self.crtShader)
-	self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
-	self.crtShader:send('iTime', self.time * 10)
+		love.graphics.setShader(self.crtShader)
+		self.crtShader:send('iResolution', { love.graphics.getWidth(), love.graphics.getHeight() })
+		self.crtShader:send('iTime', self.time * 10)
 
-	love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
-	love.graphics.setShader()
-	love.graphics.setBlendMode('alpha')
+		love.graphics.draw(self.final_canvas, x, y, 0, SX, SY)
+		love.graphics.setShader()
+		love.graphics.setBlendMode('alpha')
+	end
 end
 
 function Stage:finish()
@@ -184,13 +238,14 @@ function Stage:finish()
 		self:reset()
 		if not Achievements['10K Fighter'] then
 			Achievements['10k Fighter'] = true
-			-- Do whatever else that should be done when an achievement is unlocked
 		end
 	end)
 end
 
 function Stage:reset()
 	print("Reset Stage")
+	GCamera:lookAt(GW / 2, GH / 2)
+
 	self.director:destroy()
 	self.area:reset()
 	--self.area = nil
