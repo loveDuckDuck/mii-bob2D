@@ -2,13 +2,9 @@ StartGameInfo = GameObject:extend()
 
 function StartGameInfo:new(area, x, y, opts)
     StartGameInfo.super.new(self, area, x, y, opts)
-    self.text = opts.text or "Welcome to the bob !"
-    -- local textMovement = "W A S D   to    move    bob "
-    -- local textArrow =    "arrow     to    shoot   bob "
-    local textWASD = "W A S D"
-    local textMove = "to move"
-    local textArrow = "ARROW"
-    local textToShoot = "to shoot"
+    local textTitle =    "Welcome to the bob !"
+    local textMovement = "W A S D   to    move    bob "
+    local textArrow =    "ARROW     to    shoot   bob "
     local offset = 30
 
     self.graphics_types = { 'rgb_shift' }
@@ -16,29 +12,21 @@ function StartGameInfo:new(area, x, y, opts)
     self.timer:every(0.7, function()
         self.area:addGameObject("InfoCircularText", GW / 2, GH / 2,
             {
-                text = self.text,
+                text = textTitle,
                 color = GDefaultColor,
                 scaleFactor = SX,
 
             })
 
-        self.area:addGameObject("InfoText", GW - offset * 3, GH / 2 - offset,
+        self.area:addGameObject("InfoCircularText", GFont:getWidth(textTitle)  , GH / 2,
             {
-                text = textWASD,
+                text = textMovement,
                 color = GDefaultColor,
                 scaleFactor = SX,
 
             })
 
-        self.area:addGameObject("InfoText", GW - offset* 3, GH / 2 + offset,
-            {
-                text = textMove,
-                color = GDefaultColor,
-                scaleFactor = SX,
-
-            })
-
-        self.area:addGameObject("InfoText",offset* 3, GH / 2 - offset,
+        self.area:addGameObject("InfoCircularText", GW - GFont:getWidth(textTitle, GH / 2), GH / 2,
             {
                 text = textArrow,
                 color = GDefaultColor,
@@ -46,13 +34,6 @@ function StartGameInfo:new(area, x, y, opts)
 
             })
 
-        self.area:addGameObject("InfoText",offset* 3, GH / 2 + offset,
-            {
-                text = textToShoot,
-                color = GDefaultColor,
-                scaleFactor = SX,
-
-            })
     end, 11)
 
     self.timer:after(4.7, function()

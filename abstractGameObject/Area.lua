@@ -93,6 +93,9 @@ function Area:addPhysicsWorld()
 	self.world = Physics.newWorld(0, 0, true) -- it fall down if i set the Y to 512 crazy
 end
 
+
+
+
 --[[
 Cycle on my area and destroy all the object thath i had referecend on it
 after that shat remove the table object and add a new own
@@ -114,6 +117,17 @@ function Area:destroy()
 	if self.world then
 		self.world:destroy()
 		self.world = nil
+	end
+end
+
+function Area:killAllEnemies()
+	for i = #self.game_objects, 1, -1 do
+		local game_object = self.game_objects[i]
+
+		if game_object:is(Enemy) then
+			game_object:die()
+			table.remove(self.game_objects, i)
+		end
 	end
 end
 

@@ -18,6 +18,10 @@ function Console:new()
         self.cursor_visible = not self.cursor_visible
     end)
     GCamera:lookAt(GW / 2, GH / 2)
+	GInput:unbindAll()
+
+    GInput:bind("return", "enter")
+	GInput:bind("backspace", "delete")
 
 end
 

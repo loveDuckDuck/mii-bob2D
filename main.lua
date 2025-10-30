@@ -14,9 +14,8 @@ Moses          = require("libraries/moses/moses")
 --utilities
 Util           = require("utils/Utils")
 RoomController = require("utils/RoomController")
-
 TreeLogic      = require("utils/TreeStats")
-GlobalTime = 0
+GlobalTime     = 0
 
 require("libraries/string/utf8")
 require("globals")
@@ -24,7 +23,6 @@ require("globals")
 function flash(frames)
 	FlashFrames = frames
 end
-
 
 function resizeWidthHeight(w, h)
 	love.window.setMode(w, h)
@@ -40,6 +38,7 @@ end
 
 function love.draw()
 	GRoom:draw()
+	GRoomTransition:draw()
 	GameTracker:draw()
 	--GameTracker:DrawGarbageCollector()
 end
@@ -50,32 +49,17 @@ function love.textinput(t)
 end
 
 function love.update(dt)
-
-	if GInput:pressed("DeleteEverything") then
+	if GInput:pressed("quit") then
+		print('Quitting game')
 		QuitFGame()
-	end
-	if GInput:pressed("goToStage") then
-		GRoom:gotoRoom("Stage", 1) -- XXX : fiX
-	end
-	if GInput:pressed("console") then
-		if GRoom.currentRoom.__name == "Console" then
-			GRoom:gotoRoom("Stage", 1)
-			return
-		end
-		GRoom:gotoRoom("Console", 3)
-	end
-
-	if GInput:pressed("goToSkillTree") then
-		GRoom:gotoRoom("SkillTree", 2)
 	end
 
 	GCamera:update(dt * slow)
 	GTimer:update(dt * slow)
 	GRoom:update(dt * slow)
 	GameTracker:update(dt * slow)
-	GRoomTransition:update(dt * slow)	
+	GRoomTransition:update(dt * slow)
 	GlobalTime = dt
-
 end
 
 local function graphicSetter()
@@ -89,44 +73,11 @@ local function graphicSetter()
 	end
 end
 
-local function inputBinder()
-	GInput:bind("escape", "DeleteEverything")
-
-	GInput:bind("f1", "goToSkillTree")
-	GInput:bind("f2", "console")
-	GInput:bind("f3", "goToStage")
-
-	GInput:bind("a", "left")
-	GInput:bind("d", "right")
-	GInput:bind("w", "up")
-	GInput:bind("s", "down")
-
-
-	GInput:bind("down", "shootdown")
-	GInput:bind("up", "shootup")
-	GInput:bind("left", "shootleft")
-	GInput:bind("right", "shootright")
-
-	GInput:bind("space", "boosting")
-
-	GInput:bind("wheelup", "zoomIn")
-	GInput:bind("wheeldown", "zoomOut")
-
-	GInput:bind("return", "enter")
-    GInput:bind("backspace", "delete")
-end
-
-function InputBinderPlayerControls()
-	GInput:unbindAll()
-end
-
-function InputBinderSkillTree()
-	GInput:unbindAll()
-end
 
 function love.load()
 	GInput = Input()
-	inputBinder()
+	GInput:bind("escape", "quit")
+
 	graphicSetter()
 	GDraft = Draft()
 	GLoader = Loader()
@@ -146,7 +97,7 @@ function love.load()
 	GCamera = Camera()
 	GRoom = RoomController()
 	GRoomTransition = RoomTransiction()
-	GRoom:gotoRoom("Stage", 1,true) -- XXX : fix
+	GRoom:gotoRoom("Stage", 1, true) -- XXX : fix
 	slow = 1
 	FlashFrames = 0
 	resizeWidthHeight(1280, 720)
@@ -168,7 +119,6 @@ function love.run()
 	if love.timer then
 		love.timer.step()
 		dt = love.timer.getDelta() -- with this im gone insert define the fixed delta time
-		
 	end
 
 	-- Main loop time.
